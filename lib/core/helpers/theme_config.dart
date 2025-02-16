@@ -8,12 +8,12 @@ class ThemeConfig {
     Brightness brightness = Brightness.light,
   }) => ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      surface: surface,
       seedColor: Colors.blue,
       brightness: brightness,
+      surface: surface,
     ),
   );
   ThemeData get lightTheme => _themeData(surface: Colors.white);
   ThemeData get darkTheme =>
-      _themeData(surface: Colors.black, brightness: Brightness.dark);
+      _themeData(brightness: Brightness.dark, surface: Colors.black);
 }
