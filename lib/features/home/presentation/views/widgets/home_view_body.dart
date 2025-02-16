@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart'
-    show BuildContext, Center, StatelessWidget, Text, Widget;
+    show BuildContext, Center, StatelessWidget, Text;
 
 class HomeViewBody extends StatelessWidget {
   const HomeViewBody({super.key});
   @override
-  Widget build(BuildContext context) =>
+  Center build(BuildContext context) =>
       const Center(child: Text('Hello World!'));
 }
