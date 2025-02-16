@@ -1,3 +1,4 @@
+import 'package:edu_link/core/helpers/theme_config.dart' show ThemeConfig;
 import 'package:edu_link/features/home/presentation/views/home_view.dart'
     show HomeView;
 import 'package:flutter/material.dart'
@@ -6,5 +7,9 @@ import 'package:flutter/material.dart'
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
   @override
-  Widget build(BuildContext context) => const MaterialApp(home: HomeView());
+  Widget build(BuildContext context) => MaterialApp(
+    home: const HomeView(),
+    theme: const ThemeConfig().lightTheme,
+    darkTheme: const ThemeConfig().darkTheme,
+  );
 }
