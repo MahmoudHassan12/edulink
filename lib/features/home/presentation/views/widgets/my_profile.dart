@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MyProfile extends StatelessWidget {
@@ -11,7 +12,9 @@ class MyProfile extends StatelessWidget {
       padding: EdgeInsets.all(4),
       child: CircleAvatar(
         radius: 24,
-        backgroundImage: NetworkImage('https://i.pravatar.cc/300'),
+        backgroundImage: CachedNetworkImageProvider(
+          'https://i.pravatar.cc/300',
+        ),
       ),
     ),
   );

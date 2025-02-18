@@ -1,3 +1,4 @@
+import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/professor_entity.dart';
 
 class CourseEntity {
@@ -7,6 +8,12 @@ class CourseEntity {
     this.title,
     this.description,
     this.imageUrl,
+    this.type,
+    this.level,
+    this.department,
+    this.semester,
+    this.creditHour,
+    this.lectures,
     this.duration,
     this.professor,
   });
@@ -15,6 +22,12 @@ class CourseEntity {
   final String? title;
   final String? description;
   final String? imageUrl;
-  final String? duration;
+  final String? type;
+  final String? level;
+  final String? department;
+  final String? semester;
+  final int? creditHour;
+  final int? lectures;
+  final DurationEntity? duration;
   final ProfessorEntity? professor;
 }
