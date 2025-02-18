@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart'
-    show Brightness, Color, ColorScheme, Colors, ThemeData;
+    show
+        AppBarTheme,
+        Brightness,
+        Color,
+        ColorScheme,
+        Colors,
+        DynamicSchemeVariant,
+        ThemeData;
 
 class ThemeConfig {
   const ThemeConfig();
@@ -8,9 +15,15 @@ class ThemeConfig {
     Brightness brightness = Brightness.light,
   }) => ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
+      seedColor: Colors.blueGrey,
       brightness: brightness,
+      dynamicSchemeVariant: DynamicSchemeVariant.content, // content, fidelity
       surface: surface,
+    ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: surface,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
     ),
   );
   ThemeData get lightTheme => _themeData(surface: Colors.white);
