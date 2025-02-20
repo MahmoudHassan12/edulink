@@ -1,4 +1,4 @@
-import 'package:edu_link/features/auth/presentation/views/widgets/sign_in_with_provider_button.dart';
+import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_with_provider_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
