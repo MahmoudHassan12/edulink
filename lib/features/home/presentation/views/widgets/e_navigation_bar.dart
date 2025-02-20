@@ -25,11 +25,8 @@ class _ENavigationBarState extends State<ENavigationBar> {
     ),
   ];
   int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    if (index != _selectedIndex) setState(() => _selectedIndex = index);
-  }
-
+  void _onItemTapped(int index) =>
+      index != _selectedIndex ? setState(() => _selectedIndex = index) : null;
   @override
   Widget build(BuildContext context) => NavigationBar(
     onDestinationSelected: _onItemTapped,

@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
   @override
-  Scaffold build(BuildContext context) => const Scaffold(
-    drawer: Drawer(),
-    body: HomeViewBody(),
-    bottomNavigationBar: ENavigationBar(),
+  Scaffold build(BuildContext context) => Scaffold(
+    body: const HomeViewBody(),
+    floatingActionButton: FloatingActionButton(onPressed: () {}),
+    drawer: const Drawer(),
+    bottomNavigationBar: const ENavigationBar(),
   );
 }
