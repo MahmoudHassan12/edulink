@@ -12,8 +12,9 @@ class CurrentCourses extends StatelessWidget {
     return AspectRatio(
       aspectRatio: i,
       child: CarouselView(
-        itemExtent: MediaQuery.sizeOf(context).width - 85,
+        itemExtent: MediaQuery.sizeOf(context).width - 80,
         itemSnapping: true,
+        enableSplash: false,
         children: _courses.map((course) => Course(course: course)).toList(),
       ),
     );
