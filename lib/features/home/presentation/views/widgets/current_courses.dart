@@ -12,7 +12,7 @@ class CurrentCourses extends StatelessWidget {
     return AspectRatio(
       aspectRatio: i,
       child: CarouselView(
-        itemExtent: MediaQuery.sizeOf(context).width / i,
+        itemExtent: MediaQuery.sizeOf(context).width - 85,
         itemSnapping: true,
         children: _courses.map((course) => Course(course: course)).toList(),
       ),
@@ -27,7 +27,7 @@ const List<CourseEntity> _courses = [
     imageUrl:
         'https://miro.medium.com/v2/resize:fit:1100/format:webp/1*Y6-ksYxoEqnqZHChb4VDxg.png',
     lectures: 10,
-    professor: ProfessorEntity(
+    professor: UserEntity(
       name: 'Dr. John Doe',
       imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
     ),
@@ -39,7 +39,7 @@ const List<CourseEntity> _courses = [
     imageUrl:
         'https://miro.medium.com/v2/resize:fit:3840/format:webp/1*g76wIu8hNQVJ2OGBzZ42rQ.jpeg',
     lectures: 11,
-    professor: ProfessorEntity(
+    professor: UserEntity(
       name: 'Dr. Jane Doe',
       imageUrl: 'https://randomuser.me/api/portraits/women/2.jpg',
     ),
@@ -51,7 +51,7 @@ const List<CourseEntity> _courses = [
     imageUrl:
         'https://orientation.engsci.utoronto.ca/wp-content/uploads/2021/06/calculus_image-2.png',
     lectures: 12,
-    professor: ProfessorEntity(
+    professor: UserEntity(
       name: 'Dr. Jack Doe',
       imageUrl: 'https://randomuser.me/api/portraits/men/3.jpg',
     ),
@@ -62,7 +62,7 @@ const List<CourseEntity> _courses = [
     title: 'Calculus II',
     imageUrl: 'https://ximera.osu.edu/mooculus/logos/calculus2Logo/logo.png',
     lectures: 11,
-    professor: ProfessorEntity(
+    professor: UserEntity(
       name: 'Dr. Jill Doe',
       imageUrl: 'https://randomuser.me/api/portraits/men/4.jpg',
     ),
