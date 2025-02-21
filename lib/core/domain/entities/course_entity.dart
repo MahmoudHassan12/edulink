@@ -63,5 +63,5 @@ class CourseEntity {
   final int? creditHour;
   final int? lectures;
   final DurationEntity? duration;
-  final UserEntity? professor;
+  final ProfessorEntity? professor;
 }
