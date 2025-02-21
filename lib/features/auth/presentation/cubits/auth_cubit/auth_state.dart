@@ -14,8 +14,8 @@ final class AuthLoading extends AuthState {
 }
 
 final class AuthSuccess extends AuthState {
-  const AuthSuccess(this.userEntity);
-  final UserEntity userEntity;
+  const AuthSuccess(this.professorEntity);
+  final ProfessorEntity professorEntity;
 }
 
 final class AuthFailure extends AuthState {

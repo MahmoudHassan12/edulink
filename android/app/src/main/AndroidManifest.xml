@@ -2,7 +2,14 @@
     <application
         android:label="edu_link"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+           android:usesCleartextTraffic="true">  <!-- ✅ Allow cleartext HTTP traffic -->
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    
+        
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"

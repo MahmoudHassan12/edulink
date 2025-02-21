@@ -12,7 +12,20 @@
           "package_name": "com.edulink.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "692918403970-5qqsgru8i1g746099pga98qe910it49f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.edulink.app",
+            "certificate_hash": "630f10c170fc25186e3dda5a2f5e511664e5f2ec"
+          }
+        },
+        {
+          "client_id": "692918403970-e5oth67rig368bno1ph2srpa17bno3cg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA3uvZEutUnsgQ37eyMdKtOlyUWC97kLnw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "692918403970-e5oth67rig368bno1ph2srpa17bno3cg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
