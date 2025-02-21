@@ -1,13 +1,15 @@
-import 'package:edu_link/features/auth/presentation/views/widgets/signin_view_body.dart'
-    show SigninViewBody;
-import 'package:flutter/material.dart'
-    show AppBar, BuildContext, Scaffold, StatelessWidget, Text;
+import 'package:edu_link/features/auth/presentation/cubits/auth_cubit/auth_cubit.dart';
+import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_view_body_bloc_consumer.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SigninView extends StatelessWidget {
   const SigninView({super.key});
   @override
   Scaffold build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Sign In')),
-    body: const SigninViewBody(),
+    body: BlocProvider<AuthCubit>.value(
+      value: BlocProvider.of<AuthCubit>(context),
+      child: const SignInViewBodyBlocConsumer(),
+    ),
   );
 }

@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:flutter/material.dart';
 
 class MyProfile extends StatelessWidget {
   const MyProfile({super.key});
   @override
   Widget build(BuildContext context) => InkWell(
-    onTap: () {},
+    onTap: () async => profileNavigation(context),
     radius: 50,
     borderRadius: BorderRadius.circular(50),
     child: const Padding(

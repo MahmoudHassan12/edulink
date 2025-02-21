@@ -1,19 +1,18 @@
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
     show AboutView;
-import 'package:edu_link/features/auth/presentation/views/register_view.dart'
-    show RegisterView;
-import 'package:edu_link/features/auth/presentation/views/reset_password_view.dart'
-    show ResetPasswordView;
-import 'package:edu_link/features/auth/presentation/views/signin_view.dart'
-    show SigninView;
+import 'package:edu_link/features/auth/presentation/views/register_view.dart';
+import 'package:edu_link/features/auth/presentation/views/reset_password_view.dart';
+import 'package:edu_link/features/auth/presentation/views/signin_view.dart';
+
 import 'package:edu_link/features/home/presentation/views/home_view.dart'
     show HomeView;
 import 'package:edu_link/features/profile/presentation/views/profile_view.dart'
     show ProfileView;
 import 'package:edu_link/features/settings/presentation/views/settings_view.dart'
     show SettingsView;
-import 'package:flutter/material.dart' show BuildContext, Widget;
-import 'package:go_router/go_router.dart' show GoRoute, GoRouter;
+import 'package:flutter/material.dart' show BuildContext, RouterConfig, Widget;
+import 'package:go_router/go_router.dart'
+    show GoRoute, GoRouter, RouteMatchList;
 
 abstract class Routes {
   const Routes();
@@ -36,7 +35,8 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.signinView: (context, args) => const SigninView(),
 };
 
-GoRouter routerConfig() => GoRouter(
+RouterConfig<RouteMatchList> routerConfig = GoRouter(
+  initialLocation: Routes.signinView,
   routes:
       _routes.entries
           .map(

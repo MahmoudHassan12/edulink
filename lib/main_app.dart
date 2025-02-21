@@ -9,7 +9,7 @@ class MainApp extends StatelessWidget {
   MaterialApp build(BuildContext context) => MaterialApp.router(
     debugShowCheckedModeBanner: false,
     title: 'Edu Link',
-    routerConfig: routerConfig(),
+    routerConfig: routerConfig,
     theme: const ThemeConfig().lightTheme,
     darkTheme: const ThemeConfig().darkTheme,
   );

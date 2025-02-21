@@ -11,4 +11,8 @@ class ProfessorEntity {
   final String? id;
   final String? name;
   final String? imageUrl;
+  final String? email;
+  final String? phoneNumber;
+  final bool? emailVerified;
+  final bool? isProfessor;
 }
