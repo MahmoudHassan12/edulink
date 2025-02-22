@@ -8,7 +8,7 @@ class AuthService {
   /// Sign in with email & password
   Future<User?> signInWithEmail(String email, String password) async {
     try {
-      var userCredential = await _auth.signInWithEmailAndPassword(
+      final userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -25,7 +25,7 @@ class AuthService {
   /// Sign up with email & password
   Future<User?> signUpWithEmail(String email, String password) async {
     try {
-      var userCredential = await _auth.createUserWithEmailAndPassword(
+      final userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );

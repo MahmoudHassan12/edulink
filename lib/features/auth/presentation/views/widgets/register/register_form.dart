@@ -20,7 +20,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final _auth = AuthService();
+  final AuthService _auth = AuthService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isVisible = false;
   @override
@@ -36,9 +36,9 @@ class _RegisterFormState extends State<RegisterForm> {
       return false; // Validation failed
     }
 
-    var email = _emailController.text.trim();
-    var password = _passwordController.text.trim();
-    var confirmPassword = _confirmPasswordController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final confirmPassword = _confirmPasswordController.text.trim();
 
     if (password != confirmPassword) {
       log('Passwords do not match');
@@ -46,7 +46,7 @@ class _RegisterFormState extends State<RegisterForm> {
     }
 
     try {
-      var user = await _auth.signUpWithEmail(email, password);
+      final user = await _auth.signUpWithEmail(email, password);
       if (user != null) {
         log('User registered successfully');
         return true;
