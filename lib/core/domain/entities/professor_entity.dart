@@ -4,7 +4,7 @@ class ProfessorEntity {
   factory ProfessorEntity.fromMap(Map<String, dynamic>? data) {
     if (data == null) return const ProfessorEntity();
     return ProfessorEntity(
-      name: data['name'] ?? "N/A",
+      name: data['name'] ?? 'N/A',
       imageUrl: data['imageUrl'],
     );
   }

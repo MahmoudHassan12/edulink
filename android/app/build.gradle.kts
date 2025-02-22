@@ -43,6 +43,12 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+
+    val activity_version = "1.9.3"
+    // Java language implementation
+    implementation("androidx.activity:activity:$activity_version")
+    // Kotlin
+    implementation("androidx.activity:activity-ktx:$activity_version")
 }
 
 flutter {

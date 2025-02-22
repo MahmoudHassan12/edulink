@@ -1,3 +1,4 @@
+import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:flutter/material.dart';
 
 class RowOfTexts extends StatelessWidget {
@@ -11,7 +12,7 @@ class RowOfTexts extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          EText(
             title,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -19,7 +20,7 @@ class RowOfTexts extends StatelessWidget {
               color: colorScheme.onSurface.withAlpha(128),
             ),
           ),
-          Text(
+          EText(
             'See All',
             style: TextStyle(
               fontWeight: FontWeight.bold,

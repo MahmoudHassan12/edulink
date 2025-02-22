@@ -1,3 +1,4 @@
+import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/app_bar_bottom.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/my_profile.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class HomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) => const SliverAppBar.medium(
     title: Padding(
       padding: EdgeInsets.symmetric(vertical: 16.5),
-      child: Text('Home', overflow: TextOverflow.fade, softWrap: false),
+      child: EText('Home'),
     ),
     centerTitle: true,
     actions: [MyProfile()],

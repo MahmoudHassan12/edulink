@@ -11,9 +11,8 @@ import 'package:flutter/material.dart';
 class RegisterForm extends StatefulWidget {
   const RegisterForm({this.isLoading = false, super.key});
   final bool isLoading;
-
   @override
-  _RegisterFormState createState() => _RegisterFormState();
+  State<RegisterForm> createState() => _RegisterFormState();
 }
 
 class _RegisterFormState extends State<RegisterForm> {
@@ -23,7 +22,7 @@ class _RegisterFormState extends State<RegisterForm> {
       TextEditingController();
   final _auth = AuthService();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  bool _isVisible = false;
   @override
   void dispose() {
     _emailController.dispose();
@@ -37,26 +36,26 @@ class _RegisterFormState extends State<RegisterForm> {
       return false; // Validation failed
     }
 
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-    String confirmPassword = _confirmPasswordController.text.trim();
+    var email = _emailController.text.trim();
+    var password = _passwordController.text.trim();
+    var confirmPassword = _confirmPasswordController.text.trim();
 
     if (password != confirmPassword) {
-      log("Passwords do not match");
+      log('Passwords do not match');
       return false;
     }
 
     try {
       var user = await _auth.signUpWithEmail(email, password);
       if (user != null) {
-        log("User registered successfully");
+        log('User registered successfully');
         return true;
       } else {
-        log("Failed to register user");
+        log('Failed to register user');
         return false;
       }
     } catch (e) {
-      log("Error: $e");
+      log('Error: $e');
       return false;
     }
   }
@@ -76,7 +75,8 @@ class _RegisterFormState extends State<RegisterForm> {
           PasswordTextField(
             isLoading: widget.isLoading,
             passwordController: _passwordController,
-            setVisible: (isVisible) {},
+            isVisible: _isVisible,
+            setVisible: (isVisible) => setState(() => _isVisible = isVisible),
             textInputAction: TextInputAction.next,
             labelText: 'Password',
             onChanged: (value) {},
@@ -84,7 +84,8 @@ class _RegisterFormState extends State<RegisterForm> {
           PasswordTextField(
             isLoading: widget.isLoading,
             passwordController: _confirmPasswordController,
-            setVisible: (isVisible) {},
+            isVisible: _isVisible,
+            setVisible: (isVisible) => setState(() => _isVisible = isVisible),
             textInputAction: TextInputAction.go,
             labelText: 'Confirm Password',
           ),
@@ -94,9 +95,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 widget.isLoading
                     ? null
                     : () async {
-                      bool success = await signUp();
-                      if (success) {
-                        homeNavigation(context);
+                      if (await signUp() && context.mounted) {
+                        await homeNavigation(context);
                       }
                     },
           ),

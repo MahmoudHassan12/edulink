@@ -1,4 +1,5 @@
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
+import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/custom_auth_app_bar.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/email_text_field.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class ResetPasswordViewBody extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverList.list(
             children: [
-              const Text('Enter your email address'),
+              const EText('Enter your email address'),
               const SizedBox(height: 16),
               EmailTextField(isLoading: isLoading),
               CustomFilledButton(

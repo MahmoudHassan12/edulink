@@ -35,15 +35,15 @@ class _SignInFormState extends State<SignInForm> {
       );
 
       if (user != null) {
-        log("Sign-in successful: ${user.uid}");
+        log('Sign-in successful: ${user.uid}');
         if (mounted) {
           await homeNavigation(context);
         }
       } else {
-        log("Sign-in failed");
+        log('Sign-in failed');
       }
     } catch (e) {
-      log("Sign-in Error: $e");
+      log('Sign-in Error: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }

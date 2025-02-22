@@ -14,7 +14,7 @@ class HomeViewBody extends StatelessWidget {
         children: [
           const RowOfTexts(title: 'Your Courses'),
           CurrentCourses(),
-          SizedBox(height: 1600),
+          const SizedBox(height: 1600),
         ],
       ),
     ],

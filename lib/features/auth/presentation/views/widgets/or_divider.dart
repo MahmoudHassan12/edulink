@@ -1,3 +1,4 @@
+import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:flutter/material.dart'
     show
         BuildContext,
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart'
         Padding,
         Row,
         StatelessWidget,
-        Text,
+        
         TextStyle;
 
 class OrDivider extends StatelessWidget {
@@ -20,7 +21,7 @@ class OrDivider extends StatelessWidget {
       Flexible(child: Divider(thickness: 1.5)),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 24),
-        child: Text('OR', style: TextStyle(fontSize: 16)),
+        child: EText('OR', style: TextStyle(fontSize: 16)),
       ),
       Flexible(child: Divider(thickness: 1.5)),
     ],

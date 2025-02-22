@@ -46,9 +46,8 @@ class PasswordTextField extends StatelessWidget {
     prefixIcon: const Icon(Icons.password_rounded),
     suffixIcon: IconButton(
       focusNode: FocusNode(skipTraversal: true),
-      onPressed: () {
-        isVisible ? setVisible?.call(false) : setVisible?.call(true);
-      },
+      onPressed:
+          () => isVisible ? setVisible?.call(false) : setVisible?.call(true),
       icon: const Icon(Icons.visibility_rounded),
       selectedIcon: const Icon(Icons.visibility_off_rounded),
       isSelected: isVisible,

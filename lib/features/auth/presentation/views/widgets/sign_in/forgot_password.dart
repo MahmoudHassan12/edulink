@@ -1,4 +1,5 @@
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatelessWidget {
@@ -17,7 +18,7 @@ class ForgotPassword extends StatelessWidget {
         ),
         onPressed:
             isLoading ? null : () async => resetPasswordNavigation(context),
-        child: const Text('Forgot Password?', style: TextStyle(fontSize: 14)),
+        child: const EText('Forgot Password?', style: TextStyle(fontSize: 14)),
       ),
     ),
   );

@@ -13,11 +13,11 @@ class AuthService {
         password: password,
       );
 
-      log("${userCredential.user}");
+      log('${userCredential.user}');
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      log("Sign-in Error: ${e.message}");
+      log('Sign-in Error: ${e.message}');
       return null;
     }
   }
@@ -29,10 +29,10 @@ class AuthService {
         email: email,
         password: password,
       );
-      log("${userCredential.user}");
+      log('${userCredential.user}');
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
-      log("Sign-up Error: ${e.message}");
+      log('Sign-up Error: ${e.message}');
       return null;
     }
   }
