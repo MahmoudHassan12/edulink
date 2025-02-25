@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/core/helpers/shared_pref.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/email_text_field.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/password_text_field.dart';
@@ -22,6 +23,10 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
   bool _isLoading = false;
+  Future<void> handleSignInSuccess() async {
+    await SharedPrefHelper.setLoggedIn(true);
+    await homeNavigation(context);
+  }
 
   Future<void> _signIn() async {
     if (!_formKey.currentState!.validate()) return;
@@ -36,8 +41,9 @@ class _SignInFormState extends State<SignInForm> {
 
       if (user != null) {
         log('Sign-in successful: ${user.uid}');
+
         if (mounted) {
-          await homeNavigation(context);
+          handleSignInSuccess();
         }
       } else {
         log('Sign-in failed');
