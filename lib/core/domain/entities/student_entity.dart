@@ -36,19 +36,17 @@ class StudentEntity {
   }
 
   /// Empty instance for handling null cases
-  static StudentEntity empty() {
-    return const StudentEntity(
-      id: '',
-      name: '',
-      email: '',
-      phone: '',
-      imageUrl: '',
-      department: '',
-      level: '',
-      program: '',
-      ssn: '',
-    );
-  }
+  factory StudentEntity.empty() => const StudentEntity(
+    id: '',
+    name: '',
+    email: '',
+    phone: '',
+    imageUrl: '',
+    department: '',
+    level: '',
+    program: '',
+    ssn: '',
+  );
 
   final String? id;
   final String? name;
