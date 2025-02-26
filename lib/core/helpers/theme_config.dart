@@ -15,7 +15,7 @@ class ThemeConfig {
     Brightness brightness = Brightness.light,
   }) => ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.deepPurple,
+      seedColor: Colors.blueAccent,
       brightness: brightness,
       dynamicSchemeVariant: DynamicSchemeVariant.content, // content, fidelity
       surface: surface,

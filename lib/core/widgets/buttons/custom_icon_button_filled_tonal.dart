@@ -1,4 +1,5 @@
-import 'package:edu_link/core/widgets/buttons/style_custom_icon_button.dart';
+import 'package:edu_link/core/widgets/buttons/style_custom_button.dart'
+    show styleCustomIconButton;
 import 'package:flutter/material.dart'
     show
         BuildContext,
