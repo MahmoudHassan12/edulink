@@ -23,6 +23,10 @@ Future<void> homeNavigation(BuildContext context) =>
 Future<void> signinNavigation(BuildContext context) =>
     _navigateTo(context, Routes.signinView, clearStack: true);
 
+/// Navigations with extra data
+Future<void> courseDetailsNavigation(BuildContext context, {Object? extra}) =>
+    _navigateTo(context, Routes.courseDetailsView, extra: extra);
+
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>
     _navigateTo(context, Routes.aboutView);

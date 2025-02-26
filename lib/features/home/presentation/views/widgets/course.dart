@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImage, CachedNetworkImageProvider;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/helpers/navigations.dart'
+    show courseDetailsNavigation;
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/text_icon.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class Course extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(28)),
       ),
       child: InkWell(
-        onTap: () {},
+        onTap: () async => courseDetailsNavigation(context, extra: course),
         child: Column(
           children: [
             Expanded(
