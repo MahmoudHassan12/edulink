@@ -10,6 +10,8 @@
         android:usesCleartextTraffic="true">  <!-- ✅ Allow cleartext HTTP traffic -->
 
 
+            
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
