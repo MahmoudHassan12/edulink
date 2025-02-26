@@ -16,7 +16,7 @@ class FirstPanal extends StatelessWidget {
           const CircleAvatar(
             radius: 48,
             backgroundImage: CachedNetworkImageProvider(
-              'https://i.pravatar.cc/300',
+              'https://avatar.iran.liara.run/public/49',
             ),
           ),
           const EText(

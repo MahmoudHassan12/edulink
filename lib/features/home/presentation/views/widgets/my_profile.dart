@@ -14,7 +14,7 @@ class MyProfile extends StatelessWidget {
       child: CircleAvatar(
         radius: 24,
         backgroundImage: CachedNetworkImageProvider(
-          'https://i.pravatar.cc/300',
+          'https://avatar.iran.liara.run/public/49',
         ),
       ),
     ),

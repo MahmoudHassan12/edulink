@@ -1,3 +1,4 @@
+import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/profile/presentation/views/widgets/first_panal.dart';
 import 'package:edu_link/features/profile/presentation/views/widgets/second_panal.dart';
@@ -36,8 +37,8 @@ class ProfileViewBody extends StatelessWidget {
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         sliver: SliverList.list(
-          children: const [
-            ListTile(
+          children: [
+            const ListTile(
               minVerticalPadding: 0,
               contentPadding: EdgeInsets.zero,
               title: EText(
@@ -45,7 +46,13 @@ class ProfileViewBody extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
-            SecondPanal(),
+            const SecondPanal(),
+            const SizedBox(height: 16),
+            CustomElevatedButton.icon(
+              onPressed: () {},
+              label: 'More Details',
+              icon: Icons.arrow_forward_ios_rounded,
+            ),
           ],
         ),
       ),
