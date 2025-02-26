@@ -11,10 +11,10 @@ class HomeViewBody extends StatelessWidget {
       const HomeAppBar(),
       const SliverToBoxAdapter(child: SizedBox(height: 16)),
       SliverList.list(
-        children: [
-          const RowOfTexts(title: 'Your Courses'),
+        children: const [
+          RowOfTexts(title: 'Your Courses'),
           CurrentCourses(),
-          const SizedBox(height: 1600),
+          SizedBox(height: 1600),
         ],
       ),
     ],

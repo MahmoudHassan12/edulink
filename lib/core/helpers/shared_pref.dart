@@ -2,22 +2,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 mixin SharedPrefHelper {
   static const String _isLoggedInKey = 'isLoggedIn';
+  static late SharedPreferences _instance;
+  static Future<SharedPreferences> init() async =>
+      _instance = await SharedPreferences.getInstance();
 
   /// Saves the login status
-  static Future<void> setLoggedIn(bool isLoggedIn) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_isLoggedInKey, isLoggedIn);
-  }
+  static Future<void> setLoggedIn({bool isLoggedIn = false}) =>
+      _instance.setBool(_isLoggedInKey, isLoggedIn);
 
   /// Retrieves the login status
-  static Future<bool> isLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_isLoggedInKey) ?? false; // Default: false
-  }
+  static bool isLoggedIn() =>
+      _instance.getBool(_isLoggedInKey) ?? false; // Default: false
 
   /// Clears login data (used on logout)
-  static Future<void> clearSession() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_isLoggedInKey);
-  }
+  static Future<void> clearSession() => _instance.remove(_isLoggedInKey);
 }

@@ -24,8 +24,8 @@ class _SignInFormState extends State<SignInForm> {
   final AuthService _authService = AuthService();
   bool _isLoading = false;
   Future<void> handleSignInSuccess() async {
-    await SharedPrefHelper.setLoggedIn(true);
     await homeNavigation(context);
+    await SharedPrefHelper.setLoggedIn(isLoggedIn: true);
   }
 
   Future<void> _signIn() async {
@@ -43,7 +43,7 @@ class _SignInFormState extends State<SignInForm> {
         log('Sign-in successful: ${user.uid}');
 
         if (mounted) {
-          handleSignInSuccess();
+          await handleSignInSuccess();
         }
       } else {
         log('Sign-in failed');
