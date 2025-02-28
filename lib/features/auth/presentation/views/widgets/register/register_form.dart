@@ -49,7 +49,7 @@ class _RegisterFormState extends State<RegisterForm> {
       final user = await _auth.signUpWithEmail(email, password);
       if (user != null) {
         log('User registered successfully');
-        
+
         return true;
       } else {
         log('Failed to register user');
