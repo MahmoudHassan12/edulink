@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart'
-    show CachedNetworkImage, CachedNetworkImageProvider;
+    show CachedNetworkImage;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/navigations.dart'
     show courseDetailsNavigation;
 import 'package:edu_link/core/widgets/e_text.dart';
+import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/text_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -116,11 +117,7 @@ class Course extends StatelessWidget {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 title: const EText('By'),
                 subtitle: EText(professor!.name!),
-                trailing: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(
-                    professor.imageUrl!,
-                  ),
-                ),
+                trailing: UserPhoto(imageUrl: professor.imageUrl!),
               ),
             ),
           ],

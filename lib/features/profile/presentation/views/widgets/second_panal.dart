@@ -1,26 +1,28 @@
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/profile/presentation/views/widgets/profile_panal.dart';
 import 'package:flutter/material.dart';
 
 class SecondPanal extends StatelessWidget {
-  const SecondPanal({super.key});
+  const SecondPanal({required this.user, super.key});
+  final UserEntity user;
   @override
-  Widget build(BuildContext context) => const ProfilePanal(
+  Widget build(BuildContext context) => ProfilePanal(
     child: Column(
       spacing: 8,
       children: [
         ListTile(
           minVerticalPadding: 0,
           minTileHeight: 0,
-          leading: Icon(Icons.phone_rounded),
-          title: EText('0123456789'),
+          leading: const Icon(Icons.phone_rounded),
+          title: EText(user.phone!),
         ),
-        Divider(indent: 16, endIndent: 16),
+        const Divider(indent: 16, endIndent: 16),
         ListTile(
           minVerticalPadding: 0,
           minTileHeight: 0,
-          leading: Icon(Icons.email_rounded),
-          title: EText('30123456789123@sci.asu.edu.eg'),
+          leading: const Icon(Icons.email_rounded),
+          title: FittedBox(child: EText(user.email!)),
         ),
       ],
     ),

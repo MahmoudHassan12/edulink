@@ -11,7 +11,7 @@ class CustomElevatedButton extends StatelessWidget {
     VoidCallback? onPressed,
     IconData? icon,
   }) =>
-      CustomElevatedButtonIcon(label: label, onPressed: onPressed, icon: icon);
+      _CustomElevatedButtonIcon(label: label, onPressed: onPressed, icon: icon);
   final VoidCallback? onPressed;
   final String label;
   @override
@@ -22,12 +22,11 @@ class CustomElevatedButton extends StatelessWidget {
   );
 }
 
-class CustomElevatedButtonIcon extends CustomElevatedButton {
-  const CustomElevatedButtonIcon({
+class _CustomElevatedButtonIcon extends CustomElevatedButton {
+  const _CustomElevatedButtonIcon({
     required super.label,
     super.onPressed,
     this.icon,
-    super.key,
   });
   final IconData? icon;
   @override

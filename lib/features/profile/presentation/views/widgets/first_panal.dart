@@ -1,10 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/widgets/e_text.dart';
+import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:edu_link/features/profile/presentation/views/widgets/profile_panal.dart';
 import 'package:flutter/material.dart';
 
 class FirstPanal extends StatelessWidget {
-  const FirstPanal({super.key});
+  const FirstPanal({required this.user, super.key});
+  final UserEntity user;
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -13,15 +15,13 @@ class FirstPanal extends StatelessWidget {
       child: Column(
         spacing: 8,
         children: [
-          const CircleAvatar(
+          UserPhoto(
             radius: 48,
-            backgroundImage: CachedNetworkImageProvider(
-              'https://avatar.iran.liara.run/public/49',
-            ),
+            imageUrl: user.imageUrl!,
           ),
-          const EText(
-            'Hossam Hassan',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          EText(
+            user.name!,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,14 +60,14 @@ class FirstPanal extends StatelessWidget {
                 children: [EText('  :  '), EText('  :  '), EText('  :  ')],
               ),
               // const Spacer(),
-              const Expanded(
+              Expanded(
                 child: Column(
                   spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    EText('Level 4'),
-                    EText('12345678'),
-                    EText('Statistic & CS'),
+                    EText(user.level!),
+                    EText(user.id!),
+                    EText(user.program!),
                   ],
                 ),
               ),

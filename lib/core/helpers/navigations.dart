@@ -26,12 +26,16 @@ Future<void> signinNavigation(BuildContext context) =>
 /// Navigations with extra data
 Future<void> courseDetailsNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.courseDetailsView, extra: extra);
+Future<void> professorProfileNavigation(
+  BuildContext context, {
+  Object? extra,
+}) => _navigateTo(context, Routes.professorProfileView, extra: extra);
+Future<void> studentProfileNavigation(BuildContext context, {Object? extra}) =>
+    _navigateTo(context, Routes.studentProfileView, extra: extra);
 
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>
     _navigateTo(context, Routes.aboutView);
-Future<void> profileNavigation(BuildContext context) =>
-    _navigateTo(context, Routes.profileView);
 Future<void> registerNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerView);
 Future<void> resetPasswordNavigation(BuildContext context) =>

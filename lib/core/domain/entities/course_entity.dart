@@ -1,5 +1,5 @@
 import 'package:edu_link/core/domain/entities/duration_entity.dart';
-import 'package:edu_link/core/domain/entities/professor_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 
 class CourseEntity {
   const CourseEntity({
@@ -23,7 +23,6 @@ class CourseEntity {
     if (data == null) {
       return const CourseEntity(); // Return an empty entity if data is null
     }
-
     return CourseEntity(
       id: data['id'] as String?,
       code: data['code'] as String?,
@@ -40,14 +39,11 @@ class CourseEntity {
       lectures: (data['lectures'] as num?)?.toInt(),
       duration:
           data['duration'] != null
-              ? DurationEntity.fromMap(data['duration'] as Map<String, dynamic>)
-              : null, // Handle null safely
-      professor:
-          data['professor'] != null
-              ? ProfessorEntity.fromMap(
-                data['professor'] as Map<String, dynamic>,
+              ? DurationEntity.fromMap(
+                data['duration'] as Map<String, dynamic>?,
               )
               : null, // Handle null safely
+      professor: UserEntity.fromMap(data['professor'] as Map<String, dynamic>?),
     );
   }
 
@@ -63,5 +59,5 @@ class CourseEntity {
   final int? creditHour;
   final int? lectures;
   final DurationEntity? duration;
-  final ProfessorEntity? professor;
+  final UserEntity? professor;
 }
