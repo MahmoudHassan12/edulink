@@ -1,4 +1,5 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/helpers/entities_handlers.dart';
 
 class UserEntity {
   const UserEntity({
@@ -34,8 +35,7 @@ class UserEntity {
     program: data?['program'],
     ssn: data?['ssn'],
     academicTitle: data?['academicTitle'],
-    office:
-        data?['office'] != null ? OfficeEntity.fromMap(data?['office']) : null,
+    office: complexEntity(data?['office'], OfficeEntity.fromMap),
   );
 
   final String? id;
@@ -57,14 +57,57 @@ class UserEntity {
   final OfficeEntity? office;
 }
 
+/// The office of a professor and its availability
 class OfficeEntity {
-  const OfficeEntity({this.location, this.hours, this.contactInfo});
+  const OfficeEntity({this.location, this.availability, this.contactInfo});
   factory OfficeEntity.fromMap(Map<String, dynamic>? data) => OfficeEntity(
-    location: data?['location'],
-    hours: data?['hours'],
+    location: complexEntity(data?['location'], LocationEntity.fromMap),
+    availability: complexEntity(
+      data?['availability'],
+      AvailabilityEntity.fromMap,
+    ),
     contactInfo: data?['contactInfo'],
   );
-  final String? location;
-  final String? hours;
+  final LocationEntity? location;
+  final AvailabilityEntity? availability;
   final String? contactInfo;
+}
+
+/// The location of a professor
+class LocationEntity {
+  const LocationEntity({this.building, this.floor, this.department, this.room});
+  factory LocationEntity.fromMap(Map<String, dynamic>? data) => LocationEntity(
+    building: data?['building'],
+    floor: data?['floor'],
+    department: data?['department'],
+    room: data?['room'],
+  );
+  final String? building;
+  final String? floor;
+  final String? department;
+  final String? room;
+}
+
+/// The available times for a professor to respond to students
+class AvailabilityEntity {
+  const AvailabilityEntity({this.times});
+  factory AvailabilityEntity.fromMap(Map<String, dynamic>? data) =>
+      AvailabilityEntity(
+        times: complexListEntity(data?['times'], AvailableTimeEntity.fromMap),
+      );
+  final List<AvailableTimeEntity>? times;
+}
+
+/// The available time per day for a professor to respond to students
+class AvailableTimeEntity {
+  const AvailableTimeEntity({this.day, this.from, this.to});
+  factory AvailableTimeEntity.fromMap(Map<String, dynamic>? data) =>
+      AvailableTimeEntity(
+        day: data?['day'],
+        from: data?['from'],
+        to: data?['to'],
+      );
+  final String? day;
+  final DateTime? from;
+  final DateTime? to;
 }
