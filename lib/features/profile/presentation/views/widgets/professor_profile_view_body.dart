@@ -6,6 +6,7 @@ import 'package:edu_link/features/profile/presentation/views/widgets/first_panal
     show FirstPanalWithDecoration;
 import 'package:edu_link/features/profile/presentation/views/widgets/second_panal.dart'
     show SecondPanal;
+import 'package:edu_link/features/profile/presentation/views/widgets/third_panal.dart';
 import 'package:flutter/material.dart';
 
 class ProfessorProfileViewBody extends StatelessWidget {
@@ -19,24 +20,36 @@ class ProfessorProfileViewBody extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 32),
         sliver: SliverList.list(
           children: [
-            const ListTile(
-              minVerticalPadding: 0,
-              contentPadding: EdgeInsets.zero,
-              title: EText(
-                'Contact Information',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-            ),
+            const SizedBox(height: 12),
+            const _Label('Contact Information'),
             SecondPanal(user: user),
-            const SizedBox(height: 16),
-            CustomElevatedButton.icon(
-              onPressed: () {},
-              label: 'More Details',
-              icon: Icons.arrow_forward_ios_rounded,
-            ),
+            const SizedBox(height: 12),
+            if (user.isProfessor) ...[
+              const _Label('Office hours & availability'),
+              ThirdPanal(user: user),
+            ] else
+              CustomElevatedButton.icon(
+                onPressed: () {},
+                label: 'More Details',
+                icon: Icons.arrow_forward_ios_rounded,
+              ),
           ],
         ),
       ),
     ],
+  );
+}
+
+class _Label extends StatelessWidget {
+  const _Label(this.title);
+  final String title;
+  @override
+  Widget build(BuildContext context) => ListTile(
+    minVerticalPadding: 0,
+    contentPadding: EdgeInsets.zero,
+    title: EText(
+      title,
+      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+    ),
   );
 }

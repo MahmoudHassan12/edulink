@@ -1,5 +1,6 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/entities_handlers.dart';
+import 'package:flutter/material.dart' show TimeOfDay;
 
 class UserEntity {
   const UserEntity({
@@ -108,6 +109,6 @@ class AvailableTimeEntity {
         to: data?['to'],
       );
   final String? day;
-  final DateTime? from;
-  final DateTime? to;
+  final TimeOfDay? from;
+  final TimeOfDay? to;
 }

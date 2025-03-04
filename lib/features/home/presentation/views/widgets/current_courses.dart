@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart';
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/course.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,19 @@ class CurrentCourses extends StatelessWidget {
           return Center(child: EText('Error: ${snapshot.error}'));
         }
         if (!snapshot.hasData || (snapshot.data?.docs.isEmpty ?? true)) {
-          return const Center(child: EText('No courses available'));
+          return AspectRatio(
+            aspectRatio: 4 / 3,
+            child: CarouselView(
+              itemExtent: MediaQuery.sizeOf(context).width - 80,
+              itemSnapping: true,
+              enableSplash: false,
+              children:
+                  getUser().courses!
+                      .map((course) => Course(course: course))
+                      .toList(),
+            ),
+          );
+          // return const Center(child: EText('No courses available'));
         }
         final courses =
             snapshot.data?.docs

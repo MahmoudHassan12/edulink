@@ -18,7 +18,7 @@ class MyProfile extends StatelessWidget {
       borderRadius: BorderRadius.circular(50),
       child: Padding(
         padding: const EdgeInsets.all(4),
-        child: UserPhoto(imageUrl: user.imageUrl!),
+        child: UserPhoto(imageUrl: user.imageUrl!, isHero: true),
       ),
     );
   }

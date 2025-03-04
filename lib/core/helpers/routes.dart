@@ -18,6 +18,7 @@ import 'package:edu_link/features/profile/presentation/views/professor_profile_v
     show ProfessorProfileView;
 import 'package:edu_link/features/profile/presentation/views/student_profile_view.dart'
     show StudentProfileView;
+import 'package:edu_link/features/register_courses/presentation/views/register_courses_view.dart';
 import 'package:edu_link/features/settings/presentation/views/settings_view.dart'
     show SettingsView;
 import 'package:flutter/material.dart' show BuildContext, RouterConfig, Widget;
@@ -30,6 +31,7 @@ abstract class Routes {
   static const String courseDetailsView = '/course-details';
   static const String homeView = '/';
   static const String professorProfileView = '/professor-profile';
+  static const String registerCoursesView = '/register-courses';
   static const String registerView = '/register';
   static const String resetPasswordView = '/reset-password';
   static const String settingsView = '/settings';
@@ -49,6 +51,7 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes without arguments
   Routes.aboutView: (context, args) => const AboutView(),
   Routes.homeView: (context, args) => const HomeView(),
+  Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),
   Routes.registerView: (context, args) => const RegisterView(),
   Routes.resetPasswordView: (context, args) => const ResetPasswordView(),
   Routes.settingsView: (context, args) => const SettingsView(),

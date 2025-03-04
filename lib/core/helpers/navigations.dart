@@ -36,6 +36,8 @@ Future<void> studentProfileNavigation(BuildContext context, {Object? extra}) =>
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>
     _navigateTo(context, Routes.aboutView);
+Future<void> registerCoursesNavigation(BuildContext context) =>
+    _navigateTo(context, Routes.registerCoursesView);
 Future<void> registerNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerView);
 Future<void> resetPasswordNavigation(BuildContext context) =>

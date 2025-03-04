@@ -8,78 +8,86 @@ class FirstPanal extends StatelessWidget {
   const FirstPanal({required this.user, super.key});
   final UserEntity user;
   @override
+  Widget build(BuildContext context) => ProfilePanal(
+    child: Column(
+      spacing: 8,
+      children: [
+        UserPhoto(radius: 48, imageUrl: user.imageUrl!, isHero: true),
+        _UserName(user: user),
+        _UserInfoFirstPanal(user: user),
+        const Divider(indent: 16, endIndent: 16),
+        EText(
+          'Faculty of Science',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface.withAlpha(200),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _UserName extends StatelessWidget {
+  const _UserName({required this.user});
+  final UserEntity user;
+  @override
+  Widget build(BuildContext context) => EText(
+    user.isProfessor ? 'Dr. ${user.name!}' : user.name!,
+    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+  );
+}
+
+class _UserInfoFirstPanal extends StatelessWidget {
+  const _UserInfoFirstPanal({required this.user});
+  final UserEntity user;
+  @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final color = colorScheme.primary;
-    return ProfilePanal(
-      child: Column(
-        spacing: 8,
-        children: [
-          UserPhoto(
-            radius: 48,
-            imageUrl: user.imageUrl!,
-          ),
-          EText(
-            user.name!,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    EText(
-                      'Credit Level',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
+    final studentInfo = {
+      'Credit Level': user.level,
+      'Student ID': user.id,
+      'Program': user.program,
+    };
+    final professorInfo = {
+      'Academic title': user.academicTitle,
+      'Department': user.department,
+    };
+    final info = user.isProfessor ? professorInfo : studentInfo;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Column(
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children:
+                info.entries
+                    .map(
+                      (e) => EText(
+                        e.key,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
-                    ),
-                    EText(
-                      'Student ID',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                      ),
-                    ),
-                    EText(
-                      'Program',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Column(
-                spacing: 8,
-                children: [EText('  :  '), EText('  :  '), EText('  :  ')],
-              ),
-              // const Spacer(),
-              Expanded(
-                child: Column(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    EText(user.level!),
-                    EText(user.id!),
-                    EText(user.program!),
-                  ],
-                ),
-              ),
-            ],
+                    )
+                    .toList(),
           ),
-          const Divider(indent: 16, endIndent: 16),
-          EText(
-            'Faculty of Science',
-            style: TextStyle(color: colorScheme.onSurface.withAlpha(200)),
+        ),
+        Column(
+          spacing: 8,
+          children: List<EText>.generate(
+            info.length,
+            (_) => const EText('  :  '),
           ),
-        ],
-      ),
+        ),
+        Expanded(
+          child: Column(
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: info.entries.map((e) => EText(e.value!)).toList(),
+          ),
+        ),
+      ],
     );
   }
 }
