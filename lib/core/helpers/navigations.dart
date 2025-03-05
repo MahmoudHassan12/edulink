@@ -26,12 +26,8 @@ Future<void> signinNavigation(BuildContext context) =>
 /// Navigations with extra data
 Future<void> courseDetailsNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.courseDetailsView, extra: extra);
-Future<void> professorProfileNavigation(
-  BuildContext context, {
-  Object? extra,
-}) => _navigateTo(context, Routes.professorProfileView, extra: extra);
-Future<void> studentProfileNavigation(BuildContext context, {Object? extra}) =>
-    _navigateTo(context, Routes.studentProfileView, extra: extra);
+Future<void> profileNavigation(BuildContext context, {Object? extra}) =>
+    _navigateTo(context, Routes.profileView, extra: extra);
 
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>

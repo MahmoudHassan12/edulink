@@ -40,11 +40,7 @@ class MyProfile extends StatelessWidget {
           );
         }
         return InkWell(
-          onTap:
-              () async =>
-                  user.isProfessor
-                      ? professorProfileNavigation(context, extra: user)
-                      : studentProfileNavigation(context, extra: user),
+          onTap: () async => profileNavigation(context, extra: user),
           radius: 50,
           borderRadius: BorderRadius.circular(50),
           child: Padding(

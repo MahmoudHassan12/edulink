@@ -1,6 +1,11 @@
 import 'package:edu_link/core/domain/entities/user_entity.dart';
+import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
+import 'package:edu_link/core/helpers/navigations.dart' show signinNavigation;
+import 'package:edu_link/core/helpers/shared_pref.dart' show SharedPrefHelper;
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart'
     show CustomElevatedButton;
+import 'package:edu_link/core/widgets/buttons/custom_filled_button_tonal.dart'
+    show CustomFilledButtonTonal;
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:edu_link/features/profile/presentation/views/widgets/first_panal_with_decoration.dart'
     show FirstPanalWithDecoration;
@@ -9,8 +14,8 @@ import 'package:edu_link/features/profile/presentation/views/widgets/second_pana
 import 'package:edu_link/features/profile/presentation/views/widgets/third_panal.dart';
 import 'package:flutter/material.dart';
 
-class ProfessorProfileViewBody extends StatelessWidget {
-  const ProfessorProfileViewBody({required this.user, super.key});
+class ProfileViewBody extends StatelessWidget {
+  const ProfileViewBody({required this.user, super.key});
   final UserEntity user;
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
@@ -33,6 +38,17 @@ class ProfessorProfileViewBody extends StatelessWidget {
                 label: 'More Details',
                 icon: Icons.arrow_forward_ios_rounded,
               ),
+            const SizedBox(height: 12),
+            CustomFilledButtonTonal.icon(
+              onPressed: () async {
+                await AuthService().signOut();
+                await SharedPrefHelper.clearSession();
+                if (context.mounted) await signinNavigation(context);
+              },
+              label: 'Log Out',
+              icon: Icons.logout_rounded,
+              backgroundColor: Theme.of(context).colorScheme.errorContainer,
+            ),
           ],
         ),
       ),

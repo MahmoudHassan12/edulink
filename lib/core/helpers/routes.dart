@@ -14,10 +14,8 @@ import 'package:edu_link/features/course_details/presentation/views/course_detai
     show CourseDetailsView;
 import 'package:edu_link/features/home/presentation/views/home_view.dart'
     show HomeView;
-import 'package:edu_link/features/profile/presentation/views/professor_profile_view.dart'
-    show ProfessorProfileView;
-import 'package:edu_link/features/profile/presentation/views/student_profile_view.dart'
-    show StudentProfileView;
+import 'package:edu_link/features/profile/presentation/views/profile_view.dart'
+    show ProfileView;
 import 'package:edu_link/features/register_courses/presentation/views/register_courses_view.dart';
 import 'package:edu_link/features/settings/presentation/views/settings_view.dart'
     show SettingsView;
@@ -30,23 +28,19 @@ abstract class Routes {
   static const String aboutView = '/about';
   static const String courseDetailsView = '/course-details';
   static const String homeView = '/';
-  static const String professorProfileView = '/professor-profile';
+  static const String profileView = '/student-profile';
   static const String registerCoursesView = '/register-courses';
   static const String registerView = '/register';
   static const String resetPasswordView = '/reset-password';
   static const String settingsView = '/settings';
   static const String signinView = '/sign-in';
-  static const String studentProfileView = '/student-profile';
 }
 
 final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes with arguments
   Routes.courseDetailsView:
       (context, args) => CourseDetailsView(course: args! as CourseEntity),
-  Routes.professorProfileView:
-      (context, args) => ProfessorProfileView(user: args! as UserEntity),
-  Routes.studentProfileView:
-      (context, args) => StudentProfileView(user: args! as UserEntity),
+  Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
 
   /// Routes without arguments
   Routes.aboutView: (context, args) => const AboutView(),

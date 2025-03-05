@@ -3,9 +3,9 @@ import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart'
     show
         aboutNavigation,
+        profileNavigation,
         registerCoursesNavigation,
-        settingsNavigation,
-        studentProfileNavigation;
+        settingsNavigation;
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:flutter/material.dart';
@@ -87,8 +87,7 @@ class _DrawerHeader extends StatelessWidget {
                 ),
               ),
               OutlinedButton(
-                onPressed:
-                    () async => studentProfileNavigation(context, extra: user),
+                onPressed: () async => profileNavigation(context, extra: user),
                 child: const Text('Manage your Account'),
               ),
             ],
