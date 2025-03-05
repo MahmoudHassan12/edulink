@@ -44,8 +44,8 @@ class AppDrawer extends StatelessWidget {
         const _DrawerHeader(),
         ...navigations.map(
           (nav) => NavigationDrawerDestination(
-            icon: Icon(nav['icon'] as IconData),
-            label: EText(nav['label'] as String),
+            icon: Icon(nav['icon'] as IconData?),
+            label: EText(nav['label']! as String),
           ),
         ),
       ],
@@ -80,10 +80,15 @@ class _DrawerHeader extends StatelessWidget {
               ListTile(
                 leading: UserPhoto(imageUrl: user.imageUrl ?? ''),
                 title: EText(user.name ?? 'No Name'),
-                subtitle: FittedBox(child: EText(user.email ?? 'No Email')),
+                subtitle: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: EText(user.email ?? 'No Email'),
+                ),
               ),
               OutlinedButton(
-                onPressed: () => studentProfileNavigation(context, extra: user),
+                onPressed:
+                    () async => studentProfileNavigation(context, extra: user),
                 child: const Text('Manage your Account'),
               ),
             ],

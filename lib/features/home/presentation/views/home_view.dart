@@ -17,15 +17,14 @@ class HomeView extends StatelessWidget {
   Scaffold build(BuildContext context) => Scaffold(
     body: const HomeViewBody(),
     floatingActionButton: FloatingActionButton(
-      onPressed:
-          //_addToFirestore
-          () {},
+      onPressed: () {}, // () async => _addToFirestore(),
     ),
     drawer: const AppDrawer(),
     bottomNavigationBar: const ENavigationBar(),
   );
 }
 
+// ignore: unused_element
 Future<void> _addToFirestore() async {
   final firestore = FirebaseFirestore.instance;
   final currentUser = AuthService().currentUser;

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
@@ -42,7 +41,6 @@ Future<UserEntity?> getUser() async {
               (course) => CourseEntity.fromMap(course as Map<String, dynamic>?),
             )
             .toList();
-
     return UserEntity.fromMap(data, courses: courses);
   } catch (e) {
     log('Error while fetching user data: $e');

@@ -22,7 +22,11 @@ class SecondPanal extends StatelessWidget {
           minVerticalPadding: 0,
           minTileHeight: 0,
           leading: const Icon(Icons.email_rounded),
-          title: FittedBox(child: EText(user.email!)),
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: EText(user.email!),
+          ),
         ),
       ],
     ),

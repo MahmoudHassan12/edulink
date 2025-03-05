@@ -102,9 +102,11 @@ class AuthService {
 
   /// Sign out user
   Future<void> signOut() async {
-    await _auth.signOut();
-    //await GoogleSignIn().signOut();
-    //await FacebookAuth.instance.logOut();
+    if (_auth.currentUser != null) await _auth.signOut();
+    if (await GoogleSignIn().isSignedIn()) await GoogleSignIn().signOut();
+    // if (await FacebookAuth.instance.accessToken != null) {
+    //   await FacebookAuth.instance.logOut();
+    // }
     log('User signed out');
   }
 

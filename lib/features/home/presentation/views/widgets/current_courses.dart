@@ -1,4 +1,4 @@
-import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/course.dart';
@@ -9,7 +9,7 @@ class CurrentCourses extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<UserEntity?>(
       future: getUser(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
