@@ -51,10 +51,13 @@ class Course extends StatelessWidget {
                           ],
                         ),
                       ),
-                      child: CachedNetworkImage(
-                        imageUrl: course.imageUrl!,
-                        fit: BoxFit.cover,
-                      ),
+                      child:
+                          course.imageUrl == null
+                              ? const Center(child: Icon(Icons.error))
+                              : CachedNetworkImage(
+                                imageUrl: course.imageUrl!,
+                                fit: BoxFit.cover,
+                              ),
                     ),
                     Align(
                       alignment: Alignment.topCenter,

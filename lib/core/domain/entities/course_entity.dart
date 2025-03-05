@@ -18,7 +18,7 @@ class CourseEntity {
     this.professor,
   });
 
-  /// Function to convert Firestore data into a `CourseEntity`
+  /// Factory constructor to create `CourseEntity` from a Firestore map
   factory CourseEntity.fromMap(Map<String, dynamic>? data) {
     if (data == null) {
       return const CourseEntity(); // Return an empty entity if data is null
@@ -33,17 +33,14 @@ class CourseEntity {
       level: data['level'] as String?,
       department: data['department'] as String?,
       semester: data['semester'] as String?,
-      creditHour:
-          (data['creditHour'] as num?)
-              ?.toInt(), // Ensures safe conversion from Firestore's num type
+      creditHour: (data['creditHour'] as num?)?.toInt(),
       lectures: (data['lectures'] as num?)?.toInt(),
-      duration:
-          data['duration'] != null
-              ? DurationEntity.fromMap(
-                data['duration'] as Map<String, dynamic>?,
-              )
-              : null, // Handle null safely
-      professor: UserEntity.fromMap(data['professor'] as Map<String, dynamic>?),
+      duration: data['duration'] != null
+          ? DurationEntity.fromMap(data['duration'] as Map<String, dynamic>?)
+          : null,
+      professor: data['professor'] != null
+          ? UserEntity.fromMap(data['professor'] as Map<String, dynamic>?)
+          : null,
     );
   }
 
@@ -60,4 +57,23 @@ class CourseEntity {
   final int? lectures;
   final DurationEntity? duration;
   final UserEntity? professor;
+
+  /// Converts `CourseEntity` to a Firestore-compatible map
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'code': code,
+      'title': title,
+      'description': description,
+      'imageUrl': imageUrl,
+      'type': type,
+      'level': level,
+      'department': department,
+      'semester': semester,
+      'creditHour': creditHour,
+      'lectures': lectures,
+      'duration': duration?.toMap(),
+      'professor': professor?.toMap(),
+    };
+  }
 }

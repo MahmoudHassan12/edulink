@@ -9,6 +9,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPrefHelper.init();
+  
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
   runApp(const MainApp());
 }

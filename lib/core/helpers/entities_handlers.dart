@@ -2,8 +2,12 @@ T? complexEntity<T>(
   Map<String, dynamic>? data,
   T Function(Map<String, dynamic>?)? fromMap,
 ) => data == null ? null : fromMap?.call(data);
-
 List<T>? complexListEntity<T>(
-  List<Map<String, dynamic>>? data,
+  List<dynamic>? data,
   T Function(Map<String, dynamic>?)? fromMap,
-) => data?.map(fromMap ?? (data) => <T>[] as T).toList();
+) =>
+    data
+        ?.whereType<Map<String, dynamic>>() // Safely filter only valid maps
+        .map(fromMap ?? (data) => null as T) // Safe fallback
+        .whereType<T>() // Exclude null values from the list
+        .toList();
