@@ -1,8 +1,7 @@
 import 'dart:developer';
-
 import 'package:edu_link/core/helpers/auth_service.dart';
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
-import 'package:edu_link/core/helpers/shared_pref.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/email_text_field.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/password_text_field.dart';
@@ -12,7 +11,6 @@ import 'package:flutter/material.dart';
 class SignInForm extends StatefulWidget {
   const SignInForm({this.isLoading = false, super.key});
   final bool isLoading;
-
   @override
   State<SignInForm> createState() => _SignInFormState();
 }
@@ -24,8 +22,8 @@ class _SignInFormState extends State<SignInForm> {
   final AuthService _authService = AuthService();
   bool _isLoading = false;
   Future<void> handleSignInSuccess() async {
-    await homeNavigation(context);
-    await SharedPrefHelper.setLoggedIn(isLoggedIn: true);
+    await getUserMethod();
+    if (mounted) await homeNavigation(context);
   }
 
   Future<void> _signIn() async {
@@ -67,7 +65,6 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {

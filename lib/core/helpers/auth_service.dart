@@ -1,5 +1,10 @@
 import 'dart:developer';
+import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
+import 'package:edu_link/core/helpers/navigations.dart' show signinNavigation;
+import 'package:edu_link/core/helpers/shared_pref.dart'
+    show SharedPrefSingleton;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -101,14 +106,18 @@ class AuthService {
   }
 
   /// Sign out user
-  Future<void> signOut() async {
+  Future<void> signOut(BuildContext context) async {
     if (_auth.currentUser != null) await _auth.signOut();
     if (await GoogleSignIn().isSignedIn()) await GoogleSignIn().signOut();
     // if (await FacebookAuth.instance.accessToken != null) {
     //   await FacebookAuth.instance.logOut();
     // }
+    await SharedPrefSingleton.remove(Endpoints.user);
+    if (context.mounted) await signinNavigation(context);
     log('User signed out');
   }
+
+  bool isSignedIn() => currentUser != null;
 
   /// Get current user
   User? get currentUser => _auth.currentUser;

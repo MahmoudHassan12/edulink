@@ -1,7 +1,7 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
 import 'package:edu_link/core/domain/entities/user_entity.dart';
-import 'package:edu_link/core/helpers/shared_pref.dart' show SharedPrefHelper;
+import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
     show AboutView;
 import 'package:edu_link/features/auth/presentation/views/register_view.dart'
@@ -54,7 +54,7 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
 
 RouterConfig<RouteMatchList> routerConfig = GoRouter(
   initialLocation:
-      SharedPrefHelper.isLoggedIn() ? Routes.homeView : Routes.signinView,
+      AuthService().isSignedIn() ? Routes.homeView : Routes.signinView,
   routes:
       _routes.entries
           .map(

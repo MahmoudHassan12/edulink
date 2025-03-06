@@ -12,7 +12,7 @@ class FirstPanal extends StatelessWidget {
     child: Column(
       spacing: 8,
       children: [
-        UserPhoto(radius: 48, imageUrl: user.imageUrl!, isHero: true),
+        UserPhoto(radius: 48, imageUrl: user.imageUrl, isHero: true),
         _UserName(user: user),
         _UserInfoFirstPanal(user: user),
         const Divider(indent: 16, endIndent: 16),

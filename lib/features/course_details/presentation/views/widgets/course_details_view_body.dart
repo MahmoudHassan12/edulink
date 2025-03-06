@@ -1,6 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/widgets/course_image.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
+import 'package:edu_link/core/widgets/favorite_button.dart' show FavoriteButton;
 import 'package:flutter/material.dart';
 
 class CourseDetailsViewBody extends StatelessWidget {
@@ -9,17 +10,35 @@ class CourseDetailsViewBody extends StatelessWidget {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      SliverAppBar.large(
-        title: EText(course.title!),
+      const SliverAppBar(
+        title: EText('Course Details'),
         centerTitle: true,
-        flexibleSpace: FlexibleSpaceBar(
-          background: CachedNetworkImage(
-            imageUrl: course.imageUrl!,
-            fit: BoxFit.fitWidth,
-          ),
-          centerTitle: true,
+        floating: true,
+        snap: true,
+      ),
+      const SliverToBoxAdapter(child: SizedBox(height: 16)),
+      SliverToBoxAdapter(
+        child: AspectRatio(
+          aspectRatio: 4 / 3,
+          child: CourseImage(imageUrl: course.imageUrl!),
         ),
-        expandedHeight: 500,
+      ),
+      SliverToBoxAdapter(
+        child: ListTile(
+          title: EText(course.code!),
+          subtitle: EText('${course.title}\nBy ${course.professor?.name}'),
+          trailing: const FavoriteButton(),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        sliver: SliverList.list(
+          children: [
+            const Divider(),
+            const SizedBox(height: 8),
+            EText(course.description!),
+          ],
+        ),
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 1600)),
     ],

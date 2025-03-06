@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart'
-    show CachedNetworkImage;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/navigations.dart'
     show courseDetailsNavigation;
+import 'package:edu_link/core/widgets/course_image.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
+import 'package:edu_link/core/widgets/favorite_button.dart';
 import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/text_icon.dart';
 import 'package:flutter/material.dart';
@@ -54,10 +54,7 @@ class Course extends StatelessWidget {
                       child:
                           course.imageUrl == null
                               ? const Center(child: Icon(Icons.error))
-                              : CachedNetworkImage(
-                                imageUrl: course.imageUrl!,
-                                fit: BoxFit.cover,
-                              ),
+                              : CourseImage(imageUrl: course.imageUrl!),
                     ),
                     Align(
                       alignment: Alignment.topCenter,
@@ -71,14 +68,7 @@ class Course extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: EText(course.title!),
-                          trailing: IconButton.outlined(
-                            onPressed: () {},
-                            icon: const Icon(Icons.favorite_border_rounded),
-                            selectedIcon: const Icon(Icons.favorite_rounded),
-                            style: IconButton.styleFrom(
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                          ),
+                          trailing: const FavoriteButton(),
                           minVerticalPadding: 0,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -120,7 +110,7 @@ class Course extends StatelessWidget {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 title: const EText('By'),
                 subtitle: EText(professor!.name!),
-                trailing: UserPhoto(imageUrl: professor.imageUrl!),
+                trailing: UserPhoto(imageUrl: professor.imageUrl),
               ),
             ),
           ],

@@ -8,15 +8,16 @@ class UserPhoto extends StatelessWidget {
     this.isHero = false,
     super.key,
   });
-  final String imageUrl;
+  final String? imageUrl;
   final double? radius;
   final bool isHero;
   @override
   Widget build(BuildContext context) {
+    final url = imageUrl ?? 'https://avatar.iran.liara.run/public/32';
     final circleAvatar = CircleAvatar(
-      backgroundImage: CachedNetworkImageProvider(imageUrl),
+      backgroundImage: CachedNetworkImageProvider(url),
       radius: radius,
     );
-    return isHero ? Hero(tag: imageUrl, child: circleAvatar) : circleAvatar;
+    return isHero ? Hero(tag: url, child: circleAvatar) : circleAvatar;
   }
 }

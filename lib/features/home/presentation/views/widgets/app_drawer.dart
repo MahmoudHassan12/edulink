@@ -1,4 +1,3 @@
-import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart'
     show
@@ -58,42 +57,27 @@ class _DrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<UserEntity?>(
-      future: getUser(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError) {
-          return const Center(child: EText('Failed to load user data'));
-        }
-        final user = snapshot.data;
-        if (user == null) {
-          return const Center(child: EText('No user found'));
-        }
-
-        return DrawerHeader(
-          padding: EdgeInsets.zero,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ListTile(
-                leading: UserPhoto(imageUrl: user.imageUrl ?? ''),
-                title: EText(user.name ?? 'No Name'),
-                subtitle: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: EText(user.email ?? 'No Email'),
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () async => profileNavigation(context, extra: user),
-                child: const Text('Manage your Account'),
-              ),
-            ],
+    final user = getUser();
+    return DrawerHeader(
+      padding: EdgeInsets.zero,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ListTile(
+            leading: UserPhoto(imageUrl: user?.imageUrl),
+            title: EText(user?.name ?? 'No Name'),
+            subtitle: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: EText(user?.email ?? 'No Email'),
+            ),
           ),
-        );
-      },
+          OutlinedButton(
+            onPressed: () async => profileNavigation(context, extra: user),
+            child: const Text('Manage your Account'),
+          ),
+        ],
+      ),
     );
   }
 }

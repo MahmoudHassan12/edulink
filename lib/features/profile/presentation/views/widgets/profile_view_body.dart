@@ -1,7 +1,5 @@
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
-import 'package:edu_link/core/helpers/navigations.dart' show signinNavigation;
-import 'package:edu_link/core/helpers/shared_pref.dart' show SharedPrefHelper;
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart'
     show CustomElevatedButton;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button_tonal.dart'
@@ -40,11 +38,7 @@ class ProfileViewBody extends StatelessWidget {
               ),
             const SizedBox(height: 12),
             CustomFilledButtonTonal.icon(
-              onPressed: () async {
-                await AuthService().signOut();
-                await SharedPrefHelper.clearSession();
-                if (context.mounted) await signinNavigation(context);
-              },
+              onPressed: () async => AuthService().signOut(context),
               label: 'Log Out',
               icon: Icons.logout_rounded,
               backgroundColor: Theme.of(context).colorScheme.errorContainer,
