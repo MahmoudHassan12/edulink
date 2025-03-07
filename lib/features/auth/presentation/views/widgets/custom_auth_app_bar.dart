@@ -34,6 +34,7 @@ class CustomAuthAppBar extends StatelessWidget {
               : null,
       flexibleSpace: FlexibleSpaceBar(
         background: Center(
+          // TODO(Anyone): Remove the gesture detector after implementation
           child: GestureDetector(
             onLongPress: () async => homeNavigation(context),
             child: EText(title, style: const TextStyle(fontSize: 36)),

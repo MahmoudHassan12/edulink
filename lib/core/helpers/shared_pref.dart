@@ -22,8 +22,19 @@ mixin SharedPrefSingleton {
   static late SharedPreferences _instance;
   static Future<SharedPreferences> init() async =>
       _instance = await SharedPreferences.getInstance();
-  static Future<bool> setString(String key, String value) async =>
+
+  /// Setters
+  static Future<bool> setString(String key, String value) =>
       _instance.setString(key, value);
+  static Future<bool> setStringList(String key, List<String> value) =>
+      _instance.setStringList(key, value);
+
+  /// Getters
   static String getString(String key) => _instance.getString(key) ?? '';
-  static Future<bool> remove(String key) async => _instance.remove(key);
+  static List<String>? getStringList(String key) =>
+      _instance.getStringList(key);
+
+  /// Removers
+  static Future<bool> remove(String key) => _instance.remove(key);
+  static Future<bool> clear() => _instance.clear();
 }

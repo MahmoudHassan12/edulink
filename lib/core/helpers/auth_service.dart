@@ -106,16 +106,16 @@ class AuthService {
   }
 
   /// Sign out user
-  Future<void> signOut(BuildContext context) async {
-    if (_auth.currentUser != null) await _auth.signOut();
-    if (await GoogleSignIn().isSignedIn()) await GoogleSignIn().signOut();
-    // if (await FacebookAuth.instance.accessToken != null) {
-    //   await FacebookAuth.instance.logOut();
-    // }
-    await SharedPrefSingleton.remove(Endpoints.user);
-    if (context.mounted) await signinNavigation(context);
-    log('User signed out');
-  }
+  Future<void> signOut(BuildContext context) => Future.wait([
+    _auth.signOut(),
+    GoogleSignIn().isSignedIn().then(
+      (signedIn) => signedIn ? GoogleSignIn().signOut() : Future.value(),
+    ),
+    // FacebookAuth.instance.logOut(),
+    SharedPrefSingleton.remove(Endpoints.user),
+    SharedPrefSingleton.remove(Endpoints.courses),
+    signinNavigation(context),
+  ]);
 
   bool isSignedIn() => currentUser != null;
 

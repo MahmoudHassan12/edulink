@@ -10,7 +10,13 @@ import 'package:edu_link/core/helpers/shared_pref.dart';
 UserEntity? getUser() {
   final user = SharedPrefSingleton.getString(Endpoints.user);
   if (user.isNotEmpty) {
-    return UserEntity.fromMap(jsonDecode(user));
+    return UserEntity.fromMap(
+      jsonDecode(user),
+      courses:
+          SharedPrefSingleton.getStringList(
+            Endpoints.courses,
+          )?.map((e) => CourseEntity.fromMap(jsonDecode(e))).toList(),
+    );
   }
   return null;
 }
@@ -52,9 +58,13 @@ Future<bool?> getUserMethod() async {
               (course) => CourseEntity.fromMap(course as Map<String, dynamic>?),
             )
             .toList();
+    await SharedPrefSingleton.setStringList(
+      Endpoints.courses,
+      courses.map((course) => jsonEncode(course.toMap())).toList(),
+    );
     return SharedPrefSingleton.setString(
       Endpoints.user,
-      jsonEncode(UserEntity.fromMap(data, courses: courses).toMap()),
+      jsonEncode(UserEntity.fromMap(data).toMap()),
     );
   } catch (e) {
     log('Error while fetching user data: $e');
