@@ -4,20 +4,18 @@ import 'package:flutter/material.dart';
 
 class CurrentCourses extends StatelessWidget {
   const CurrentCourses({super.key});
-
   @override
-  Widget build(BuildContext context) {
-    final user = getUser();
-    return AspectRatio(
-      aspectRatio: 4 / 3,
-      child: CarouselView(
-        itemExtent: MediaQuery.sizeOf(context).width - 80,
-        itemSnapping: true,
-        enableSplash: false,
-        children:
-            user?.courses?.map((course) => Course(course: course)).toList() ??
-            [],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AspectRatio(
+    aspectRatio: 4 / 3,
+    child: CarouselView(
+      itemExtent: MediaQuery.sizeOf(context).width - 80,
+      itemSnapping: true,
+      enableSplash: false,
+      children:
+          getUser()?.courses
+              ?.map((course) => Course(course: course))
+              .toList() ??
+          [],
+    ),
+  );
 }

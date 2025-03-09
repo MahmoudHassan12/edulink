@@ -35,12 +35,16 @@ class CourseEntity {
       semester: data['semester'] as String?,
       creditHour: (data['creditHour'] as num?)?.toInt(),
       lectures: (data['lectures'] as num?)?.toInt(),
-      duration: data['duration'] != null
-          ? DurationEntity.fromMap(data['duration'] as Map<String, dynamic>?)
-          : null,
-      professor: data['professor'] != null
-          ? UserEntity.fromMap(data['professor'] as Map<String, dynamic>?)
-          : null,
+      duration:
+          data['duration'] != null
+              ? DurationEntity.fromMap(
+                data['duration'] as Map<String, dynamic>?,
+              )
+              : null,
+      professor:
+          data['professor'] != null
+              ? UserEntity.fromMap(data['professor'] as Map<String, dynamic>?)
+              : null,
     );
   }
 
@@ -59,21 +63,27 @@ class CourseEntity {
   final UserEntity? professor;
 
   /// Converts `CourseEntity` to a Firestore-compatible map
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'code': code,
-      'title': title,
-      'description': description,
-      'imageUrl': imageUrl,
-      'type': type,
-      'level': level,
-      'department': department,
-      'semester': semester,
-      'creditHour': creditHour,
-      'lectures': lectures,
-      'duration': duration?.toMap(),
-      'professor': professor?.toMap(),
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'code': code,
+    'title': title,
+    'description': description,
+    'imageUrl': imageUrl,
+    'type': type,
+    'level': level,
+    'department': department,
+    'semester': semester,
+    'creditHour': creditHour,
+    'lectures': lectures,
+    'duration': duration?.toMap(),
+    'professor': professor?.toMap(),
+  };
+
+  bool isValid() =>
+      (code?.isNotEmpty ?? false) &&
+      (title?.isNotEmpty ?? false) &&
+      (type?.isNotEmpty ?? false) &&
+      (level?.isNotEmpty ?? false) &&
+      (department?.isNotEmpty ?? false) &&
+      (semester?.isNotEmpty ?? false);
 }

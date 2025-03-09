@@ -10,7 +10,7 @@ class MyProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = getUser();
     return InkWell(
-      // TODO(Anyone): Remove this line after implementation
+      // TODO(Anyone): Remove the next line after implementation
       onLongPress: () async => AuthService().signOut(context),
       onTap: () async => profileNavigation(context, extra: user),
       radius: 50,

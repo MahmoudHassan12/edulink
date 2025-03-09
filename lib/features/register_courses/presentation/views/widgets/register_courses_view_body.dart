@@ -11,8 +11,7 @@ class RegisterCoursesViewBody extends StatelessWidget {
   const RegisterCoursesViewBody({super.key});
   @override
   Widget build(BuildContext context) {
-    final user = getUser();
-    final courses = user?.courses;
+    final courses = getUser()?.courses;
     return CustomScrollView(
       slivers: [
         const SliverAppBar(title: EText('Register Courses'), centerTitle: true),
@@ -69,6 +68,8 @@ class _ChooseCourseState extends State<ChooseCourse> {
   @override
   Widget build(BuildContext context) => Checkbox(
     value: _isSelected,
-    onChanged: (_) => setState(() => _isSelected = !_isSelected),
+    onChanged:
+        (value) =>
+            value != null ? setState(() => _isSelected = !_isSelected) : null,
   );
 }

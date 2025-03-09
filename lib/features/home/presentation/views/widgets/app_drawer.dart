@@ -39,6 +39,7 @@ class AppDrawer extends StatelessWidget {
             navigations[index]['action'] as void Function(BuildContext)?;
         action?.call(context);
       },
+      selectedIndex: null,
       children: [
         const _DrawerHeader(),
         ...navigations.map(
@@ -54,7 +55,6 @@ class AppDrawer extends StatelessWidget {
 
 class _DrawerHeader extends StatelessWidget {
   const _DrawerHeader();
-
   @override
   Widget build(BuildContext context) {
     final user = getUser();

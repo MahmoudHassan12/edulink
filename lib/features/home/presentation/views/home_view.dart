@@ -5,6 +5,8 @@ import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart';
+import 'package:edu_link/core/helpers/get_user.dart' show getUser;
+import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/app_drawer.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/e_navigation_bar.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/home_view_body.dart'
@@ -16,11 +18,22 @@ class HomeView extends StatelessWidget {
   @override
   Scaffold build(BuildContext context) => Scaffold(
     body: const HomeViewBody(),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {}, // () async => _addToFirestore(),
-    ),
+    floatingActionButton:
+        (getUser()?.isProfessor ?? false)
+            ? const AddCourseFloatingButton()
+            : null,
     drawer: const AppDrawer(),
     bottomNavigationBar: const ENavigationBar(),
+  );
+}
+
+class AddCourseFloatingButton extends StatelessWidget {
+  const AddCourseFloatingButton({super.key});
+  @override
+  Widget build(BuildContext context) => FloatingActionButton(
+    onPressed: () async => addCourseNavigation(context),
+    // () async => _addToFirestore(),
+    child: const Icon(Icons.add_rounded),
   );
 }
 

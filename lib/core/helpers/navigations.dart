@@ -32,6 +32,8 @@ Future<void> profileNavigation(BuildContext context, {Object? extra}) =>
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>
     _navigateTo(context, Routes.aboutView);
+Future<void> addCourseNavigation(BuildContext context) =>
+    _navigateTo(context, Routes.addCourseView);
 Future<void> registerCoursesNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerCoursesView);
 Future<void> registerNavigation(BuildContext context) =>
