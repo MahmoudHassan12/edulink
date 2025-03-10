@@ -1,6 +1,7 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/text_id_generator.dart';
+import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/code_field.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/credit_hour_field.dart';
@@ -88,7 +89,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
               ],
             ),
             DescriptionField(controller: _descriptionController),
-            ElevatedButton(
+            CustomElevatedButton(
               onPressed: () {
                 final course = CourseEntity(
                   id: TextIdGenerator(_codeController.text).generateId(),
@@ -115,7 +116,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                   );
                 }
               },
-              child: const Text('Done'),
+              label: 'Done',
             ),
           ],
         ),
