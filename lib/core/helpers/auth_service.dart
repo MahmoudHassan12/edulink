@@ -111,7 +111,7 @@ class AuthService {
     GoogleSignIn().isSignedIn().then(
       (signedIn) => signedIn ? GoogleSignIn().signOut() : Future.value(),
     ),
-    // FacebookAuth.instance.logOut(),
+    FacebookAuth.instance.logOut(),
     SharedPrefSingleton.remove(Endpoints.user),
     SharedPrefSingleton.remove(Endpoints.courses),
     signinNavigation(context),

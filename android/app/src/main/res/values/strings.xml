@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EduLink</string>
+    <string name="facebook_app_id">628149239924493</string>
+    <string name="fb_login_protocol_scheme">fb628149239924493</string>
+    <string name="facebook_client_token">ea150783e26d61b1d5ea80eb0bd77ae5</string>
+</resources>
