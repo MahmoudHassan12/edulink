@@ -1,4 +1,6 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/course_image.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:edu_link/core/widgets/favorite_button.dart' show FavoriteButton;
@@ -10,11 +12,22 @@ class CourseDetailsViewBody extends StatelessWidget {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      const SliverAppBar(
-        title: EText('Course Details'),
+      SliverAppBar(
+        title: const EText('Course Details'),
         centerTitle: true,
         floating: true,
         snap: true,
+        actions:
+            (getUser()?.isProfessor ?? false)
+                ? [
+                  IconButton(
+                    onPressed:
+                        () async =>
+                            manageCourseNavigation(context, extra: course),
+                    icon: const Icon(Icons.edit_rounded),
+                  ),
+                ]
+                : null,
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 16)),
       SliverToBoxAdapter(

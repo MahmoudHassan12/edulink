@@ -31,7 +31,7 @@ class AddCourseFloatingButton extends StatelessWidget {
   const AddCourseFloatingButton({super.key});
   @override
   Widget build(BuildContext context) => FloatingActionButton(
-    onPressed: () async => addCourseNavigation(context),
+    onPressed: () async => manageCourseNavigation(context),
     // () async => _addToFirestore(),
     child: const Icon(Icons.add_rounded),
   );

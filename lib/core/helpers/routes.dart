@@ -4,8 +4,6 @@ import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
     show AboutView;
-import 'package:edu_link/features/add_course/presentation/views/add_course_view.dart'
-    show AddCourseView;
 import 'package:edu_link/features/auth/presentation/views/register_view.dart'
     show RegisterView;
 import 'package:edu_link/features/auth/presentation/views/reset_password_view.dart'
@@ -16,6 +14,8 @@ import 'package:edu_link/features/course_details/presentation/views/course_detai
     show CourseDetailsView;
 import 'package:edu_link/features/home/presentation/views/home_view.dart'
     show HomeView;
+import 'package:edu_link/features/manage_course/presentation/views/manage_course_view.dart'
+    show ManageCourseView;
 import 'package:edu_link/features/profile/presentation/views/profile_view.dart'
     show ProfileView;
 import 'package:edu_link/features/register_courses/presentation/views/register_courses_view.dart'
@@ -29,9 +29,9 @@ import 'package:go_router/go_router.dart'
 abstract class Routes {
   const Routes();
   static const String aboutView = '/about';
-  static const String addCourseView = '/add-course';
   static const String courseDetailsView = '/course-details';
   static const String homeView = '/';
+  static const String manageCourseView = '/manage-course';
   static const String profileView = '/student-profile';
   static const String registerCoursesView = '/register-courses';
   static const String registerView = '/register';
@@ -44,11 +44,12 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes with arguments
   Routes.courseDetailsView:
       (context, args) => CourseDetailsView(course: args! as CourseEntity),
+  Routes.manageCourseView:
+      (context, args) => ManageCourseView(course: args as CourseEntity?),
   Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
 
   /// Routes without arguments
   Routes.aboutView: (context, args) => const AboutView(),
-  Routes.addCourseView: (context, args) => const AddCourseView(),
   Routes.homeView: (context, args) => const HomeView(),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),
   Routes.registerView: (context, args) => const RegisterView(),

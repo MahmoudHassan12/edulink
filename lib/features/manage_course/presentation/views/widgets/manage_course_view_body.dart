@@ -1,25 +1,26 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/text_id_generator.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/code_field.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/credit_hour_field.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/department_field.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/description_field.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/level_field.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/pick_image.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/semester_field.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/title_field.dart';
-import 'package:edu_link/features/add_course/presentation/views/widgets/type_field.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/code_field.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/credit_hour_field.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/department_field.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/description_field.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/level_field.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/pick_image.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/semester_field.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/title_field.dart';
+import 'package:edu_link/features/manage_course/presentation/views/widgets/type_field.dart';
 import 'package:flutter/material.dart';
 
-class AddCourseViewBody extends StatefulWidget {
-  const AddCourseViewBody({super.key});
+class ManageCourseViewBody extends StatefulWidget {
+  const ManageCourseViewBody({super.key, this.course});
+  final CourseEntity? course;
   @override
-  State<AddCourseViewBody> createState() => _AddCourseViewBodyState();
+  State<ManageCourseViewBody> createState() => _ManageCourseViewBodyState();
 }
 
-class _AddCourseViewBodyState extends State<AddCourseViewBody> {
+class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
   late final TextEditingController _codeController;
   late final TextEditingController _titleController;
   late final TextEditingController _creditHourController;
@@ -31,14 +32,17 @@ class _AddCourseViewBodyState extends State<AddCourseViewBody> {
 
   @override
   void initState() {
-    _codeController = TextEditingController();
-    _titleController = TextEditingController();
-    _creditHourController = TextEditingController();
-    _levelController = TextEditingController();
-    _departmentController = TextEditingController();
-    _semesterController = TextEditingController();
-    _typeController = TextEditingController();
-    _descriptionController = TextEditingController();
+    final course = widget.course;
+    _codeController = TextEditingController(text: course?.code);
+    _titleController = TextEditingController(text: course?.title);
+    _creditHourController = TextEditingController(
+      text: course?.creditHour.toString(),
+    );
+    _levelController = TextEditingController(text: course?.level);
+    _departmentController = TextEditingController(text: course?.department);
+    _semesterController = TextEditingController(text: course?.semester);
+    _typeController = TextEditingController(text: course?.type);
+    _descriptionController = TextEditingController(text: course?.description);
     super.initState();
   }
 
@@ -58,7 +62,7 @@ class _AddCourseViewBodyState extends State<AddCourseViewBody> {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      const PickImage(),
+      PickImage(imageUrl: widget.course?.imageUrl),
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         sliver: SliverList.list(
@@ -101,6 +105,7 @@ class _AddCourseViewBodyState extends State<AddCourseViewBody> {
                 );
                 if (course.isValid()) {
                   // TODO(Mahmoud): Add the course to the firestore
+                  // or edit it if it's exist
                   // واتصرف وشوف هاترفع الصور إزاي
                 } else {
                   showSnackbar(
@@ -110,7 +115,7 @@ class _AddCourseViewBodyState extends State<AddCourseViewBody> {
                   );
                 }
               },
-              child: const Text('Add Course'),
+              child: const Text('Done'),
             ),
           ],
         ),
@@ -118,19 +123,3 @@ class _AddCourseViewBodyState extends State<AddCourseViewBody> {
     ],
   );
 }
-
-/// Done
-
-/// Almost Done
-// final String? code;
-// final String? title;
-// final String? description;
-// final String? imageUrl;
-// final String? level;
-// final String? department;
-// final int? creditHour;
-// final String? semester;
-// final String? type;
-
-/// Not Done yet
-// final String? id;
