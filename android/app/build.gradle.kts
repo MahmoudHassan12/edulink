@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.edulink.app"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "28.0.13004108" // flutter.ndkVersion
+    ndkVersion = "29.0.13113456" // flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -40,11 +40,11 @@ android {
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
-    val activity_version = "1.9.3"
+    val activity_version = "1.10.1"
     // Java language implementation
     implementation("androidx.activity:activity:$activity_version")
     // Kotlin
