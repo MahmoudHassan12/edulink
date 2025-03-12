@@ -23,7 +23,8 @@ class ManageCourseView extends StatelessWidget {
                 IconButton(
                   icon: const Icon(Icons.delete_rounded),
                   onPressed:
-                      () async => deleteCourseDialog(context, path: course?.id),
+                      () async =>
+                          _deleteCourseDialog(context, path: course?.id),
                 ),
               ],
     ),
@@ -31,7 +32,7 @@ class ManageCourseView extends StatelessWidget {
   );
 }
 
-Future<void> deleteCourseDialog(BuildContext context, {String? path}) =>
+Future<void> _deleteCourseDialog(BuildContext context, {String? path}) =>
     showDialog<bool>(
       context: context,
       builder:
