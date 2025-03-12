@@ -1,26 +1,35 @@
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImageProvider;
 import 'package:edu_link/core/constants/borders.dart';
-import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/helpers/get_courses.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:flutter/material.dart';
 
-class RegisterCoursesViewBody extends StatelessWidget {
+class RegisterCoursesViewBody extends StatefulWidget {
   const RegisterCoursesViewBody({super.key});
   @override
-  Widget build(BuildContext context) {
-    final courses = getUser()?.courses;
-    return CustomScrollView(
+  State<RegisterCoursesViewBody> createState() =>
+      _RegisterCoursesViewBodyState();
+}
+
+class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
+  @override
+  Widget build(BuildContext context) => RefreshIndicator(
+    onRefresh: () async {
+      await getCoursesMethod();
+      setState(() {});
+    },
+    child: CustomScrollView(
       slivers: [
         const SliverAppBar(title: EText('Register Courses'), centerTitle: true),
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           sliver: SliverList.builder(
-            itemCount: courses?.length ?? 0,
+            itemCount: getCourses()?.length ?? 0,
             itemBuilder: (context, index) {
-              final course = courses?[index];
+              final course = getCourses()?[index];
               return Card.filled(
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 shape: const RoundedRectangleBorder(borderRadius: sBorder),
@@ -53,8 +62,8 @@ class RegisterCoursesViewBody extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
 }
 
 class ChooseCourse extends StatefulWidget {

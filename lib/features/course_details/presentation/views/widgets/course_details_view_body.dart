@@ -18,8 +18,9 @@ class CourseDetailsViewBody extends StatelessWidget {
         floating: true,
         snap: true,
         actions:
-            (getUser()?.isProfessor ?? false)
-                ? [
+            // (getUser()?.isProfessor ?? false)
+            //     ?
+                 [
                   IconButton(
                     onPressed:
                         () async =>
@@ -27,7 +28,8 @@ class CourseDetailsViewBody extends StatelessWidget {
                     icon: const Icon(Icons.edit_rounded),
                   ),
                 ]
-                : null,
+                // : null
+                ,
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 16)),
       SliverToBoxAdapter(

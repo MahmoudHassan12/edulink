@@ -1,5 +1,6 @@
 import 'dart:developer' show log;
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
+import 'package:cloud_firestore/cloud_firestore.dart'
+    show FirebaseFirestore, SetOptions;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/text_id_generator.dart';
@@ -99,12 +100,17 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                   code: _codeController.text,
                   title: _titleController.text,
                   description: _descriptionController.text,
-                  imageUrl: '', // TODO(Mahmoud): Don't forget this line
+                  // TODO(Mahmoud): Don't forget this line
+                  imageUrl: widget.course?.imageUrl,
+                  type: _typeController.text,
                   level: _levelController.text,
                   department: _departmentController.text,
-                  creditHour: int.tryParse(_creditHourController.text),
                   semester: _semesterController.text,
-                  type: _typeController.text,
+                  creditHour: int.tryParse(_creditHourController.text),
+                  // TODO(Mahmoud): Don't forget this line
+                  lectures: widget.course?.lectures,
+                  // TODO(Mahmoud): Don't forget this line
+                  duration: widget.course?.duration,
                   professor: getUser(),
                 );
                 if (course.isValid()) {
@@ -142,7 +148,7 @@ Future<void> _addToFirestore({
     await FirebaseFirestore.instance
         .collection(collectionPath)
         .doc(path)
-        .set(data);
+        .set(data, SetOptions(merge: true));
     log('Course added successfully!');
   } on FirebaseException catch (e) {
     log('Failed to add course: $e');

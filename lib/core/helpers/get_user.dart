@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
-import 'package:edu_link/core/domain/entities/course_entity.dart';
+// import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/shared_pref.dart';
@@ -12,10 +12,10 @@ UserEntity? getUser() {
   if (user.isNotEmpty) {
     return UserEntity.fromMap(
       jsonDecode(user),
-      courses:
-          SharedPrefSingleton.getStringList(
-            Endpoints.courses,
-          )?.map((e) => CourseEntity.fromMap(jsonDecode(e))).toList(),
+      // courses:
+      //     SharedPrefSingleton.getStringList(
+      //       Endpoints.courses,
+      //     )?.map((e) => CourseEntity.fromMap(jsonDecode(e))).toList(),
     );
   }
   return null;
@@ -49,19 +49,19 @@ Future<bool?> getUserMethod() async {
     log('Fetched User Data: $data');
 
     // Parse the courses if they exist
-    final coursesData = data['courses'] as List<dynamic>? ?? [];
-    log('Courses Raw Data: $coursesData');
+    // final coursesData = data['courses'] as List<dynamic>? ?? [];
+    // log('Courses Raw Data: $coursesData');
 
-    final courses =
-        coursesData
-            .map(
-              (course) => CourseEntity.fromMap(course as Map<String, dynamic>?),
-            )
-            .toList();
-    await SharedPrefSingleton.setStringList(
-      Endpoints.courses,
-      courses.map((course) => jsonEncode(course.toMap())).toList(),
-    );
+    // final courses =
+    //     coursesData
+    //         .map(
+    //           (course) => CourseEntity.fromMap(course as Map<String, dynamic>?),
+    //         )
+    //         .toList();
+    // await SharedPrefSingleton.setStringList(
+    //   Endpoints.courses,
+    //   courses.map((course) => jsonEncode(course.toMap())).toList(),
+    // );
     return SharedPrefSingleton.setString(
       Endpoints.user,
       jsonEncode(UserEntity.fromMap(data).toMap()),

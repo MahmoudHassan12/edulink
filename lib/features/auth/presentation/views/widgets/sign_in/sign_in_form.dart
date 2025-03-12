@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:edu_link/core/helpers/auth_service.dart';
+import 'package:edu_link/core/helpers/get_courses.dart' show getCoursesMethod;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
@@ -23,6 +24,7 @@ class _SignInFormState extends State<SignInForm> {
   bool _isLoading = false;
   Future<void> handleSignInSuccess() async {
     await getUserMethod();
+    await getCoursesMethod();
     if (mounted) await homeNavigation(context);
   }
 

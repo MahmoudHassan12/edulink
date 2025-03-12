@@ -20,9 +20,11 @@ class UserEntity {
   });
 
   factory UserEntity.fromMap(
-    Map<String, dynamic>? data, {
-    List<CourseEntity>? courses,
-  }) => UserEntity(
+    Map<String, dynamic>? data,
+    //   {
+    //   List<CourseEntity>? courses,
+    // }
+  ) => UserEntity(
     id: data?['id'],
     name: data?['name'],
     email: data?['email'],
@@ -30,7 +32,8 @@ class UserEntity {
     imageUrl: data?['imageUrl'],
     department: data?['department'],
     level: data?['level'],
-    courses: courses ?? [],
+    courses: complexListEntity(data?['courses'], CourseEntity.fromMap),
+    // data?['courses'] ?? courses ?? [],
     isProfessor: data?['isProfessor'] ?? false,
     program: data?['program'],
     ssn: data?['ssn'],
@@ -73,7 +76,6 @@ class UserEntity {
 
 class OfficeEntity {
   const OfficeEntity({this.location, this.availability, this.contactInfo});
-
   factory OfficeEntity.fromMap(Map<String, dynamic>? data) => OfficeEntity(
     location: complexEntity(data?['location'], LocationEntity.fromMap),
     availability: complexEntity(
