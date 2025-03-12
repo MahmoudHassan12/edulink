@@ -1,6 +1,7 @@
 import 'dart:developer' show log;
 import 'package:cloud_firestore/cloud_firestore.dart'
     show FirebaseFirestore, SetOptions;
+import 'package:edu_link/core/constants/endpoints.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/text_id_generator.dart';
@@ -116,7 +117,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                 if (course.isValid()) {
                   await _addToFirestore(
                     data: course.toMap(),
-                    collectionPath: 'courses',
+                    collectionPath: Endpoints.courses,
                     path: course.id,
                   );
                   // TODO(Mahmoud): Add the course to the firestore
@@ -154,4 +155,3 @@ Future<void> _addToFirestore({
     log('Failed to add course: $e');
   }
 }
-

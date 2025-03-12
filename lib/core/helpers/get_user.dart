@@ -10,13 +10,7 @@ import 'package:edu_link/core/helpers/shared_pref.dart';
 UserEntity? getUser() {
   final user = SharedPrefSingleton.getString(Endpoints.user);
   if (user.isNotEmpty) {
-    return UserEntity.fromMap(
-      jsonDecode(user),
-      // courses:
-      //     SharedPrefSingleton.getStringList(
-      //       Endpoints.courses,
-      //     )?.map((e) => CourseEntity.fromMap(jsonDecode(e))).toList(),
-    );
+    return UserEntity.fromMap(jsonDecode(user));
   }
   return null;
 }
@@ -27,41 +21,22 @@ Future<bool?> getUserMethod() async {
     log('Error: No current user found');
     return null;
   }
-
   try {
     final docSnapshot =
         await FirebaseFirestore.instance
             .collection('users')
             .doc(currentUser.uid)
             .get();
-
     if (!docSnapshot.exists) {
       log('Error: User document does not exist for ID: ${currentUser.uid}');
       return null;
     }
-
     final data = docSnapshot.data();
     if (data == null) {
       log('Error: User data is null');
       return null;
     }
-
-    log('Fetched User Data: $data');
-
-    // Parse the courses if they exist
-    // final coursesData = data['courses'] as List<dynamic>? ?? [];
-    // log('Courses Raw Data: $coursesData');
-
-    // final courses =
-    //     coursesData
-    //         .map(
-    //           (course) => CourseEntity.fromMap(course as Map<String, dynamic>?),
-    //         )
-    //         .toList();
-    // await SharedPrefSingleton.setStringList(
-    //   Endpoints.courses,
-    //   courses.map((course) => jsonEncode(course.toMap())).toList(),
-    // );
+    // log('Fetched User Data: $data');
     return SharedPrefSingleton.setString(
       Endpoints.user,
       jsonEncode(UserEntity.fromMap(data).toMap()),

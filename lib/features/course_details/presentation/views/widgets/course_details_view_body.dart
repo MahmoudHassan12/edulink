@@ -1,5 +1,5 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
-import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/course_image.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
@@ -18,9 +18,8 @@ class CourseDetailsViewBody extends StatelessWidget {
         floating: true,
         snap: true,
         actions:
-            // (getUser()?.isProfessor ?? false)
-            //     ?
-                 [
+            (getUser()?.isProfessor ?? false)
+                ? [
                   IconButton(
                     onPressed:
                         () async =>
@@ -28,8 +27,7 @@ class CourseDetailsViewBody extends StatelessWidget {
                     icon: const Icon(Icons.edit_rounded),
                   ),
                 ]
-                // : null
-                ,
+                : null,
       ),
       const SliverToBoxAdapter(child: SizedBox(height: 16)),
       SliverToBoxAdapter(

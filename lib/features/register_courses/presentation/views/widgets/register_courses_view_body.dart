@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImageProvider;
 import 'package:edu_link/core/constants/borders.dart';
+import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_courses.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
@@ -15,6 +16,7 @@ class RegisterCoursesViewBody extends StatefulWidget {
 }
 
 class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
+  final List<CourseEntity> courses = [];
   @override
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: () async {
@@ -46,7 +48,7 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
                   ),
                   title: EText(course.code!),
                   subtitle: EText(course.title!),
-                  trailing: const ChooseCourse(),
+                  trailing: ChooseCourse(courses: courses),
                   onTap:
                       () async =>
                           courseDetailsNavigation(context, extra: course),
@@ -55,19 +57,37 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
             },
           ),
         ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: CustomFilledButton(label: 'Register', onPressed: () {}),
-          ),
-        ),
+        RegisterButton(courses: courses),
       ],
     ),
   );
 }
 
+class RegisterButton extends StatelessWidget {
+  const RegisterButton({required this.courses, super.key});
+  final List<CourseEntity> courses;
+  @override
+  Widget build(BuildContext context) => SliverToBoxAdapter(
+    child: Padding(
+      padding: const EdgeInsets.all(8),
+      child: CustomFilledButton(
+        label: 'Register',
+        onPressed: () async {
+          //  _addCourses(courses.map((e) => e.toMap()).toList());
+        },
+      ),
+    ),
+  );
+}
+
+// Future<void> _addCourses(List<Map<String, dynamic>> courses) async =>
+//     FirebaseFirestore.instance.collection('users').doc(getUser()?.id).update({
+//       Endpoints.courses: FieldValue.arrayUnion(courses),
+//     });
+
 class ChooseCourse extends StatefulWidget {
-  const ChooseCourse({super.key});
+  const ChooseCourse({required this.courses, super.key});
+  final List<CourseEntity> courses;
   @override
   State<ChooseCourse> createState() => _ChooseCourseState();
 }
@@ -77,8 +97,8 @@ class _ChooseCourseState extends State<ChooseCourse> {
   @override
   Widget build(BuildContext context) => Checkbox(
     value: _isSelected,
-    onChanged:
-        (value) =>
-            value != null ? setState(() => _isSelected = !_isSelected) : null,
+    onChanged: (value) {
+      value != null ? setState(() => _isSelected = !_isSelected) : null;
+    },
   );
 }
