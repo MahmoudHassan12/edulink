@@ -154,3 +154,4 @@ Future<void> _addToFirestore({
     log('Failed to add course: $e');
   }
 }
+

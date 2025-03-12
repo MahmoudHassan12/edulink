@@ -19,12 +19,7 @@ class UserEntity {
     this.office,
   });
 
-  factory UserEntity.fromMap(
-    Map<String, dynamic>? data,
-    //   {
-    //   List<CourseEntity>? courses,
-    // }
-  ) => UserEntity(
+  factory UserEntity.fromMap(Map<String, dynamic>? data) => UserEntity(
     id: data?['id'],
     name: data?['name'],
     email: data?['email'],
@@ -33,7 +28,6 @@ class UserEntity {
     department: data?['department'],
     level: data?['level'],
     courses: complexListEntity(data?['courses'], CourseEntity.fromMap),
-    // data?['courses'] ?? courses ?? [],
     isProfessor: data?['isProfessor'] ?? false,
     program: data?['program'],
     ssn: data?['ssn'],
@@ -55,23 +49,21 @@ class UserEntity {
   final String? academicTitle;
   final OfficeEntity? office;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'imageUrl': imageUrl,
-      'department': department,
-      'level': level,
-      'courses': courses?.map((course) => course.toMap()).toList(),
-      'isProfessor': isProfessor,
-      'program': program,
-      'ssn': ssn,
-      'academicTitle': academicTitle,
-      'office': office?.toMap(),
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'id': id,
+    'name': name,
+    'email': email,
+    'phone': phone,
+    'imageUrl': imageUrl,
+    'department': department,
+    'level': level,
+    'courses': courses?.map((course) => course.toMap()).toList(),
+    'isProfessor': isProfessor,
+    'program': program,
+    'ssn': ssn,
+    'academicTitle': academicTitle,
+    'office': office?.toMap(),
+  };
 }
 
 class OfficeEntity {
@@ -89,18 +81,15 @@ class OfficeEntity {
   final AvailabilityEntity? availability;
   final String? contactInfo;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'location': location?.toMap(),
-      'availability': availability?.toMap(),
-      'contactInfo': contactInfo,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'location': location?.toMap(),
+    'availability': availability?.toMap(),
+    'contactInfo': contactInfo,
+  };
 }
 
 class LocationEntity {
   const LocationEntity({this.building, this.floor, this.department, this.room});
-
   factory LocationEntity.fromMap(Map<String, dynamic>? data) => LocationEntity(
     building: data?['building'],
     floor: data?['floor'],
@@ -113,14 +102,12 @@ class LocationEntity {
   final String? department;
   final String? room;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'building': building,
-      'floor': floor,
-      'department': department,
-      'room': room,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'building': building,
+    'floor': floor,
+    'department': department,
+    'room': room,
+  };
 }
 
 class AvailabilityEntity {
@@ -133,9 +120,9 @@ class AvailabilityEntity {
 
   final List<AvailableTimeEntity>? times;
 
-  Map<String, dynamic> toMap() {
-    return {'times': times?.map((time) => time.toMap()).toList()};
-  }
+  Map<String, dynamic> toMap() => {
+    'times': times?.map((time) => time.toMap()).toList(),
+  };
 }
 
 class AvailableTimeEntity {
@@ -161,12 +148,9 @@ class AvailableTimeEntity {
   final TimeOfDay? from;
   final TimeOfDay? to;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'day': day,
-      'from':
-          from != null ? {'hour': from!.hour, 'minute': from!.minute} : null,
-      'to': to != null ? {'hour': to!.hour, 'minute': to!.minute} : null,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'day': day,
+    'from': from != null ? {'hour': from!.hour, 'minute': from!.minute} : null,
+    'to': to != null ? {'hour': to!.hour, 'minute': to!.minute} : null,
+  };
 }
