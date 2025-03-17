@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
 // import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/shared_pref.dart';
+import 'package:edu_link/core/repos/user_repo.dart';
 
 UserEntity? getUser() {
   final user = SharedPrefSingleton.getString(Endpoints.user);
@@ -22,11 +22,7 @@ Future<bool?> getUserMethod() async {
     return null;
   }
   try {
-    final docSnapshot =
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUser.uid)
-            .get();
+    final docSnapshot = await UserRepo().get(documentId: currentUser.uid);
     if (!docSnapshot.exists) {
       log('Error: User document does not exist for ID: ${currentUser.uid}');
       return null;

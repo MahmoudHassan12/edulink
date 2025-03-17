@@ -1,12 +1,11 @@
 import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/app_drawer.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/e_navigation_bar.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/home_view_body.dart'
@@ -39,7 +38,6 @@ class AddCourseFloatingButton extends StatelessWidget {
 
 // ignore: unused_element
 Future<void> _addToFirestore() async {
-  final firestore = FirebaseFirestore.instance;
   final currentUser = AuthService().currentUser;
   const user = UserEntity(
     id: '1234',
@@ -175,7 +173,7 @@ Future<void> _addToFirestore() async {
   );
 
   try {
-    await firestore.collection('users').doc(currentUser?.uid).set(user.toMap());
+    await UserRepo().add(data: user.toMap(), documentId: currentUser?.uid);
     log('User added successfully!');
   } catch (e) {
     log('Failed to add user: $e');

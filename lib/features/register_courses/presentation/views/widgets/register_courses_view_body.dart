@@ -80,10 +80,8 @@ class RegisterButton extends StatelessWidget {
   );
 }
 
-// Future<void> _addCourses(List<Map<String, dynamic>> courses) async =>
-//     FirebaseFirestore.instance.collection('users').doc(getUser()?.id).update({
-//       Endpoints.courses: FieldValue.arrayUnion(courses),
-//     });
+// Future<void> _addCourses(List<Map<String, dynamic>> courses) async => UserRepo()
+//     .update(data: {Endpoints.courses: FieldValue.arrayUnion(courses)});
 
 class ChooseCourse extends StatefulWidget {
   const ChooseCourse({required this.courses, super.key});
@@ -98,7 +96,7 @@ class _ChooseCourseState extends State<ChooseCourse> {
   Widget build(BuildContext context) => Checkbox(
     value: _isSelected,
     onChanged: (value) {
-      value != null ? setState(() => _isSelected = !_isSelected) : null;
+      return value != null ? setState(() => _isSelected = !_isSelected) : null;
     },
   );
 }

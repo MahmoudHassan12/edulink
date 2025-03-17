@@ -1,10 +1,7 @@
-import 'dart:developer' show log;
-import 'package:cloud_firestore/cloud_firestore.dart'
-    show FirebaseFirestore, SetOptions;
-import 'package:edu_link/core/constants/endpoints.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/text_id_generator.dart';
+import 'package:edu_link/core/repos/courses_repo.dart' show CoursesRepo;
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/code_field.dart';
@@ -16,7 +13,6 @@ import 'package:edu_link/features/manage_course/presentation/views/widgets/pick_
 import 'package:edu_link/features/manage_course/presentation/views/widgets/semester_field.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/title_field.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/type_field.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class ManageCourseViewBody extends StatefulWidget {
@@ -115,10 +111,9 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                   professor: getUser(),
                 );
                 if (course.isValid()) {
-                  await _addToFirestore(
+                  await CoursesRepo().add(
                     data: course.toMap(),
-                    collectionPath: Endpoints.courses,
-                    path: course.id,
+                    documentId: course.id,
                   );
                   // TODO(Mahmoud): Add the course to the firestore
                   // or edit it if it's exist
@@ -138,20 +133,4 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
       ),
     ],
   );
-}
-
-Future<void> _addToFirestore({
-  required Map<String, dynamic> data,
-  required String collectionPath,
-  String? path,
-}) async {
-  try {
-    await FirebaseFirestore.instance
-        .collection(collectionPath)
-        .doc(path)
-        .set(data, SetOptions(merge: true));
-    log('Course added successfully!');
-  } on FirebaseException catch (e) {
-    log('Failed to add course: $e');
-  }
 }

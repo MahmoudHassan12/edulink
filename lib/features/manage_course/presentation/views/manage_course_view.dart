@@ -1,8 +1,7 @@
-import 'dart:developer' show log;
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/manage_course_view_body.dart'
     show ManageCourseViewBody;
@@ -24,7 +23,7 @@ class ManageCourseView extends StatelessWidget {
                   icon: const Icon(Icons.delete_rounded),
                   onPressed:
                       () async =>
-                          _deleteCourseDialog(context, path: course?.id),
+                          _deleteCourseDialog(context, documentId: course?.id),
                 ),
               ],
     ),
@@ -32,7 +31,7 @@ class ManageCourseView extends StatelessWidget {
   );
 }
 
-Future<void> _deleteCourseDialog(BuildContext context, {String? path}) =>
+Future<void> _deleteCourseDialog(BuildContext context, {String? documentId}) =>
     showDialog<bool>(
       context: context,
       builder:
@@ -56,17 +55,5 @@ Future<void> _deleteCourseDialog(BuildContext context, {String? path}) =>
           ),
     ).then(
       (value) =>
-          value ?? false
-              ? _deleteFromFirestore(collectionPath: 'courses', path: path)
-              : null,
+          value ?? false ? CoursesRepo().delete(documentId: documentId) : null,
     );
-
-Future<void> _deleteFromFirestore({
-  required String collectionPath,
-  String? path,
-}) => FirebaseFirestore.instance
-    .collection(collectionPath)
-    .doc(path)
-    .delete()
-    .then((_) => log('Course deleted successfully!'))
-    .catchError((e) => log('Failed to delete course: $e'));
