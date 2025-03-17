@@ -15,14 +15,12 @@ List<CourseEntity>? getCourses() {
   return null;
 }
 
-Future<void> getCoursesMethod() => CoursesRepo()
+Future<bool> getCoursesMethod() => CoursesRepo()
     .get()
     .then(
       (e) => SharedPrefSingleton.setStringList(
         Endpoints.courses,
-        e
-            .map((course) => jsonEncode(CourseEntity.fromMap(course).toMap()))
-            .toList(),
+        e?.map((course) => jsonEncode(course.toMap())).toList() ?? [],
       ),
     )
     .catchError((e) {

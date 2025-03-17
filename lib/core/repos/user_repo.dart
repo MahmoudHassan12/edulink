@@ -12,7 +12,7 @@ class UserRepo {
   Future<void> update({required Map<String, dynamic> data}) => fireStoreService
       .update(data: data, path: _path, documentId: getUser()?.id);
   Future<DocumentSnapshot<Map<String, dynamic>>> get({String? documentId}) =>
-      fireStoreService.get(path: _path, documentId: documentId);
+      fireStoreService.getDocument(path: _path, documentId: documentId);
   Future<void> delete() =>
       fireStoreService.delete(path: _path, documentId: getUser()?.id);
 }

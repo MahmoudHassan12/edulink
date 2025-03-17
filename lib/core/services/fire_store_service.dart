@@ -1,6 +1,11 @@
 import 'dart:developer' show log;
 import 'package:cloud_firestore/cloud_firestore.dart'
-    show DocumentSnapshot, FirebaseException, FirebaseFirestore, SetOptions;
+    show
+        DocumentSnapshot,
+        FirebaseException,
+        FirebaseFirestore,
+        QuerySnapshot,
+        SetOptions;
 
 class FireStoreService {
   final FirebaseFirestore _instance = FirebaseFirestore.instance;
@@ -30,7 +35,7 @@ class FireStoreService {
         (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
       )
       .catchError((e) => log('$e'));
-  Future<DocumentSnapshot<Map<String, dynamic>>> get({
+  Future<DocumentSnapshot<Map<String, dynamic>>> getDocument({
     required String path,
     String? documentId,
   }) => _instance
@@ -45,6 +50,20 @@ class FireStoreService {
         log('$e');
         throw e;
       });
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getAll({required String path}) =>
+      _instance
+          .collection(path)
+          .get()
+          .onError<FirebaseException>((e, _) {
+            log('Code: ${e.code}, Message: ${e.message}, $e');
+            throw e;
+          })
+          .catchError((e) {
+            log('$e');
+            throw e;
+          });
+
   Future<void> delete({required String path, String? documentId}) => _instance
       .collection(path)
       .doc(documentId)

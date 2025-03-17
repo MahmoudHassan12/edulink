@@ -100,7 +100,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                   code: _codeController.text,
                   title: _titleController.text,
                   description: _descriptionController.text,
-                  // TODO(Mahmoud): اتصرف وشوف هاترفع الصور إزاي
+                  // TODO(Mahmoud): شوف هاترفع الصور إزاي
                   imageUrl: widget.course?.imageUrl ?? '',
                   type: _typeController.text,
                   level: _levelController.text,

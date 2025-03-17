@@ -34,11 +34,10 @@ class AppDrawer extends StatelessWidget {
 
     return NavigationDrawer(
       tilePadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      onDestinationSelected: (index) {
-        final action =
-            navigations[index]['action'] as void Function(BuildContext)?;
-        action?.call(context);
-      },
+      onDestinationSelected:
+          (index) async => (navigations[index]['action']
+                  as Future<void> Function(BuildContext)?)
+              ?.call(context),
       selectedIndex: null,
       children: [
         const _DrawerHeader(),

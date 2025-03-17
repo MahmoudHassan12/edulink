@@ -1,5 +1,4 @@
 import 'dart:developer' show log;
-import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/services/fire_store_service.dart'
@@ -25,24 +24,13 @@ class CoursesRepo {
       .onError<FirebaseException>((e, _) => log('Failed to update course: $e'))
       .catchError((e) => log('Failed to update course: $e'));
 
-  Future<List<Map<String, dynamic>>> get({String? documentId}) =>
-      fireStoreService
-          .get(path: _path)
-          .then(
-            (docs) =>
-                (docs as List<DocumentSnapshot>)
-                    .map(
-                      (doc) =>
-                          CourseEntity.fromMap(
-                            doc.data() as Map<String, dynamic>?,
-                          ).toMap(),
-                    )
-                    .toList(),
-          )
-          .onError<FirebaseException>(
-            (e, _) => throw Exception('Failed to fetch courses: $e'),
-          )
-          .catchError((e) => throw Exception('Failed to fetch courses: $e'));
+  Future<List<CourseEntity>?> get({String? documentId}) => fireStoreService
+      .getAll(path: _path)
+      .then((e) => e.docs.map((e) => CourseEntity.fromMap(e.data())).toList())
+      .onError<FirebaseException>(
+        (e, _) => throw Exception('Failed to fetch courses: $e'),
+      )
+      .catchError((e) => throw Exception('Failed to fetch courses: $e'));
 
   Future<void> delete({String? documentId}) => fireStoreService
       .delete(path: _path, documentId: documentId)
