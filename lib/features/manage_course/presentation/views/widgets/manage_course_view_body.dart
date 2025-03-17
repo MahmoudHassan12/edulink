@@ -70,7 +70,10 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
         sliver: SliverList.list(
           children: [
             const SizedBox(height: 16),
-            CodeField(controller: _codeController),
+            CodeField(
+              controller: _codeController,
+              enabled: widget.course == null,
+            ),
             TitleField(controller: _titleController),
             Row(
               spacing: 16,
@@ -112,7 +115,10 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                 );
                 if (course.isValid()) {
                   widget.course != null
-                      ? await CoursesRepo().update(data: course.toMap())
+                      ? await CoursesRepo().update(
+                        data: course.toMap(),
+                        documentId: course.id,
+                      )
                       : await CoursesRepo().add(
                         data: course.toMap(),
                         documentId: course.id,
