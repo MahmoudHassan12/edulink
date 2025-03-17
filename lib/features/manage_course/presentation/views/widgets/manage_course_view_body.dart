@@ -97,8 +97,8 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                   code: _codeController.text,
                   title: _titleController.text,
                   description: _descriptionController.text,
-                  // TODO(Mahmoud): Don't forget this line
-                  imageUrl: widget.course?.imageUrl,
+                  // TODO(Mahmoud): اتصرف وشوف هاترفع الصور إزاي
+                  imageUrl: widget.course?.imageUrl ?? '',
                   type: _typeController.text,
                   level: _levelController.text,
                   department: _departmentController.text,
@@ -111,13 +111,12 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                   professor: getUser(),
                 );
                 if (course.isValid()) {
-                  await CoursesRepo().add(
-                    data: course.toMap(),
-                    documentId: course.id,
-                  );
-                  // TODO(Mahmoud): Add the course to the firestore
-                  // or edit it if it's exist
-                  // واتصرف وشوف هاترفع الصور إزاي
+                  widget.course != null
+                      ? await CoursesRepo().update(data: course.toMap())
+                      : await CoursesRepo().add(
+                        data: course.toMap(),
+                        documentId: course.id,
+                      );
                 } else {
                   showSnackbar(
                     context,

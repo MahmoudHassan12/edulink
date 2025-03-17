@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseException;
 
 class CoursesRepo {
   final FireStoreService fireStoreService = FireStoreService();
-  final _path = Endpoints.courses;
+  final String _path = Endpoints.courses;
   Future<void> add({required Map<String, dynamic> data, String? documentId}) =>
       fireStoreService
           .add(data: data, path: _path, documentId: documentId)
@@ -28,17 +28,17 @@ class CoursesRepo {
   Future<List<Map<String, dynamic>>> get({String? documentId}) =>
       fireStoreService
           .get(path: _path)
-          .then((docs) {
-            log('Courses fetched successfully!');
-            return (docs as List<DocumentSnapshot>)
-                .map(
-                  (doc) =>
-                      CourseEntity.fromMap(
-                        doc.data() as Map<String, dynamic>?,
-                      ).toMap(),
-                )
-                .toList();
-          })
+          .then(
+            (docs) =>
+                (docs as List<DocumentSnapshot>)
+                    .map(
+                      (doc) =>
+                          CourseEntity.fromMap(
+                            doc.data() as Map<String, dynamic>?,
+                          ).toMap(),
+                    )
+                    .toList(),
+          )
           .onError<FirebaseException>(
             (e, _) => throw Exception('Failed to fetch courses: $e'),
           )

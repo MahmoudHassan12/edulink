@@ -80,8 +80,8 @@ class RegisterButton extends StatelessWidget {
   );
 }
 
-// Future<void> _addCourses(List<Map<String, dynamic>> courses) async => UserRepo()
-//     .update(data: {Endpoints.courses: FieldValue.arrayUnion(courses)});
+// Future<void> _addCourses(List<Map<String, dynamic>> courses) async =>
+// UserRepo().update(data: {Endpoints.courses: FieldValue.arrayUnion(courses)});
 
 class ChooseCourse extends StatefulWidget {
   const ChooseCourse({required this.courses, super.key});
