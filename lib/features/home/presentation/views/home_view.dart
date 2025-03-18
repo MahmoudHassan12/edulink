@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
@@ -38,7 +37,6 @@ class AddCourseFloatingButton extends StatelessWidget {
 
 // ignore: unused_element
 Future<void> _addToFirestore() async {
-  final currentUser = AuthService().currentUser;
   const user = UserEntity(
     id: '1234',
     name: 'Mahmoud Hassan',
@@ -171,11 +169,8 @@ Future<void> _addToFirestore() async {
       contactInfo: 'contact@example.com',
     ),
   );
-
-  try {
-    await UserRepo().add(data: user.toMap(), documentId: currentUser?.uid);
-    log('User added successfully!');
-  } catch (e) {
-    log('Failed to add user: $e');
-  }
+  return const UserRepo().add(
+    data: user.toMap(),
+    documentId: const AuthService().currentUser?.uid,
+  );
 }

@@ -1,36 +1,36 @@
-import 'package:edu_link/core/domain/entities/course_entity.dart'
-    show CourseEntity;
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
-import 'package:edu_link/features/manage_course/presentation/views/widgets/manage_course_view_body.dart'
-    show ManageCourseViewBody;
+import 'package:edu_link/features/manage_user/presentation/views/widgets/manage_profile_view_body.dart'
+    show ManageProfileViewBody;
 import 'package:flutter/material.dart';
 
-class ManageCourseView extends StatelessWidget {
-  const ManageCourseView({super.key, this.course});
-  final CourseEntity? course;
+class ManageProfileView extends StatelessWidget {
+  const ManageProfileView({super.key, this.user});
+  final UserEntity? user;
   @override
   Scaffold build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: EText(course == null ? 'Add Course' : 'Edit Course'),
+      title: EText(user == null ? 'Add User' : 'Edit User'),
       centerTitle: true,
-      actions:
-          course == null
-              ? null
-              : [
-                IconButton(
-                  icon: const Icon(Icons.delete_rounded),
-                  onPressed:
-                      () async =>
-                          _deleteCourseDialog(context, documentId: course?.id),
-                ),
-              ],
+      // actions:
+      //     user == null
+      //         ? null
+      //         : [
+      //           IconButton(
+      //             icon: const Icon(Icons.delete_rounded),
+      //             onPressed:
+      //                 () async =>
+      //                     _deleteCourseDialog(context, documentId: user?.id),
+      //           ),
+      //         ],
     ),
-    body: ManageCourseViewBody(course: course),
+    body: ManageProfileViewBody(user: user),
   );
 }
 
+// ignore: unused_element
 Future<void> _deleteCourseDialog(BuildContext context, {String? documentId}) =>
     showDialog<bool>(
       context: context,

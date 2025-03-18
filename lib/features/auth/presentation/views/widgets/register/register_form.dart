@@ -1,8 +1,6 @@
 import 'dart:developer';
-
-import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
-
+import 'package:edu_link/core/repos/auth_repo.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/email_text_field.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/password_text_field.dart';
@@ -16,13 +14,20 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  final AuthService _auth = AuthService();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isVisible = false;
+
+  @override
+  void initState() {
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    super.initState();
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -31,8 +36,8 @@ class _RegisterFormState extends State<RegisterForm> {
     super.dispose();
   }
 
-  Future<bool> signUp() async {
-    if (!_formKey.currentState!.validate()) {
+  Future<bool> _signUp() async {
+    if (!(_formKey.currentState?.validate() ?? false)) {
       return false; // Validation failed
     }
 
@@ -46,15 +51,9 @@ class _RegisterFormState extends State<RegisterForm> {
     }
 
     try {
-      final user = await _auth.signUpWithEmail(email, password);
-      if (user != null) {
-        log('User registered successfully');
-
-        return true;
-      } else {
-        log('Failed to register user');
-        return false;
-      }
+      await const AuthRepo().signUpWithEmail(email, password);
+      log('User registered successfully');
+      return true;
     } catch (e) {
       log('Error: $e');
       return false;
@@ -96,7 +95,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 widget.isLoading
                     ? null
                     : () async {
-                      if (await signUp() && context.mounted) {
+                      if (await _signUp() && context.mounted) {
                         await homeNavigation(context);
                       }
                     },

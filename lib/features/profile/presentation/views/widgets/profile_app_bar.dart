@@ -1,4 +1,5 @@
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
+import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
     actions: [
       IconButton(
         icon: const Icon(Icons.edit_rounded),
-        onPressed: () {},
+        onPressed: () async => manageProfileNavigation(context, extra: user),
         color: Theme.of(context).colorScheme.onPrimary,
       ),
       const SizedBox(width: 8),

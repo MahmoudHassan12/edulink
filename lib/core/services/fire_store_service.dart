@@ -8,7 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart'
         SetOptions;
 
 class FireStoreService {
-  final FirebaseFirestore _instance = FirebaseFirestore.instance;
+  const FireStoreService();
+  static final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
   /// It can be used to add a course to the database or update an existing one
   Future<void> add({

@@ -11,7 +11,7 @@ class MyProfile extends StatelessWidget {
     final user = getUser();
     return InkWell(
       // TODO(Anyone): Remove the next line after implementation
-      onLongPress: () async => AuthService().signOut(context),
+      onLongPress: () async => const AuthService().signOut(context),
       onTap: () async => profileNavigation(context, extra: user),
       radius: 50,
       borderRadius: BorderRadius.circular(50),

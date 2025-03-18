@@ -1,8 +1,7 @@
 import 'dart:developer';
-import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/get_courses.dart' show getCoursesMethod;
-import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/core/repos/auth_repo.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/email_text_field.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/password_text_field.dart';
@@ -20,10 +19,8 @@ class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
   bool _isLoading = false;
   Future<void> handleSignInSuccess() async {
-    await getUserMethod();
     await getCoursesMethod();
     if (mounted) await homeNavigation(context);
   }
@@ -34,7 +31,7 @@ class _SignInFormState extends State<SignInForm> {
     setState(() => _isLoading = true);
 
     try {
-      final user = await _authService.signInWithEmail(
+      final user = await const AuthRepo().signInWithEmail(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );

@@ -64,6 +64,15 @@ class UserEntity {
     'academicTitle': academicTitle,
     'office': office?.toMap(),
   };
+
+  bool isValid() =>
+      (name?.isNotEmpty ?? false) &&
+      (email?.isNotEmpty ?? false) &&
+      (phone?.isNotEmpty ?? false) &&
+      (department?.isNotEmpty ?? false) &&
+      (level?.isNotEmpty ?? false) &&
+      (program?.isNotEmpty ?? false) &&
+      (ssn?.isNotEmpty ?? false);
 }
 
 class OfficeEntity {

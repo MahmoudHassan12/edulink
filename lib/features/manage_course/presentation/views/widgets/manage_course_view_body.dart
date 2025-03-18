@@ -115,11 +115,11 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                 );
                 if (course.isValid()) {
                   widget.course != null
-                      ? await CoursesRepo().update(
+                      ? await const CoursesRepo().update(
                         data: course.toMap(),
                         documentId: course.id,
                       )
-                      : await CoursesRepo().add(
+                      : await const CoursesRepo().add(
                         data: course.toMap(),
                         documentId: course.id,
                       );

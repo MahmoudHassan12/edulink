@@ -1,4 +1,3 @@
-import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/current_courses.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/home_app_bar.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/row_of_texts.dart';
@@ -12,23 +11,17 @@ class HomeViewBody extends StatefulWidget {
 
 class _HomeViewBodyState extends State<HomeViewBody> {
   @override
-  RefreshIndicator build(BuildContext context) => RefreshIndicator(
-    onRefresh: () async {
-      await getUserMethod();
-      setState(() {});
-    },
-    child: CustomScrollView(
-      slivers: [
-        const HomeAppBar(),
-        const SliverToBoxAdapter(child: SizedBox(height: 16)),
-        SliverList.list(
-          children: const [
-            RowOfTexts(title: 'Your Courses'),
-            CurrentCourses(),
-            SizedBox(height: 1600),
-          ],
-        ),
-      ],
-    ),
+  CustomScrollView build(BuildContext context) => CustomScrollView(
+    slivers: [
+      const HomeAppBar(),
+      const SliverToBoxAdapter(child: SizedBox(height: 16)),
+      SliverList.list(
+        children: const [
+          RowOfTexts(title: 'Your Courses'),
+          CurrentCourses(),
+          SizedBox(height: 1600),
+        ],
+      ),
+    ],
   );
 }

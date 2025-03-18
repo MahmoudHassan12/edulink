@@ -9,7 +9,8 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  const AuthService();
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   /// Sign in with Email & Password
   Future<User?> signInWithEmail(String email, String password) async {

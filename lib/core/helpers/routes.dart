@@ -2,6 +2,7 @@ import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
     show AboutView;
 import 'package:edu_link/features/auth/presentation/views/register_view.dart'
@@ -16,6 +17,7 @@ import 'package:edu_link/features/home/presentation/views/home_view.dart'
     show HomeView;
 import 'package:edu_link/features/manage_course/presentation/views/manage_course_view.dart'
     show ManageCourseView;
+import 'package:edu_link/features/manage_user/presentation/views/manage_profile_view.dart';
 import 'package:edu_link/features/profile/presentation/views/profile_view.dart'
     show ProfileView;
 import 'package:edu_link/features/register_courses/presentation/views/register_courses_view.dart'
@@ -32,6 +34,7 @@ abstract class Routes {
   static const String courseDetailsView = '/course-details';
   static const String homeView = '/';
   static const String manageCourseView = '/manage-course';
+  static const String manageProfileView = '/manage-profile';
   static const String profileView = '/student-profile';
   static const String registerCoursesView = '/register-courses';
   static const String registerView = '/register';
@@ -46,6 +49,9 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
       (context, args) => CourseDetailsView(course: args! as CourseEntity),
   Routes.manageCourseView:
       (context, args) => ManageCourseView(course: args as CourseEntity?),
+  Routes.manageProfileView:
+      (context, args) =>
+          ManageProfileView(user: getUser() ?? args as UserEntity?),
   Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
 
   /// Routes without arguments
@@ -60,7 +66,11 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
 
 RouterConfig<RouteMatchList> routerConfig = GoRouter(
   initialLocation:
-      AuthService().isSignedIn() ? Routes.homeView : Routes.signinView,
+      const AuthService().isSignedIn()
+          ? (getUser()?.isValid() ?? false)
+              ? Routes.homeView
+              : Routes.manageProfileView
+          : Routes.signinView,
   routes:
       _routes.entries
           .map(

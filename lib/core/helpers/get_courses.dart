@@ -15,8 +15,8 @@ List<CourseEntity>? getCourses() {
   return null;
 }
 
-Future<bool> getCoursesMethod() => CoursesRepo()
-    .get()
+Future<bool> getCoursesMethod() => const CoursesRepo()
+    .getAll()
     .then(
       (e) => SharedPrefSingleton.setStringList(
         Endpoints.courses,
