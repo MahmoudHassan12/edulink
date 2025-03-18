@@ -1,5 +1,5 @@
-import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart'
     show CustomElevatedButton;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button_tonal.dart'
@@ -13,23 +13,22 @@ import 'package:edu_link/features/profile/presentation/views/widgets/third_panal
 import 'package:flutter/material.dart';
 
 class ProfileViewBody extends StatelessWidget {
-  const ProfileViewBody({required this.user, super.key});
-  final UserEntity user;
+  const ProfileViewBody({super.key});
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      FirstPanalWithDecoration(user: user),
+      const FirstPanalWithDecoration(),
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         sliver: SliverList.list(
           children: [
             const SizedBox(height: 12),
             const _Label('Contact Information'),
-            SecondPanal(user: user),
+            const SecondPanal(),
             const SizedBox(height: 12),
-            if (user.isProfessor) ...[
+            if (getUser()?.isProfessor ?? false) ...[
               const _Label('Office hours & availability'),
-              ThirdPanal(user: user),
+              const ThirdPanal(),
             ] else
               CustomElevatedButton.icon(
                 onPressed: () {},

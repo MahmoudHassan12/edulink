@@ -1,6 +1,5 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
-import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
@@ -17,7 +16,7 @@ import 'package:edu_link/features/home/presentation/views/home_view.dart'
     show HomeView;
 import 'package:edu_link/features/manage_course/presentation/views/manage_course_view.dart'
     show ManageCourseView;
-import 'package:edu_link/features/manage_user/presentation/views/manage_profile_view.dart';
+import 'package:edu_link/features/manage_profile/presentation/views/manage_profile_view.dart';
 import 'package:edu_link/features/profile/presentation/views/profile_view.dart'
     show ProfileView;
 import 'package:edu_link/features/register_courses/presentation/views/register_courses_view.dart'
@@ -50,9 +49,8 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.manageCourseView:
       (context, args) => ManageCourseView(course: args as CourseEntity?),
   Routes.manageProfileView:
-      (context, args) =>
-          ManageProfileView(user: getUser() ?? args as UserEntity?),
-  Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
+      (context, args) => const ManageProfileView(),
+  Routes.profileView: (context, args) => const ProfileView(),
 
   /// Routes without arguments
   Routes.aboutView: (context, args) => const AboutView(),

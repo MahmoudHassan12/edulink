@@ -21,8 +21,8 @@ class AuthRepo {
   static final String? _uid = _auth.currentUser?.uid;
 
   Future<User?> signInWithEmail(String email, String password) =>
-      _auth.signInWithEmail(email, password).then((user) {
-        _get(documentId: user?.uid);
+      _auth.signInWithEmail(email, password).then((user) async {
+        await _get(documentId: user?.uid);
         return user;
       });
 
@@ -72,10 +72,11 @@ class AuthRepo {
                 imageUrl: user?.photoURL,
                 phone: user?.phoneNumber,
               ).toMap();
-          await _add(data: data, documentId: user?.uid);
-          await SharedPrefSingleton.setString(
-            Endpoints.user,
-            jsonEncode(UserEntity.fromMap(data).toMap()),
+          await _add(data: data, documentId: user?.uid).then(
+            (_) => SharedPrefSingleton.setString(
+              Endpoints.user,
+              jsonEncode(UserEntity.fromMap(data).toMap()),
+            ),
           );
         }
         return user;

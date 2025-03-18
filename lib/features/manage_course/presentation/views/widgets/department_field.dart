@@ -17,9 +17,14 @@ class DepartmentField extends StatelessWidget {
 
 const List<String> _departments = [
   'All Departments',
-  'Statistics',
-  'Computer Science',
-  'Statistics & Computer Science',
+  'Geophysics',
+  'Microbiology',
+  'Botany',
   'Physics',
+  'Zoology',
+  'Geology',
+  'Entomology',
   'Chemistry',
+  'Mathematics',
+  'Biochemistry',
 ];

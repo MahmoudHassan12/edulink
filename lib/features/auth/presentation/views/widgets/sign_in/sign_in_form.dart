@@ -1,7 +1,7 @@
 import 'dart:developer';
-import 'package:edu_link/core/helpers/get_courses.dart' show getCoursesMethod;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/auth_repo.dart';
+import 'package:edu_link/core/repos/courses_repo.dart' show CoursesRepo;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/email_text_field.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/password_text_field.dart';
@@ -21,7 +21,7 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   Future<void> handleSignInSuccess() async {
-    await getCoursesMethod();
+    await const CoursesRepo().getAll();
     if (mounted) await homeNavigation(context);
   }
 

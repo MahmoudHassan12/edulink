@@ -31,7 +31,7 @@ class FireStoreService {
   }) => _instance
       .collection(path)
       .doc(documentId)
-      .update(data)
+      .set(data)
       .onError<FirebaseException>(
         (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
       )

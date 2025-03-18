@@ -9,11 +9,8 @@ import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:flutter/material.dart';
 
-// Import UserEntity model
-
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
-
   @override
   Widget build(BuildContext context) {
     final navigations = [
@@ -63,7 +60,7 @@ class _DrawerHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
-            leading: UserPhoto(imageUrl: user?.imageUrl),
+            leading: const UserPhoto(),
             title: EText(user?.name ?? 'No Name'),
             subtitle: FittedBox(
               fit: BoxFit.scaleDown,
@@ -72,7 +69,7 @@ class _DrawerHeader extends StatelessWidget {
             ),
           ),
           OutlinedButton(
-            onPressed: () async => profileNavigation(context, extra: user),
+            onPressed: () async => profileNavigation(context),
             child: const Text('Manage your Account'),
           ),
         ],

@@ -1,0 +1,42 @@
+[
+    {
+        "id": "1",
+        "name": "Geophysics"
+    },
+    {
+        "id": "2",
+        "name": "Microbiology"
+    },
+    {
+        "id": "3",
+        "name": "Botany"
+    },
+    {
+        "id": "4",
+        "name": "Physics"
+    },
+    {
+        "id": "5",
+        "name": "Zoology"
+    },
+    {
+        "id": "6",
+        "name": "Geology"
+    },
+    {
+        "id": "7",
+        "name": "Entomology"
+    },
+    {
+        "id": "8",
+        "name": "Chemistry"
+    },
+    {
+        "id": "9",
+        "name": "Mathematics"
+    },
+    {
+        "id": "10",
+        "name": "Biochemistry"
+    }
+]

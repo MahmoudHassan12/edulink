@@ -1,5 +1,9 @@
+import 'package:edu_link/core/domain/entities/availability_entity.dart';
+import 'package:edu_link/core/domain/entities/available_time_entity.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/duration_entity.dart';
+import 'package:edu_link/core/domain/entities/location_entity.dart';
+import 'package:edu_link/core/domain/entities/office_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
@@ -43,9 +47,9 @@ Future<void> _addToFirestore() async {
     email: 'mahmoud@example.com',
     phone: '+201234567890',
     imageUrl: 'https://avatar.iran.liara.run/public/18',
-    department: 'Computer Science',
+    // department: 'Computer Science',
     level: 'Senior',
-    program: 'Stat & CS',
+    // program: 'Stat & CS',
     ssn: '987654321',
     academicTitle: 'Student',
     courses: [

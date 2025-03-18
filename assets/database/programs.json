@@ -1,0 +1,32 @@
+[
+    {
+        "id": "1",
+        "department_id": "9",
+        "name": "Statistics"
+    },
+    {
+        "id": "2",
+        "department_id": "9",
+        "name": "Computer Science"
+    },
+    {
+        "id": "3",
+        "department_id": "9",
+        "name": "Pure Mathematics"
+    },
+    {
+        "id": "4",
+        "department_id": "9",
+        "name": "Statistics & Computer Science"
+    },
+    {
+        "id": "5",
+        "department_id": "9",
+        "name": "Pure Mathematics & Computer Science"
+    },
+    {
+        "id": "6",
+        "department_id": "9",
+        "name": "Pure Mathematics & Statistics"
+    }
+]

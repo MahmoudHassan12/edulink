@@ -1,32 +1,26 @@
-import 'package:edu_link/core/domain/entities/user_entity.dart';
+import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
-import 'package:edu_link/features/manage_user/presentation/views/widgets/manage_profile_view_body.dart'
+import 'package:edu_link/features/manage_profile/presentation/controllers/cubits/manage_profile_cubit/manage_profile_cubit.dart'
+    show ManageProfileCubit;
+import 'package:edu_link/features/manage_profile/presentation/views/widgets/manage_profile_view_body.dart'
     show ManageProfileViewBody;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 
 class ManageProfileView extends StatelessWidget {
-  const ManageProfileView({super.key, this.user});
-  final UserEntity? user;
+  const ManageProfileView({super.key});
   @override
   Scaffold build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: EText(user == null ? 'Add User' : 'Edit User'),
+      title: EText(getUser() == null ? 'Add User' : 'Edit User'),
       centerTitle: true,
-      // actions:
-      //     user == null
-      //         ? null
-      //         : [
-      //           IconButton(
-      //             icon: const Icon(Icons.delete_rounded),
-      //             onPressed:
-      //                 () async =>
-      //                     _deleteCourseDialog(context, documentId: user?.id),
-      //           ),
-      //         ],
     ),
-    body: ManageProfileViewBody(user: user),
+    body: BlocProvider<ManageProfileCubit>(
+      create: (context) => ManageProfileCubit(),
+      child: const ManageProfileViewBody(),
+    ),
   );
 }
 

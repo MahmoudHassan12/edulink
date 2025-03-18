@@ -41,10 +41,9 @@ class CourseEntity {
                 data['duration'] as Map<String, dynamic>?,
               )
               : null,
-      professor:
-          data['professor'] != null
-              ? UserEntity.fromMap(data['professor'] as Map<String, dynamic>?)
-              : null,
+      professor: UserEntity.fromMap(
+        UserEntity(id: data['professorId']).toMap(),
+      ),
     );
   }
 
@@ -76,8 +75,38 @@ class CourseEntity {
     'creditHour': creditHour,
     'lectures': lectures,
     'duration': duration?.toMap(),
-    'professor': professor?.toMap(),
+    'professorId': professor?.id,
   };
+
+  CourseEntity copyWith({
+    String? id,
+    String? code,
+    String? title,
+    String? description,
+    String? imageUrl,
+    String? type,
+    String? level,
+    String? department,
+    String? semester,
+    int? creditHour,
+    int? lectures,
+    DurationEntity? duration,
+    UserEntity? professor,
+  }) => CourseEntity(
+    id: id ?? this.id,
+    code: code ?? this.code,
+    title: title ?? this.title,
+    description: description ?? this.description,
+    imageUrl: imageUrl ?? this.imageUrl,
+    type: type ?? this.type,
+    level: level ?? this.level,
+    department: department ?? this.department,
+    semester: semester ?? this.semester,
+    creditHour: creditHour ?? this.creditHour,
+    lectures: lectures ?? this.lectures,
+    duration: duration ?? this.duration,
+    professor: professor ?? this.professor,
+  );
 
   bool isValid() =>
       (code?.isNotEmpty ?? false) &&

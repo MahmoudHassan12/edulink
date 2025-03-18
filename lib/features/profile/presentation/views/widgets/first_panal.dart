@@ -1,20 +1,19 @@
-import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:edu_link/features/profile/presentation/views/widgets/profile_panal.dart';
 import 'package:flutter/material.dart';
 
 class FirstPanal extends StatelessWidget {
-  const FirstPanal({required this.user, super.key});
-  final UserEntity user;
+  const FirstPanal({super.key});
   @override
   Widget build(BuildContext context) => ProfilePanal(
     child: Column(
       spacing: 8,
       children: [
-        UserPhoto(radius: 48, imageUrl: user.imageUrl, isHero: true),
-        _UserName(user: user),
-        _UserInfoFirstPanal(user: user),
+        const UserPhoto(radius: 48, isHero: true),
+        const _UserName(),
+        const _UserInfoFirstPanal(),
         const Divider(indent: 16, endIndent: 16),
         EText(
           'Faculty of Science',
@@ -28,30 +27,32 @@ class FirstPanal extends StatelessWidget {
 }
 
 class _UserName extends StatelessWidget {
-  const _UserName({required this.user});
-  final UserEntity user;
+  const _UserName();
   @override
-  Widget build(BuildContext context) => EText(
-    user.isProfessor ? 'Dr. ${user.name!}' : user.name!,
-    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-  );
+  Widget build(BuildContext context) {
+    final user = getUser();
+    return EText(
+      user?.isProfessor ?? false ? 'Dr. ${user?.name}' : user?.name ?? '',
+      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+    );
+  }
 }
 
 class _UserInfoFirstPanal extends StatelessWidget {
-  const _UserInfoFirstPanal({required this.user});
-  final UserEntity user;
+  const _UserInfoFirstPanal();
   @override
   Widget build(BuildContext context) {
+    final user = getUser();
     final studentInfo = {
-      'Credit Level': user.level,
-      'Student ID': user.id,
-      'Program': user.program,
+      'Credit Level': user?.level,
+      'Student ID': user?.id,
+      'Program': user?.program?.name,
     };
     final professorInfo = {
-      'Academic title': user.academicTitle,
-      'Department': user.department,
+      'Academic title': user?.academicTitle,
+      'Department': user?.department?.name,
     };
-    final info = user.isProfessor ? professorInfo : studentInfo;
+    final info = user?.isProfessor ?? false ? professorInfo : studentInfo;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

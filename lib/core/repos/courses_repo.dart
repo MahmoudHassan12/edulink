@@ -1,6 +1,11 @@
+import 'dart:convert' show jsonEncode;
 import 'dart:developer' show log;
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart';
+import 'package:edu_link/core/helpers/shared_pref.dart'
+    show SharedPrefSingleton;
+import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:edu_link/core/services/fire_store_service.dart'
     show FireStoreService;
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseException;
@@ -27,10 +32,26 @@ class CoursesRepo {
 
   Future<List<CourseEntity>?> getAll() => _fireStore
       .getAll(path: _path)
-      .then((e) {
+      .then((e) async {
         final docs = e.docs;
         log('${docs.length} Courses fetched successfully!');
-        return docs.map((e) => CourseEntity.fromMap(e.data())).toList();
+        final courses = await Future.wait<CourseEntity>(
+          docs.map((e) async {
+            final data = e.data();
+            final user = await const UserRepo().get(
+              documentId: data['professorId'],
+            );
+            final course = CourseEntity.fromMap(
+              data,
+            ).copyWith(professor: UserEntity.fromMap(user.data()));
+            return course;
+          }),
+        );
+        await SharedPrefSingleton.setStringList(
+          Endpoints.courses,
+          courses.map((course) => jsonEncode(course.toMap())).toList(),
+        );
+        return courses;
       })
       .onError<FirebaseException>(
         (e, _) => throw Exception('Failed to fetch courses: $e'),

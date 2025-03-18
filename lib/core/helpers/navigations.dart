@@ -28,14 +28,14 @@ Future<void> courseDetailsNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.courseDetailsView, extra: extra);
 Future<void> manageCourseNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.manageCourseView, extra: extra);
-Future<void> manageProfileNavigation(BuildContext context, {Object? extra}) =>
-    _navigateTo(context, Routes.manageProfileView, extra: extra);
-Future<void> profileNavigation(BuildContext context, {Object? extra}) =>
-    _navigateTo(context, Routes.profileView, extra: extra);
 
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>
     _navigateTo(context, Routes.aboutView);
+Future<void> manageProfileNavigation(BuildContext context) =>
+    _navigateTo(context, Routes.manageProfileView);
+Future<void> profileNavigation(BuildContext context) =>
+    _navigateTo(context, Routes.profileView);
 Future<void> registerCoursesNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerCoursesView);
 Future<void> registerNavigation(BuildContext context) =>

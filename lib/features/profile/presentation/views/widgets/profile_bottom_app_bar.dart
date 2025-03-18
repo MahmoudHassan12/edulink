@@ -1,13 +1,10 @@
 import 'dart:developer';
-
-import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileBottomAppBar extends StatelessWidget {
-  const ProfileBottomAppBar({required this.user, super.key});
-  final UserEntity user;
+  const ProfileBottomAppBar({super.key});
   @override
   Widget build(BuildContext context) => BottomAppBar(
     color: Colors.transparent,

@@ -12,7 +12,7 @@ class DurationEntity {
   }
 
   /// Converts the `DurationEntity` to a Firestore-compatible map
-  Map<String, dynamic> toMap() {
+  Map<String, int> toMap() {
     return {'hours': hours, 'minutes': minutes, 'seconds': seconds};
   }
 

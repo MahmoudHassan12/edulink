@@ -1,6 +1,8 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/department_entity.dart';
+import 'package:edu_link/core/domain/entities/office_entity.dart';
+import 'package:edu_link/core/domain/entities/program_entity.dart';
 import 'package:edu_link/core/helpers/entities_handlers.dart';
-import 'package:flutter/material.dart' show TimeOfDay;
 
 class UserEntity {
   const UserEntity({
@@ -12,7 +14,7 @@ class UserEntity {
     this.department,
     this.level,
     this.courses = const [],
-    this.isProfessor = false,
+    this.isProfessor,
     this.program,
     this.ssn,
     this.academicTitle,
@@ -25,11 +27,11 @@ class UserEntity {
     email: data?['email'],
     phone: data?['phone'],
     imageUrl: data?['imageUrl'],
-    department: data?['department'],
+    department: complexEntity(data?['department'], DepartmentEntity.fromMap),
     level: data?['level'],
     courses: complexListEntity(data?['courses'], CourseEntity.fromMap),
-    isProfessor: data?['isProfessor'] ?? false,
-    program: data?['program'],
+    isProfessor: data?['isProfessor'],
+    program: complexEntity(data?['program'], ProgramEntity.fromMap),
     ssn: data?['ssn'],
     academicTitle: data?['academicTitle'],
     office: complexEntity(data?['office'], OfficeEntity.fromMap),
@@ -40,11 +42,11 @@ class UserEntity {
   final String? email;
   final String? phone;
   final String? imageUrl;
-  final String? department;
+  final DepartmentEntity? department;
   final String? level;
   final List<CourseEntity>? courses;
-  final bool isProfessor;
-  final String? program;
+  final bool? isProfessor;
+  final ProgramEntity? program;
   final String? ssn;
   final String? academicTitle;
   final OfficeEntity? office;
@@ -55,111 +57,65 @@ class UserEntity {
     'email': email,
     'phone': phone,
     'imageUrl': imageUrl,
-    'department': department,
+    'department': department?.toMap(),
     'level': level,
     'courses': courses?.map((course) => course.toMap()).toList(),
-    'isProfessor': isProfessor,
-    'program': program,
+    'isProfessor': isProfessor ?? false,
+    'program': program?.toMap(),
     'ssn': ssn,
     'academicTitle': academicTitle,
     'office': office?.toMap(),
   };
 
+  UserEntity copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? phone,
+    String? imageUrl,
+    DepartmentEntity? department,
+    String? level,
+    List<CourseEntity>? courses,
+    bool? isProfessor,
+    ProgramEntity? program,
+    String? ssn,
+    String? academicTitle,
+    OfficeEntity? office,
+  }) => UserEntity(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    email: email ?? this.email,
+    phone: phone ?? this.phone,
+    imageUrl: imageUrl ?? this.imageUrl,
+    department: department ?? this.department,
+    level: level ?? this.level,
+    courses: courses ?? this.courses,
+    isProfessor: isProfessor ?? this.isProfessor,
+    program: program ?? this.program,
+    ssn: ssn ?? this.ssn,
+    academicTitle: academicTitle ?? this.academicTitle,
+    office: office ?? this.office,
+  );
+
+  UserEntity setName(String name) => copyWith(name: name);
+  UserEntity setEmail(String email) => copyWith(email: email);
+  UserEntity setPhone(String phone) => copyWith(phone: phone);
+  UserEntity setImageUrl(String imageUrl) => copyWith(imageUrl: imageUrl);
+  UserEntity setDepartment(DepartmentEntity department) =>
+      copyWith(department: department);
+  UserEntity setLevel(String level) => copyWith(level: level);
+  UserEntity setProgram(ProgramEntity program) => copyWith(program: program);
+  UserEntity setSsn(String ssn) => copyWith(ssn: ssn);
+  UserEntity setAcademicTitle(String academicTitle) =>
+      copyWith(academicTitle: academicTitle);
+  UserEntity setOffice(OfficeEntity office) => copyWith(office: office);
+
   bool isValid() =>
       (name?.isNotEmpty ?? false) &&
       (email?.isNotEmpty ?? false) &&
       (phone?.isNotEmpty ?? false) &&
-      (department?.isNotEmpty ?? false) &&
+      (department?.isValid() ?? false) &&
       (level?.isNotEmpty ?? false) &&
-      (program?.isNotEmpty ?? false) &&
+      (program?.isValid() ?? false) &&
       (ssn?.isNotEmpty ?? false);
-}
-
-class OfficeEntity {
-  const OfficeEntity({this.location, this.availability, this.contactInfo});
-  factory OfficeEntity.fromMap(Map<String, dynamic>? data) => OfficeEntity(
-    location: complexEntity(data?['location'], LocationEntity.fromMap),
-    availability: complexEntity(
-      data?['availability'],
-      AvailabilityEntity.fromMap,
-    ),
-    contactInfo: data?['contactInfo'],
-  );
-
-  final LocationEntity? location;
-  final AvailabilityEntity? availability;
-  final String? contactInfo;
-
-  Map<String, dynamic> toMap() => {
-    'location': location?.toMap(),
-    'availability': availability?.toMap(),
-    'contactInfo': contactInfo,
-  };
-}
-
-class LocationEntity {
-  const LocationEntity({this.building, this.floor, this.department, this.room});
-  factory LocationEntity.fromMap(Map<String, dynamic>? data) => LocationEntity(
-    building: data?['building'],
-    floor: data?['floor'],
-    department: data?['department'],
-    room: data?['room'],
-  );
-
-  final String? building;
-  final String? floor;
-  final String? department;
-  final String? room;
-
-  Map<String, dynamic> toMap() => {
-    'building': building,
-    'floor': floor,
-    'department': department,
-    'room': room,
-  };
-}
-
-class AvailabilityEntity {
-  const AvailabilityEntity({this.times});
-
-  factory AvailabilityEntity.fromMap(Map<String, dynamic>? data) =>
-      AvailabilityEntity(
-        times: complexListEntity(data?['times'], AvailableTimeEntity.fromMap),
-      );
-
-  final List<AvailableTimeEntity>? times;
-
-  Map<String, dynamic> toMap() => {
-    'times': times?.map((time) => time.toMap()).toList(),
-  };
-}
-
-class AvailableTimeEntity {
-  const AvailableTimeEntity({this.day, this.from, this.to});
-
-  factory AvailableTimeEntity.fromMap(Map<String, dynamic>? data) {
-    final from = data?['from'] as Map<String, dynamic>?;
-    final to = data?['to'] as Map<String, dynamic>?;
-    return AvailableTimeEntity(
-      day: data?['day'],
-      from:
-          from != null
-              ? TimeOfDay(hour: from['hour'] ?? 0, minute: from['minute'] ?? 0)
-              : null,
-      to:
-          to != null
-              ? TimeOfDay(hour: to['hour'] ?? 0, minute: to['minute'] ?? 0)
-              : null,
-    );
-  }
-
-  final String? day;
-  final TimeOfDay? from;
-  final TimeOfDay? to;
-
-  Map<String, dynamic> toMap() => {
-    'day': day,
-    'from': from != null ? {'hour': from!.hour, 'minute': from!.minute} : null,
-    'to': to != null ? {'hour': to!.hour, 'minute': to!.minute} : null,
-  };
 }
