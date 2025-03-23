@@ -3,6 +3,7 @@ import 'package:edu_link/core/controllers/cubits/courses_cubit.dart/courses_cubi
     show CoursesCubit, CoursesState, CoursesSuccess;
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
+import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,9 +16,9 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
       builder:
           (context, state) => SearchAnchor.bar(
             suggestionsBuilder:
-                (_, controller) =>
+                (context, controller) =>
                     state is CoursesSuccess
-                        ? suggestions(state.courses, controller)
+                        ? _suggestions(context, state.courses, controller)
                         : [],
             viewHintText: 'Search',
             barHintText: 'Search',
@@ -42,26 +43,28 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(48);
 }
 
-Iterable<ListTile> suggestions(
+Iterable<ListTile> _suggestions(
+  BuildContext context,
   List<CourseEntity> courses,
   SearchController controller,
 ) sync* {
-  final query = controller.value.text.toLowerCase();
-  final queryWords = query.split(' ');
+  final searchQuery = controller.value.text.toLowerCase();
+  if (searchQuery.isEmpty) return;
   for (final course in courses) {
-    final title = course.title?.toLowerCase();
-    final code = course.code?.toLowerCase();
-    if ((title?.contains(query) ?? false) ||
-        (code?.contains(query) ?? false) ||
-        queryWords.any(
-          (element) =>
-              (title?.contains(element) ?? false) ||
-              (code?.contains(element) ?? false),
-        )) {
+    final courseTitle = course.title;
+    final courseCode = course.code;
+    if ((courseTitle?.toLowerCase().contains(searchQuery) ?? false) ||
+        (courseCode?.toLowerCase().contains(searchQuery) ?? false)) {
       yield ListTile(
-        title: Text(course.code ?? ''),
-        subtitle: Text(course.title ?? ''),
-        onTap: () {},
+        title: Text(courseCode!),
+        subtitle: Text(courseTitle!),
+        onTap:
+            () async => courseDetailsNavigation(context, extra: course).then(
+              (_) =>
+                  controller
+                    ..clear()
+                    ..closeView(null),
+            ),
       );
     }
   }
