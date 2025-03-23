@@ -96,7 +96,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     ? null
                     : () async {
                       if (await _signUp() && context.mounted) {
-                        await homeNavigation(context);
+                        await manageProfileNavigation(context);
                       }
                     },
           ),
