@@ -64,7 +64,10 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      PickImage(imageUrl: widget.course?.imageUrl),
+      PickImage(
+        imageUrl: widget.course?.imageUrl,
+        courseId: '55d1lpJ',
+      ), //TODO(Yossouf): Replace with real courseId
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         sliver: SliverList.list(
