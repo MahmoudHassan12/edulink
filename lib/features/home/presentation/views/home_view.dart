@@ -5,10 +5,10 @@ import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/location_entity.dart';
 import 'package:edu_link/core/domain/entities/office_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
-import 'package:edu_link/core/helpers/auth_service.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/user_repo.dart';
+import 'package:edu_link/core/services/auth_service.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/app_drawer.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/e_navigation_bar.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/home_view_body.dart'
@@ -173,7 +173,7 @@ Future<void> _addToFirestore() async {
       contactInfo: 'contact@example.com',
     ),
   );
-  return const UserRepo().add(
+  return const UserRepo().addUser(
     data: user.toMap(),
     documentId: const AuthService().currentUser?.uid,
   );

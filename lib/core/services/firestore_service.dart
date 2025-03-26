@@ -2,17 +2,18 @@ import 'dart:developer' show log;
 import 'package:cloud_firestore/cloud_firestore.dart'
     show
         DocumentSnapshot,
+        FieldValue,
         FirebaseException,
         FirebaseFirestore,
         QuerySnapshot,
         SetOptions;
 
-class FireStoreService {
-  const FireStoreService();
+class FirestoreService {
+  const FirestoreService();
   static final FirebaseFirestore _instance = FirebaseFirestore.instance;
 
   /// It can be used to add a course to the database or update an existing one
-  Future<void> add({
+  Future<void> addDocument({
     required Map<String, dynamic> data,
     required String path,
     String? documentId,
@@ -24,6 +25,21 @@ class FireStoreService {
         (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
       )
       .catchError((e) => log('$e'));
+
+  Future<void> addListInDocument({
+    required String path,
+    required String listKey,
+    required List<dynamic> list,
+    String? documentId,
+  }) => _instance
+      .collection(path)
+      .doc(documentId)
+      .update({listKey: FieldValue.arrayUnion(list)})
+      .onError<FirebaseException>(
+        (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
+      )
+      .catchError((e) => log('$e'));
+
   Future<void> update({
     required Map<String, dynamic> data,
     required String path,

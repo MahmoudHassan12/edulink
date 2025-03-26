@@ -3,9 +3,12 @@ import 'package:edu_link/core/domain/entities/course_entity.dart'
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
+import 'package:edu_link/features/manage_course/presentation/controllers/manage_course_cubit/manage_course_cubit.dart'
+    show ManageCourseCubit;
 import 'package:edu_link/features/manage_course/presentation/views/widgets/manage_course_view_body.dart'
     show ManageCourseViewBody;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 
 class ManageCourseView extends StatelessWidget {
   const ManageCourseView({super.key, this.course});
@@ -27,7 +30,10 @@ class ManageCourseView extends StatelessWidget {
                 ),
               ],
     ),
-    body: ManageCourseViewBody(course: course),
+    body: BlocProvider<ManageCourseCubit>(
+      create: (context) => ManageCourseCubit(),
+      child: ManageCourseViewBody(course: course),
+    ),
   );
 }
 

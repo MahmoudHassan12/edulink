@@ -1,5 +1,5 @@
-import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/core/services/auth_service.dart' show AuthService;
 import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:flutter/material.dart';
 

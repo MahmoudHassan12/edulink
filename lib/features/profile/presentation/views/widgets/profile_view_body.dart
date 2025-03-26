@@ -1,5 +1,5 @@
-import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
 import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/services/auth_service.dart' show AuthService;
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart'
     show CustomElevatedButton;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button_tonal.dart'

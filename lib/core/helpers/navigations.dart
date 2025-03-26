@@ -1,6 +1,6 @@
 import 'package:edu_link/core/helpers/routes.dart' show Routes;
 import 'package:flutter/material.dart' show BuildContext;
-import 'package:go_router/go_router.dart' show GoRouter;
+import 'package:go_router/go_router.dart' show GoRouter, RouteMatchList;
 
 Future<void> _navigateTo(
   BuildContext context,
@@ -11,7 +11,7 @@ Future<void> _navigateTo(
   final router = GoRouter.of(context);
   return clearStack
       ? router.go(route, extra: extra)
-      : router.push(route, extra: extra);
+      : router.push<RouteMatchList?>(route, extra: extra);
 }
 
 void popNavigation(BuildContext context, [Object? result]) =>
@@ -36,6 +36,8 @@ Future<void> manageProfileNavigation(BuildContext context) =>
     _navigateTo(context, Routes.manageProfileView);
 Future<void> profileNavigation(BuildContext context) =>
     _navigateTo(context, Routes.profileView);
+Future<void> qaForumNavigation(BuildContext context) =>
+    _navigateTo(context, Routes.qaForumView);
 Future<void> registerCoursesNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerCoursesView);
 Future<void> registerNavigation(BuildContext context) =>

@@ -10,31 +10,3 @@ UserEntity? getUser() {
   }
   return null;
 }
-
-// Future<bool?> getUserMethod() async {
-//   final currentUser = const AuthService().currentUser;
-//   if (currentUser == null) {
-//     log('Error: No current user found');
-//     return null;
-//   }
-//   try {
-//  final docSnapshot = await const UserRepo().get(documentId: currentUser.uid);
-//     if (!docSnapshot.exists) {
-//       log('Error: User document does not exist for ID: ${currentUser.uid}');
-//       return null;
-//     }
-//     final data = docSnapshot.data();
-//     if (data == null) {
-//       log('Error: User data is null');
-//       return null;
-//     }
-//     // log('Fetched User Data: $data');
-//     return SharedPrefSingleton.setString(
-//       Endpoints.user,
-//       jsonEncode(UserEntity.fromMap(data).toMap()),
-//     );
-//   } catch (e) {
-//     log('Error while fetching user data: $e');
-//     return null;
-//   }
-// }

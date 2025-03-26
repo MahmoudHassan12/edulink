@@ -90,7 +90,7 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
                       ..setLevel(_levelController.text)
                       ..setSsn(_ssnController.text);
                 if (cubit.user?.isValid() ?? false) {
-                  await cubit.updateFireStore();
+                  await cubit.update();
                   if (context.mounted) {
                     await homeNavigation(context);
                   }
