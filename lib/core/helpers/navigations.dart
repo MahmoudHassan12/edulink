@@ -28,6 +28,8 @@ Future<void> courseDetailsNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.courseDetailsView, extra: extra);
 Future<void> manageCourseNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.manageCourseView, extra: extra);
+Future<void> questionDetailsNavigation(BuildContext context, {Object? extra}) =>
+    _navigateTo(context, Routes.questionDetailsView, extra: extra);
 
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>

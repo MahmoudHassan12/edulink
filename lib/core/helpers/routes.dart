@@ -1,5 +1,6 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
+import 'package:edu_link/core/domain/entities/q_a_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/services/auth_service.dart' show AuthService;
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
@@ -21,6 +22,8 @@ import 'package:edu_link/features/profile/presentation/views/profile_view.dart'
     show ProfileView;
 import 'package:edu_link/features/q_a_forum/presentation/views/q_a_forum_view.dart'
     show QAForumView;
+import 'package:edu_link/features/question_details/presentation/views/question_details_view.dart'
+    show QuestionDetailsView;
 import 'package:edu_link/features/register_courses/presentation/views/register_courses_view.dart'
     show RegisterCoursesView;
 import 'package:edu_link/features/settings/presentation/views/settings_view.dart'
@@ -38,6 +41,7 @@ abstract class Routes {
   static const String manageProfileView = '/manage-profile';
   static const String profileView = '/student-profile';
   static const String qaForumView = '/qa-forum';
+  static const String questionDetailsView = '/question-details';
   static const String registerCoursesView = '/register-courses';
   static const String registerView = '/register';
   static const String resetPasswordView = '/reset-password';
@@ -58,6 +62,8 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.aboutView: (context, args) => const AboutView(),
   Routes.homeView: (context, args) => const HomeView(),
   Routes.qaForumView: (context, args) => const QAForumView(),
+  Routes.questionDetailsView:
+      (context, args) => QuestionDetailsView(qa: args! as QAEntity),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),
   Routes.registerView: (context, args) => const RegisterView(),
   Routes.resetPasswordView: (context, args) => const ResetPasswordView(),

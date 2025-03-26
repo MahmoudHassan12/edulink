@@ -6,18 +6,23 @@ import 'package:flutter/material.dart'
         ElevatedButton,
         FilledButton,
         IconButton,
+        MaterialTapTargetSize,
         MediaQuery,
         RoundedRectangleBorder,
         Size;
 
-ButtonStyle styleCustomFilledButton(BuildContext context) =>
-    FilledButton.styleFrom(
-      minimumSize: Size(MediaQuery.sizeOf(context).longestSide, 56),
-      shape: const RoundedRectangleBorder(borderRadius: xsBorder),
-    );
+ButtonStyle styleCustomFilledButton(
+  BuildContext context, {
+  required bool hasMinimumSize,
+}) => FilledButton.styleFrom(
+  minimumSize:
+      hasMinimumSize ? Size(MediaQuery.sizeOf(context).width, 56) : null,
+  shape: const RoundedRectangleBorder(borderRadius: xsBorder),
+);
 
 ButtonStyle styleCustomIconButton() => IconButton.styleFrom(
   shape: const RoundedRectangleBorder(borderRadius: xxsBorder),
+  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
 );
 
 ButtonStyle styleCustomElevatedButton(BuildContext context) =>

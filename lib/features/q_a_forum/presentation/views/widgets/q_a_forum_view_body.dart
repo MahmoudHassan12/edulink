@@ -1,5 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edu_link/core/domain/entities/answer_entity.dart';
+import 'package:edu_link/core/domain/entities/q_a_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart';
+import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
+import 'package:edu_link/features/q_a_forum/presentation/views/widgets/q_a_forum_app_bar.dart';
+import 'package:edu_link/features/q_a_forum/presentation/views/widgets/question_card.dart';
 import 'package:flutter/material.dart';
 
 class QAForumViewBody extends StatelessWidget {
@@ -7,30 +12,112 @@ class QAForumViewBody extends StatelessWidget {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      SliverAppBar(
-        expandedHeight: MediaQuery.sizeOf(context).height * 0.25,
-        flexibleSpace: FlexibleSpaceBar(
-          titlePadding: EdgeInsets.zero,
-          title: const ListTile(
-            title: EText('Q&A Forum\n'),
-            subtitle: EText(
-              'Ask questions and get instant answers.\n'
-              'Engage in discussions with professors and students.\n'
-              'Stay updated with the latest course announcements.',
-              style: TextStyle(height: 2),
-              softWrap: true,
-            ),
+      const QAForumAppBar(),
+      SliverToBoxAdapter(
+        child: ListTile(
+          minTileHeight: 64,
+          title: const EText('Questions'),
+          trailing: CustomFilledButton(
+            onPressed: () {},
+            label: 'Ask a question',
+            hasMinimumSize: false,
           ),
-          background: CachedNetworkImage(
-            imageUrl:
-                'https://s3-alpha-sig.figma.com/img/bd66/c69e/40464c0d1d8ac792277c082db1450a30?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=bOE9sV~vY6f8hmod-FYKGUInUR67ChZTY3yx7siq9b7K5ZI9FQIoYTNfp5gnJW4QgdiMmZpOc2OTd25te4oVD~bTxzOs1rvTmEOZPDkanOKRKZ9MKqwuNsolPk7b0ZlgmS31947BAoDnnXzdlqJENZfA-Rc8qA7zMsUl~8kxXB1-sGfpEczn4qZiotg7-Q1SIhripfqRpv1EDmW9f--HI88HrurQ4pVQ639Vv7fAMCuMVjBtVpAXdTLgSeK3HhmGya-4ci8Cb9SKXFUxkjpefuWjfV1B1PfL6mxL-vTALPoLGLGV6es-5WhLnJ7FzqI0QYtu71aTj6AoVbS2V-sVYA__',
-            fit: BoxFit.cover,
-          ),
-          centerTitle: false,
-          expandedTitleScale: 1,
         ),
       ),
-      const SliverToBoxAdapter(child: EText('Q&A Forum')),
+      SliverList.builder(
+        itemCount: _questions.length,
+        itemBuilder: (context, index) => QuestionCard(qa: _questions[index]),
+      ),
     ],
   );
 }
+
+List<QAEntity> _questions = [
+  QAEntity(
+    question: 'What is Flutter?',
+    answers: [
+      AnswerEntity(
+        answer:
+            'Flutter is a mobile app development framework created by Google.',
+        user: const UserEntity(
+          name: 'Hosam Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/30',
+        ),
+        date: DateTime.now(),
+      ),
+      AnswerEntity(
+        answer:
+            'Flutter is an open-source mobile app '
+            'development framework created by Google.',
+        user: const UserEntity(
+          name: 'Mahmoud Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/31',
+        ),
+        date: DateTime.now(),
+      ),
+    ],
+    user: const UserEntity(
+      name: 'Yousef Saber',
+      imageUrl: 'https://avatar.iran.liara.run/public/32',
+    ),
+    date: DateTime.now(),
+  ),
+  QAEntity(
+    question: 'What is Dart?',
+    answers: [
+      AnswerEntity(
+        answer:
+            'Dart is a programming language '
+            'created by Google that runs on Flutter.',
+        user: const UserEntity(
+          name: 'Yousef Saber',
+          imageUrl: 'https://avatar.iran.liara.run/public/32',
+        ),
+        date: DateTime.now(),
+      ),
+      AnswerEntity(
+        answer:
+            'Dart is an open-source programming language '
+            'created by Google that runs on Flutter.',
+        user: const UserEntity(
+          name: 'Mahmoud Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/31',
+        ),
+        date: DateTime.now(),
+      ),
+    ],
+    user: const UserEntity(
+      name: 'Hosam Hasan',
+      imageUrl: 'https://avatar.iran.liara.run/public/30',
+    ),
+    date: DateTime.now(),
+  ),
+  QAEntity(
+    question: 'What is a widget?',
+    answers: [
+      AnswerEntity(
+        answer: 'A widget is a building block of user interface in Flutter.',
+        user: const UserEntity(
+          name: 'Yousef Saber',
+          imageUrl: 'https://avatar.iran.liara.run/public/32',
+        ),
+        date: DateTime.now(),
+      ),
+      AnswerEntity(
+        answer:
+            'A widget is an abstract representation '
+            'of a user interface in Flutter.',
+        user: const UserEntity(
+          name: 'Hosam Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/30',
+        ),
+        date: DateTime.now(),
+      ),
+    ],
+    user: const UserEntity(
+      name: 'Mahmoud Hasan',
+      imageUrl: 'https://avatar.iran.liara.run/public/31',
+    ),
+    date: DateTime.now(),
+  ),
+];
