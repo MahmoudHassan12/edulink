@@ -3,7 +3,6 @@ import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/course_image.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
-import 'package:edu_link/core/widgets/favorite_button.dart' show FavoriteButton;
 import 'package:flutter/material.dart';
 
 class CourseDetailsViewBody extends StatelessWidget {
@@ -29,7 +28,6 @@ class CourseDetailsViewBody extends StatelessWidget {
                 ]
                 : null,
       ),
-      const SliverToBoxAdapter(child: SizedBox(height: 16)),
       SliverToBoxAdapter(
         child: AspectRatio(
           aspectRatio: 4 / 3,
@@ -40,7 +38,10 @@ class CourseDetailsViewBody extends StatelessWidget {
         child: ListTile(
           title: EText(course.code!),
           subtitle: EText('${course.title}\nBy ${course.professor?.name}'),
-          trailing: const FavoriteButton(),
+          trailing: IconButton(
+            onPressed: () async => qaForumNavigation(context),
+            icon: const Icon(Icons.message_rounded),
+          ), // const FavoriteButton(),
         ),
       ),
       SliverPadding(
