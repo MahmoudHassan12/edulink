@@ -21,7 +21,7 @@ class HomeView extends StatelessWidget {
   Scaffold build(BuildContext context) => Scaffold(
     body: const HomeViewBody(),
     floatingActionButton:
-        (getUser()?.isProfessor ?? false)
+        (getUser?.isProfessor ?? false)
             ? const AddCourseFloatingButton()
             : null,
     drawer: const AppDrawer(),

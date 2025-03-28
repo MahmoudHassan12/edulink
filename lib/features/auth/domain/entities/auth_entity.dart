@@ -31,7 +31,7 @@ class AuthEntity {
   AuthEntity changeAutovalidateMode(AutovalidateMode mode) =>
       copyWith(autovalidateMode: mode);
 
-  bool isValid() =>
+  bool get isValid =>
       (password1?.isNotEmpty ?? false) &&
       (password2?.isNotEmpty ?? false) &&
       (password1 == password2);

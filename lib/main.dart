@@ -1,4 +1,5 @@
 import 'package:edu_link/core/controllers/cubits/courses_cubit.dart/courses_cubit.dart';
+import 'package:edu_link/core/helpers/bloc_observe.dart' show BlocObserve;
 import 'package:edu_link/core/helpers/shared_pref.dart';
 import 'package:edu_link/core/services/supabase_service.dart'
     show SupabaseService;
@@ -10,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  const BlocObserve().init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPrefSingleton.init();
   await SupabaseService.init();

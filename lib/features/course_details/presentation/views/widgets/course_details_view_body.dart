@@ -17,7 +17,7 @@ class CourseDetailsViewBody extends StatelessWidget {
         floating: true,
         snap: true,
         actions:
-            (getUser()?.isProfessor ?? false)
+            (getUser?.isProfessor ?? false)
                 ? [
                   IconButton(
                     onPressed:

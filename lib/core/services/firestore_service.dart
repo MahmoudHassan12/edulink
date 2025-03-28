@@ -68,6 +68,31 @@ class FirestoreService {
         throw e;
       });
 
+  Future<List<DocumentSnapshot<Map<String, dynamic>>>?> getMultibleDocuments({
+    required String path,
+    List<String?>? documentIds,
+  }) async {
+    if (documentIds == null) return null;
+    return Future.wait(
+      documentIds
+          .map(
+            (id) => _instance
+                .collection(path)
+                .doc(id)
+                .get()
+                .onError<FirebaseException>((e, _) {
+                  log('Code: ${e.code}, Message: ${e.message}, $e');
+                  throw e;
+                })
+                .catchError((e) {
+                  log('$e');
+                  throw e;
+                }),
+          )
+          .toList(),
+    );
+  }
+
   Future<QuerySnapshot<Map<String, dynamic>>> getAll({required String path}) =>
       _instance
           .collection(path)

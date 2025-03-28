@@ -16,7 +16,7 @@ class ManageProfileCubit extends Cubit<ManageProfileState> {
   ManageProfileCubit() : super(const ManageProfileInitial()) {
     unawaited(fetchDepartmentsAndPrograms());
   }
-  UserEntity? user = getUser()?.copyWith();
+  UserEntity? user = getUser?.copyWith();
 
   final List<DepartmentEntity> departments = List<DepartmentEntity>.empty(
     growable: true,
@@ -94,7 +94,7 @@ class ManageProfileCubit extends Cubit<ManageProfileState> {
     if (user?.image != null) {
       await userRepo.uploadImage(user!.image!).then((e) => setImageUrl(e));
     }
-    await userRepo.update(data: user!.toMap());
+    await userRepo.update(data: user!.toMap(), documentId: user?.id);
     emit(ManageProfileSuccess(user!));
   }
 }

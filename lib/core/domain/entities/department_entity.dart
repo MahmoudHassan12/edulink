@@ -5,5 +5,5 @@ class DepartmentEntity {
   final String? id;
   final String? name;
   Map<String, String?> toMap() => {'id': id, 'name': name};
-  bool isValid() => (id?.isNotEmpty ?? false) && (name?.isNotEmpty ?? false);
+  bool get isValid => (id?.isNotEmpty ?? false) && (name?.isNotEmpty ?? false);
 }

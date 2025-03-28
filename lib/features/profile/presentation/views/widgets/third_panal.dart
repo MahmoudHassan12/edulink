@@ -8,7 +8,7 @@ class ThirdPanal extends StatelessWidget {
   const ThirdPanal({super.key});
   @override
   Widget build(BuildContext context) {
-    final office = getUser()?.office;
+    final office = getUser?.office;
     final location = office?.location;
     final allTimes = office?.availability?.times
         ?.expand<String?>((e) {

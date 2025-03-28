@@ -74,7 +74,7 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
 RouterConfig<RouteMatchList> routerConfig = GoRouter(
   initialLocation:
       const AuthService().isSignedIn()
-          ? (getUser()?.isValid() ?? false)
+          ? (getUser?.isValid ?? false)
               ? Routes.homeView
               : Routes.manageProfileView
           : Routes.signinView,

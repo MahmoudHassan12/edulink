@@ -101,7 +101,6 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
               .add(data: course.toMap(), documentId: course.id)
               .then((_) => emit(const ManageCourseSuccess())),
         )
-        .catchError((e) => emit(ManageCourseFailure(e.toString())))
-        .onError((e, _) => emit(ManageCourseFailure(e.toString())));
+        .catchError((e) => emit(ManageCourseFailure(e.toString())));
   }
 }

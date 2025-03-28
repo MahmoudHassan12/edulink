@@ -35,7 +35,7 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
 
   @override
   void initState() {
-    final user = getUser();
+    final user = getUser;
     _nameController = TextEditingController(text: user?.name);
     _emailController = TextEditingController(text: user?.email);
     _phoneController = TextEditingController(text: user?.phone);
@@ -57,7 +57,7 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      PickImage(imageUrl: getUser()?.imageUrl),
+      PickImage(imageUrl: getUser?.imageUrl),
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         sliver: SliverList.list(
@@ -89,7 +89,7 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
                       ..setPhone(_phoneController.text)
                       ..setLevel(_levelController.text)
                       ..setSsn(_ssnController.text);
-                if (cubit.user?.isValid() ?? false) {
+                if (cubit.user?.isValid ?? false) {
                   await cubit.update();
                   if (context.mounted) {
                     await homeNavigation(context);

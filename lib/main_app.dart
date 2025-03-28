@@ -1,6 +1,6 @@
 import 'package:edu_link/core/helpers/routes.dart' show routerConfig;
 import 'package:edu_link/core/helpers/theme_config.dart' show ThemeConfig;
-import 'package:edu_link/generated/l10n.dart' show S;
+import 'package:edu_link/generated/l10n.dart' show AppLocalizationDelegate;
 import 'package:flutter/material.dart'
     show BuildContext, MaterialApp, StatelessWidget;
 import 'package:flutter_localizations/flutter_localizations.dart'
@@ -19,11 +19,11 @@ class MainApp extends StatelessWidget {
     theme: const ThemeConfig().lightTheme,
     darkTheme: const ThemeConfig().darkTheme,
     localizationsDelegates: const [
-      S.delegate,
+      AppLocalizationDelegate(),
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,
     ],
-    supportedLocales: S.delegate.supportedLocales,
+    supportedLocales: const AppLocalizationDelegate().supportedLocales,
   );
 }

@@ -11,7 +11,7 @@ class UserPhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     final url =
         imageUrl ??
-        getUser()?.imageUrl ??
+        getUser?.imageUrl ??
         'https://avatar.iran.liara.run/public/32';
     final circleAvatar = CircleAvatar(
       backgroundImage: CachedNetworkImageProvider(url),

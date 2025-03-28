@@ -13,7 +13,7 @@ class ProgramEntity {
     'department_id': departmentId,
     'name': name,
   };
-  bool isValid() =>
+  bool get isValid =>
       (id?.isNotEmpty ?? false) &&
       (departmentId?.isNotEmpty ?? false) &&
       (name?.isNotEmpty ?? false);

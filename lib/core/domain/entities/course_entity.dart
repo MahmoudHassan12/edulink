@@ -25,30 +25,24 @@ class CourseEntity {
 
   /// Factory constructor to create `CourseEntity` from a Firestore map
   factory CourseEntity.fromMap(Map<String, dynamic>? data) {
-    if (data == null) {
-      return const CourseEntity(); // Return an empty entity if data is null
-    }
+    final professor =
+        data?['professor'] != null
+            ? UserEntity.fromMap(data?['professor'])
+            : UserEntity(id: data?['professorId']);
     return CourseEntity(
-      id: data['id'] as String?,
-      code: data['code'] as String?,
-      title: data['title'] as String?,
-      description: data['description'] as String?,
-      imageUrl: data['imageUrl'] as String?,
-      type: data['type'] as String?,
-      level: data['level'] as String?,
-      department: data['department'] as String?,
-      semester: data['semester'] as String?,
-      creditHour: (data['creditHour'] as num?)?.toInt(),
-      lectures: (data['lectures'] as num?)?.toInt(),
-      duration:
-          data['duration'] != null
-              ? DurationEntity.fromMap(
-                data['duration'] as Map<String, dynamic>?,
-              )
-              : null,
-      professor: UserEntity.fromMap(
-        UserEntity(id: data['professorId']).toMap(),
-      ),
+      id: data?['id'],
+      code: data?['code'],
+      title: data?['title'],
+      description: data?['description'],
+      imageUrl: data?['imageUrl'],
+      type: data?['type'],
+      level: data?['level'],
+      department: data?['department'],
+      semester: data?['semester'],
+      creditHour: data?['creditHour'],
+      lectures: data?['lectures'],
+      duration: DurationEntity.fromMap(data?['duration']),
+      professor: professor,
     );
   }
 
@@ -68,7 +62,7 @@ class CourseEntity {
   final UserEntity? professor;
 
   /// Converts `CourseEntity` to a Firestore-compatible map
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap({bool toSharedPref = false}) => {
     'id': id,
     'code': code,
     'title': title,
@@ -81,7 +75,10 @@ class CourseEntity {
     'creditHour': creditHour,
     'lectures': lectures,
     'duration': duration?.toMap(),
-    'professorId': professor?.id,
+    if (toSharedPref)
+      'professor': professor?.toMap(toSharedPref: true)
+    else
+      'professorId': professor?.id,
   };
 
   CourseEntity copyWith({

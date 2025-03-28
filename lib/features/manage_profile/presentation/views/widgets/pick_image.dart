@@ -8,27 +8,27 @@ class PickImage extends StatelessWidget {
   const PickImage({super.key, this.imageUrl});
   final String? imageUrl;
   @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<ManageProfileCubit>();
-    final user = cubit.user;
-    final image = user?.image;
-    final imageUrl = user?.imageUrl;
-    return SliverToBoxAdapter(
-      child: GestureDetector(
-        onTap: () async => cubit.setImage(),
-        child: CircleAvatar(
-          radius: 48,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(48),
-            child:
-                image != null
-                    ? Image.file(image, fit: BoxFit.cover)
-                    : imageUrl?.isNotEmpty ?? false
-                    ? CachedNetworkImage(imageUrl: imageUrl!, fit: BoxFit.cover)
-                    : const Icon(Icons.add_photo_alternate_rounded, size: 48),
+  Widget build(BuildContext context) => SliverToBoxAdapter(
+    child: GestureDetector(
+      onTap: () async => context.read<ManageProfileCubit>().setImage(),
+      child: CircleAvatar(
+        radius: 48,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(48),
+          child: Builder(
+            builder: (context) {
+              final user = context.watch<ManageProfileCubit>().user;
+              final image = user?.image;
+              final imageUrl = user?.imageUrl;
+              return image != null
+                  ? Image.file(image, fit: BoxFit.cover)
+                  : imageUrl?.isNotEmpty ?? false
+                  ? CachedNetworkImage(imageUrl: imageUrl!, fit: BoxFit.cover)
+                  : const Icon(Icons.add_photo_alternate_rounded, size: 48);
+            },
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
 }

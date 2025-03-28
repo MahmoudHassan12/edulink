@@ -2,8 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImageProvider;
 import 'package:edu_link/core/constants/borders.dart';
 import 'package:edu_link/core/controllers/cubits/courses_cubit.dart/courses_cubit.dart';
+import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
-import 'package:edu_link/core/repos/user_repo.dart';
+import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,7 @@ class RegisterButton extends StatelessWidget {
         label: 'Register',
         onPressed:
             () async => Future.wait<void>([
-              const UserRepo().addCoursesId(selectedCourses),
+              const CoursesRepo().addCoursesIds(selectedCourses),
               homeNavigation(context),
             ]),
       ),
@@ -122,14 +123,24 @@ class ChooseCourse extends StatelessWidget {
   final String courseId;
   final List<String> selectedCourses;
   final ValueChanged<bool> onSelectionChanged;
-
   @override
-  Widget build(BuildContext context) => Checkbox(
-    value: selectedCourses.contains(courseId),
-    onChanged: (value) {
-      if (value != null) {
-        onSelectionChanged(value);
-      }
-    },
-  );
+  Widget build(BuildContext context) {
+    final registeredCoursesIds = getUser?.courses?.map((e) => e.id).toList();
+    return Checkbox(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      value:
+          (registeredCoursesIds?.contains(courseId) ?? false) ||
+          selectedCourses.contains(courseId),
+      onChanged:
+          registeredCoursesIds?.contains(courseId) ?? true
+              ? null
+              : (value) {
+                if (value != null) {
+                  onSelectionChanged(value);
+                }
+              },
+    );
+  }
 }

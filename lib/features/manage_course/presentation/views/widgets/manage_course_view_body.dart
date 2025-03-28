@@ -117,14 +117,16 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                       ..setDuration(
                         widget.course?.duration ?? const DurationEntity(),
                       )
-                      ..setProfessor(getUser()!);
-                if (cubit.course.isValid) {
+                      ..setProfessor(getUser!);
+                final course = cubit.course;
+                if (course.isValid) {
                   widget.course != null
                       ? await const CoursesRepo().update(
-                        data: cubit.course.toMap(),
-                        documentId: cubit.course.id,
+                        data: course.toMap(),
+                        documentId: course.id,
                       )
                       : cubit.upload();
+                  await const CoursesRepo().addCoursesIds([course.id!]);
                 } else {
                   showSnackbar(
                     context,

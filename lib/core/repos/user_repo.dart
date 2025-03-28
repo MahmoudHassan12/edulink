@@ -1,12 +1,14 @@
 import 'dart:convert' show jsonEncode;
 import 'dart:developer' show log;
 import 'dart:io' show File;
-import 'package:cloud_firestore/cloud_firestore.dart'
-    show DocumentSnapshot, FirebaseException;
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseException;
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
-import 'package:edu_link/core/domain/entities/course_entity.dart';
-import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/domain/entities/course_entity.dart'
+    show CourseEntity;
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
+import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/shared_pref.dart';
+import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/services/firestore_service.dart'
     show FirestoreService;
 import 'package:edu_link/core/services/supabase_service.dart';
@@ -25,28 +27,24 @@ class UserRepo {
     String? documentId,
   }) => _fireStore
       .addDocument(data: data, path: _path, documentId: documentId)
-      .then((_) => log('User added successfully!'))
-      .onError<FirebaseException>((e, _) => log('Failed to add user: $e'))
-      .catchError((e) => log('Failed to add user: $e'));
-  Future<void> addCoursesId(List<String> courseIds) => _fireStore
-      .addListInDocument(
-        path: _path,
-        listKey: 'coursesId',
-        list: courseIds,
-        documentId: getUser()?.id,
-      )
       .then((_) {
-        final courses = List<CourseEntity>.empty(growable: true);
-        courseIds.map((id) => courses.add(CourseEntity(id: id))).toList();
-        final user = getUser()?.copyWith(courses: courses);
-        SharedPrefSingleton.setString(
-          Endpoints.user,
-          jsonEncode(user?.toMap()),
-        );
+        SharedPrefSingleton.setString(Endpoints.user, jsonEncode(data));
         log('User added successfully!');
+      })
+      .onError<FirebaseException>((e, _) {
+        delete(documentId: documentId);
+        log('Failed to add user: $e');
+      })
+      .catchError((e) {
+        delete(documentId: documentId);
+        log('Failed to add user: $e');
       });
-  Future<void> update({required Map<String, dynamic> data}) => _fireStore
-      .update(data: data, path: _path, documentId: getUser()?.id)
+
+  Future<void> update({
+    required Map<String, dynamic> data,
+    String? documentId,
+  }) => _fireStore
+      .update(data: data, path: _path, documentId: documentId)
       .then(
         (_) => SharedPrefSingleton.setString(
           Endpoints.user,
@@ -55,16 +53,46 @@ class UserRepo {
       )
       .onError<FirebaseException>((e, _) => log('Failed to update user: $e'))
       .catchError((e) => log('Failed to update user: $e'));
-  Future<DocumentSnapshot<Map<String, dynamic>>> get({String? documentId}) =>
-      _fireStore
-          .getDocument(path: _path, documentId: documentId)
-          .onError<FirebaseException>(
-            (e, _) => throw Exception('Failed to get user: $e'),
-          )
-          .catchError((e) => throw Exception('Failed to get user: $e'));
 
-  Future<void> delete() => _fireStore
-      .delete(path: _path, documentId: getUser()?.id)
+  Future<UserEntity?> get({String? documentId, bool isProfessor = false}) =>
+      _fireStore
+          .getDocument(path: _path, documentId: documentId ?? getUser?.id)
+          .then((doc) async {
+            final data = doc.data();
+            final courses = List<CourseEntity>.empty(growable: true);
+            if (!isProfessor) {
+              final coursesIds =
+                  (data?['coursesIds'] as List<dynamic>?)
+                      ?.cast<String>()
+                      .toList() ??
+                  [];
+              courses.addAll(
+                (await const CoursesRepo().getMultibleCourses(
+                      coursesIds,
+                    ))?.toList() ??
+                    [],
+              );
+            }
+            final user = UserEntity?.fromMap(data).copyWith(courses: courses);
+            if (!isProfessor) {
+              await SharedPrefSingleton.setString(
+                Endpoints.user,
+                jsonEncode(user.toMap(toSharedPref: true)),
+              );
+            }
+            return user;
+          })
+          .onError<FirebaseException>((e, _) {
+            log('User not found');
+            throw Exception('User not found: $e');
+          })
+          .catchError((e) {
+            log('Failed to get user: $e');
+            throw Exception('Failed to get user: $e');
+          });
+
+  Future<void> delete({String? documentId}) => _fireStore
+      .delete(path: _path, documentId: documentId)
       .then((_) => log('User deleted successfully!'))
       .onError<FirebaseException>((e, _) => log('Failed to delete user: $e'))
       .catchError((e) => log('Failed to delete user: $e'));
