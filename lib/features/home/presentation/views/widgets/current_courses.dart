@@ -11,7 +11,7 @@ class CurrentCourses extends StatelessWidget {
       itemExtent: MediaQuery.sizeOf(context).width - 80,
       itemSnapping: true,
       enableSplash: false,
-      children: // TODO(Anyone): Needs handling
+      children:
           getUser?.courses?.map((course) => Course(course: course)).toList() ??
           [],
     ),
