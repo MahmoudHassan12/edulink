@@ -86,7 +86,7 @@ class CourseEntity {
     else
       'professorId': professor?.id,
     'questions':
-        questions?.map((x) => x.toMap(toSharedPref: toSharedPref)).toList(),
+        questions?.map((e) => e.toMap(toSharedPref: toSharedPref)).toList(),
   };
 
   CourseEntity copyWith({

@@ -11,7 +11,8 @@ class QuestionEntity {
         data?['user'] != null
             ? UserEntity.fromMap(data?['user'])
             : UserEntity(id: data?['userId']),
-    date: DateTime.parse(data?['date'] as String),
+    date:
+        data?['date'] is String ? DateTime.parse(data?['date']) : data?['date'],
   );
   final String? question;
   final List<AnswerEntity>? answers;
@@ -20,12 +21,12 @@ class QuestionEntity {
   Map<String, dynamic> toMap({bool toSharedPref = false}) => {
     'question': question,
     'answers':
-        answers?.map((x) => x.toMap(toSharedPref: toSharedPref)).toList(),
+        answers?.map((e) => e.toMap(toSharedPref: toSharedPref)).toList(),
     if (toSharedPref)
       'user': user?.toMap(toSharedPref: true)
     else
       'userId': user?.id,
-    'date': date?.toIso8601String(),
+    'date': toSharedPref ? date?.toIso8601String() : date,
   };
   QuestionEntity copyWith({
     String? question,

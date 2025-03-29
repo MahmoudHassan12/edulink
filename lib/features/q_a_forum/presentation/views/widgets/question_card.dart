@@ -17,8 +17,8 @@ class QuestionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final aLength = qa.answers?.length ?? 0;
     final user = qa.user;
-    final date = DateFormat('MMMM dd, yyyy').format(qa.date!);
-    final time = DateFormat('hh:mm a').format(qa.date!);
+    final date = DateFormat('MMMM dd, yyyy').format(qa.date ?? DateTime.now());
+    final time = DateFormat('hh:mm a').format(qa.date ?? DateTime.now());
     return Hero(
       tag: qa.hashCode,
       child: Card.filled(
@@ -37,7 +37,10 @@ class QuestionCard extends StatelessWidget {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    EText(user!.name!, style: const TextStyle(fontSize: 14)),
+                    EText(
+                      user?.name ?? '',
+                      style: const TextStyle(fontSize: 14),
+                    ),
                     EText(
                       aLength == 1 ? '$aLength answer' : '$aLength answers',
                       style: const TextStyle(
@@ -59,7 +62,7 @@ class QuestionCard extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 64, right: 8),
-                child: EText(qa.question!, softWrap: true),
+                child: EText(qa.question ?? '', softWrap: true),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

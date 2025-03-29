@@ -61,7 +61,8 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes without arguments
   Routes.aboutView: (context, args) => const AboutView(),
   Routes.homeView: (context, args) => const HomeView(),
-  Routes.qaForumView: (context, args) => const QAForumView(),
+  Routes.qaForumView:
+      (context, args) => QAForumView(course: args! as CourseEntity),
   Routes.questionDetailsView:
       (context, args) => QuestionDetailsView(qa: args! as QuestionEntity),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),

@@ -2,7 +2,12 @@ import 'dart:convert' show jsonEncode;
 import 'dart:developer' show log;
 import 'dart:io' show File;
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
+import 'package:edu_link/core/domain/entities/answer_entity.dart'
+    show AnswerEntity;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/question_entity.dart'
+    show QuestionEntity;
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/shared_pref.dart'
     show SharedPrefSingleton;
@@ -60,7 +65,7 @@ class CoursesRepo {
                     );
                     return CourseEntity.fromMap(
                       data,
-                    ).copyWith(professor: professor);
+                    ).copyWith(professor: professor, questions: _questions);
                   }).toList() ??
                   <Future<CourseEntity>>[],
             );
@@ -89,7 +94,7 @@ class CoursesRepo {
             );
             final course = CourseEntity.fromMap(
               data,
-            ).copyWith(professor: professor);
+            ).copyWith(professor: professor, questions: _questions);
             return course;
           }),
         );
@@ -106,3 +111,93 @@ class CoursesRepo {
       .onError<FirebaseException>((e, _) => log('Failed to delete course: $e'))
       .catchError((e) => log('Failed to delete course: $e'));
 }
+
+List<QuestionEntity> _questions = [
+  QuestionEntity(
+    question: 'What is Flutter?',
+    answers: [
+      AnswerEntity(
+        answer:
+            'Flutter is a mobile app development framework created by Google.',
+        user: const UserEntity(
+          name: 'Hosam Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/30',
+        ),
+        date: DateTime.now(),
+      ),
+      AnswerEntity(
+        answer:
+            'Flutter is an open-source mobile app '
+            'development framework created by Google.',
+        user: const UserEntity(
+          name: 'Mahmoud Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/31',
+        ),
+        date: DateTime.now(),
+      ),
+    ],
+    user: const UserEntity(
+      name: 'Yousef Saber',
+      imageUrl: 'https://avatar.iran.liara.run/public/32',
+    ),
+    date: DateTime.now(),
+  ),
+  QuestionEntity(
+    question: 'What is Dart?',
+    answers: [
+      AnswerEntity(
+        answer:
+            'Dart is a programming language '
+            'created by Google that runs on Flutter.',
+        user: const UserEntity(
+          name: 'Yousef Saber',
+          imageUrl: 'https://avatar.iran.liara.run/public/32',
+        ),
+        date: DateTime.now(),
+      ),
+      AnswerEntity(
+        answer:
+            'Dart is an open-source programming language '
+            'created by Google that runs on Flutter.',
+        user: const UserEntity(
+          name: 'Mahmoud Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/31',
+        ),
+        date: DateTime.now(),
+      ),
+    ],
+    user: const UserEntity(
+      name: 'Hosam Hasan',
+      imageUrl: 'https://avatar.iran.liara.run/public/30',
+    ),
+    date: DateTime.now(),
+  ),
+  QuestionEntity(
+    question: 'What is a widget?',
+    answers: [
+      AnswerEntity(
+        answer: 'A widget is a building block of user interface in Flutter.',
+        user: const UserEntity(
+          name: 'Yousef Saber',
+          imageUrl: 'https://avatar.iran.liara.run/public/32',
+        ),
+        date: DateTime.now(),
+      ),
+      AnswerEntity(
+        answer:
+            'A widget is an abstract representation '
+            'of a user interface in Flutter.',
+        user: const UserEntity(
+          name: 'Hosam Hasan',
+          imageUrl: 'https://avatar.iran.liara.run/public/30',
+        ),
+        date: DateTime.now(),
+      ),
+    ],
+    user: const UserEntity(
+      name: 'Mahmoud Hasan',
+      imageUrl: 'https://avatar.iran.liara.run/public/31',
+    ),
+    date: DateTime.now(),
+  ),
+];
