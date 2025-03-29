@@ -1,6 +1,9 @@
 import 'dart:io' show File;
 import 'package:edu_link/core/domain/entities/duration_entity.dart';
+import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
+import 'package:edu_link/core/helpers/entities_handlers.dart'
+    show complexListEntity;
 import 'package:edu_link/core/helpers/pick_image.dart' show pickImage;
 import 'package:edu_link/core/helpers/text_id_generator.dart'
     show TextIdGenerator;
@@ -21,6 +24,7 @@ class CourseEntity {
     this.lectures,
     this.duration,
     this.professor,
+    this.questions,
   });
 
   /// Factory constructor to create `CourseEntity` from a Firestore map
@@ -43,6 +47,7 @@ class CourseEntity {
       lectures: data?['lectures'],
       duration: DurationEntity.fromMap(data?['duration']),
       professor: professor,
+      questions: complexListEntity(data?['questions'], QuestionEntity.fromMap),
     );
   }
 
@@ -60,6 +65,7 @@ class CourseEntity {
   final int? lectures;
   final DurationEntity? duration;
   final UserEntity? professor;
+  final List<QuestionEntity>? questions;
 
   /// Converts `CourseEntity` to a Firestore-compatible map
   Map<String, dynamic> toMap({bool toSharedPref = false}) => {
@@ -79,6 +85,8 @@ class CourseEntity {
       'professor': professor?.toMap(toSharedPref: true)
     else
       'professorId': professor?.id,
+    'questions':
+        questions?.map((x) => x.toMap(toSharedPref: toSharedPref)).toList(),
   };
 
   CourseEntity copyWith({
@@ -96,6 +104,7 @@ class CourseEntity {
     int? lectures,
     DurationEntity? duration,
     UserEntity? professor,
+    List<QuestionEntity>? questions,
   }) => CourseEntity(
     id: id ?? this.id,
     code: code ?? this.code,
@@ -111,6 +120,7 @@ class CourseEntity {
     lectures: lectures ?? this.lectures,
     duration: duration ?? this.duration,
     professor: professor ?? this.professor,
+    questions: questions ?? this.questions,
   );
 
   CourseEntity setId(String id) =>
@@ -133,7 +143,6 @@ class CourseEntity {
       copyWith(duration: duration);
   CourseEntity setProfessor(UserEntity professor) =>
       copyWith(professor: professor);
-
   bool get isValid =>
       (code?.isNotEmpty ?? false) &&
       (title?.isNotEmpty ?? false) &&

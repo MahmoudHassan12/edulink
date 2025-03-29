@@ -1,5 +1,5 @@
 import 'package:edu_link/core/domain/entities/answer_entity.dart';
-import 'package:edu_link/core/domain/entities/q_a_entity.dart';
+import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/core/widgets/user_photo.dart' show UserPhoto;
 import 'package:edu_link/features/q_a_forum/presentation/views/widgets/question_card.dart'
@@ -9,7 +9,7 @@ import 'package:intl/intl.dart' show DateFormat;
 
 class QuestionDetailsViewBody extends StatelessWidget {
   const QuestionDetailsViewBody({required this.qa, super.key});
-  final QAEntity qa;
+  final QuestionEntity qa;
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [

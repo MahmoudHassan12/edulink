@@ -1,5 +1,5 @@
 import 'package:edu_link/core/domain/entities/answer_entity.dart';
-import 'package:edu_link/core/domain/entities/q_a_entity.dart';
+import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
@@ -32,8 +32,8 @@ class QAForumViewBody extends StatelessWidget {
   );
 }
 
-List<QAEntity> _questions = [
-  QAEntity(
+List<QuestionEntity> _questions = [
+  QuestionEntity(
     question: 'What is Flutter?',
     answers: [
       AnswerEntity(
@@ -62,7 +62,7 @@ List<QAEntity> _questions = [
     ),
     date: DateTime.now(),
   ),
-  QAEntity(
+  QuestionEntity(
     question: 'What is Dart?',
     answers: [
       AnswerEntity(
@@ -92,7 +92,7 @@ List<QAEntity> _questions = [
     ),
     date: DateTime.now(),
   ),
-  QAEntity(
+  QuestionEntity(
     question: 'What is a widget?',
     answers: [
       AnswerEntity(

@@ -1,6 +1,6 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
-import 'package:edu_link/core/domain/entities/q_a_entity.dart';
+import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/services/auth_service.dart' show AuthService;
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
@@ -63,7 +63,7 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.homeView: (context, args) => const HomeView(),
   Routes.qaForumView: (context, args) => const QAForumView(),
   Routes.questionDetailsView:
-      (context, args) => QuestionDetailsView(qa: args! as QAEntity),
+      (context, args) => QuestionDetailsView(qa: args! as QuestionEntity),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),
   Routes.registerView: (context, args) => const RegisterView(),
   Routes.resetPasswordView: (context, args) => const ResetPasswordView(),

@@ -1,5 +1,5 @@
 import 'package:edu_link/core/constants/borders.dart' show xsBorder;
-import 'package:edu_link/core/domain/entities/q_a_entity.dart';
+import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/helpers/navigations.dart'
     show questionDetailsNavigation;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 
 class QuestionCard extends StatelessWidget {
   const QuestionCard({required this.qa, super.key});
-  final QAEntity qa;
+  final QuestionEntity qa;
   @override
   Widget build(BuildContext context) {
     final aLength = qa.answers?.length ?? 0;
