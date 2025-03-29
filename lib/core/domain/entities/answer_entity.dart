@@ -9,7 +9,9 @@ class AnswerEntity {
             ? UserEntity.fromMap(data?['user'])
             : UserEntity(id: data?['userId']),
     date:
-        data?['date'] is String ? DateTime.parse(data?['date']) : data?['date'],
+        data?['date'] is String?
+            ? DateTime.tryParse(data?['date'])
+            : data?['date'],
   );
   final String? answer;
   final UserEntity? user;
