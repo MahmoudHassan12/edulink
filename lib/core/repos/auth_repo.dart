@@ -14,7 +14,8 @@ class AuthRepo {
 
   Future<User?> signInWithEmail(String email, String password) =>
       _auth.signInWithEmail(email, password).then((user) async {
-        await _get(documentId: user?.uid);
+        if (user == null) return null;
+        await _get(documentId: user.uid);
         return user;
       });
 
@@ -27,36 +28,38 @@ class AuthRepo {
 
   Future<User?> signInWithGoogle() async =>
       _auth.signInWithGoogle().then((user) async {
-        if ((await _get(documentId: user?.uid)) != null) {
-          await _get(documentId: user?.uid);
+        if (user == null) return null;
+        if ((await _get(documentId: user.uid)) != null) {
+          await _get(documentId: user.uid);
         } else {
           final data =
               UserEntity(
-                id: user?.uid,
-                name: user?.displayName,
-                email: user?.email,
-                imageUrl: user?.photoURL,
-                phone: user?.phoneNumber,
+                id: user.uid,
+                name: user.displayName,
+                email: user.email,
+                imageUrl: user.photoURL,
+                phone: user.phoneNumber,
               ).toMap();
-          await _add(data: data, documentId: user?.uid);
+          await _add(data: data, documentId: user.uid);
         }
         return user;
       });
 
   Future<User?> signInWithFacebook() async =>
       _auth.signInWithFacebook().then((user) async {
-        if ((await _get(documentId: user?.uid)) != null) {
-          await _get(documentId: user?.uid);
+        if (user == null) return null;
+        if ((await _get(documentId: user.uid)) != null) {
+          await _get(documentId: user.uid);
         } else {
           final data =
               UserEntity(
-                id: user?.uid,
-                name: user?.displayName,
-                email: user?.email,
-                imageUrl: user?.photoURL,
-                phone: user?.phoneNumber,
+                id: user.uid,
+                name: user.displayName,
+                email: user.email,
+                imageUrl: user.photoURL,
+                phone: user.phoneNumber,
               ).toMap();
-          await _add(data: data, documentId: user?.uid);
+          await _add(data: data, documentId: user.uid);
         }
         return user;
       });
@@ -71,7 +74,7 @@ class AuthRepo {
             log('Failed to add user: $e');
           });
 
-  Future<UserEntity?> _get({String? documentId}) =>
+  Future<UserEntity?> _get({required String documentId}) =>
       _userRepo.get(documentId: documentId);
 
   Future<void> update() => _userRepo

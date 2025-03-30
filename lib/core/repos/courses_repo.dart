@@ -51,6 +51,24 @@ class CoursesRepo {
         log('User added successfully!');
       });
 
+  Future<void> addQuestion(QuestionEntity question, String? courseId) =>
+      _fireStore
+          .addListInDocument(
+            path: _coursesPath,
+            listKey: 'questions',
+            list: [question.toMap()],
+            documentId: courseId,
+          )
+          .then((_) {
+            log('Questions added successfully!');
+          })
+          .onError<FirebaseException>((e, _) {
+            log('Failed to add questions: $e');
+          })
+          .catchError((e) {
+            log('Failed to add questions: $e');
+          });
+
   Future<List<CourseEntity>?> getMultibleCourses(List<String?>? courseIds) =>
       _fireStore
           .getMultibleDocuments(path: _coursesPath, documentIds: courseIds)
@@ -65,11 +83,31 @@ class CoursesRepo {
                     );
                     return CourseEntity.fromMap(
                       data,
-                    ).copyWith(professor: professor, questions: _questions);
+                    ).copyWith(professor: professor);
                   }).toList() ??
                   <Future<CourseEntity>>[],
             );
           });
+
+  Stream<List<CourseEntity>?> getMultibleCoursesStream(
+    List<String?>? courseIds,
+  ) async* {
+    yield* _fireStore
+        .getMultibleDocumentStream(path: _coursesPath, documentIds: courseIds)
+        .asyncMap((docs) async {
+          log('${docs.length} Courses fetched successfully!');
+          return Future.wait(
+            docs.map((e) async {
+              final data = e.data();
+              final professor = await const UserRepo().get(
+                documentId: data?['professorId'],
+                isProfessor: true,
+              );
+              return CourseEntity.fromMap(data).copyWith(professor: professor);
+            }).toList(),
+          );
+        });
+  }
 
   Future<void> update({
     required Map<String, dynamic> data,

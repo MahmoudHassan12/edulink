@@ -13,21 +13,15 @@ class ProfileBottomAppBar extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(FontAwesomeIcons.linkedinIn),
-          onPressed: () async {
-            await _launchUrl('https://www.linkedin.com/');
-          },
+          onPressed: () async => _launchUrl('https://www.linkedin.com/'),
         ),
         IconButton(
           icon: const Icon(FontAwesomeIcons.facebookF),
-          onPressed: () async {
-            await _launchUrl('https://www.facebook.com/');
-          },
+          onPressed: () async => _launchUrl('https://www.facebook.com/'),
         ),
         IconButton(
           icon: const Icon(FontAwesomeIcons.github),
-          onPressed: () async {
-            await _launchUrl('https://www.github.com/');
-          },
+          onPressed: () async => _launchUrl('https://www.github.com/'),
         ),
       ],
     ),

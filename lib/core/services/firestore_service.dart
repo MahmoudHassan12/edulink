@@ -2,6 +2,7 @@ import 'dart:developer' show log;
 import 'package:cloud_firestore/cloud_firestore.dart'
     show
         DocumentSnapshot,
+        FieldPath,
         FieldValue,
         FirebaseException,
         FirebaseFirestore,
@@ -54,7 +55,7 @@ class FirestoreService {
       .catchError((e) => log('$e'));
   Future<DocumentSnapshot<Map<String, dynamic>>> getDocument({
     required String path,
-    String? documentId,
+    required String documentId,
   }) => _instance
       .collection(path)
       .doc(documentId)
@@ -105,6 +106,47 @@ class FirestoreService {
             log('$e');
             throw e;
           });
+
+  /// Streams
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getDocumentStream({
+    required String path,
+    required String documentId,
+  }) async* {
+    final snapshots = _instance.collection(path).doc(documentId).snapshots();
+    await for (final snapshot in snapshots) {
+      yield snapshot;
+    }
+  }
+
+  Stream<List<DocumentSnapshot<Map<String, dynamic>>>>
+  getMultibleDocumentStream({
+    required String path,
+    List<String?>? documentIds,
+  }) async* {
+    if (documentIds == null || documentIds.isEmpty) {
+      yield [];
+      return;
+    }
+
+    final stream =
+        _instance
+            .collection(path)
+            .where(FieldPath.documentId, whereIn: documentIds)
+            .snapshots();
+
+    await for (final snapshot in stream) {
+      yield snapshot.docs;
+    }
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllStream({
+    required String path,
+  }) async* {
+    final snapshots = _instance.collection(path).snapshots();
+    await for (final snapshot in snapshots) {
+      yield snapshot;
+    }
+  }
 
   Future<void> delete({required String path, String? documentId}) => _instance
       .collection(path)

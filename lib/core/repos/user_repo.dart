@@ -6,7 +6,6 @@ import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
-import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/shared_pref.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/services/firestore_service.dart'
@@ -54,41 +53,171 @@ class UserRepo {
       .onError<FirebaseException>((e, _) => log('Failed to update user: $e'))
       .catchError((e) => log('Failed to update user: $e'));
 
-  Future<UserEntity?> get({String? documentId, bool isProfessor = false}) =>
-      _fireStore
-          .getDocument(path: _path, documentId: documentId ?? getUser?.id)
-          .then((doc) async {
-            final data = doc.data();
-            final courses = List<CourseEntity>.empty(growable: true);
-            if (!isProfessor) {
-              final coursesIds =
-                  (data?['coursesIds'] as List<dynamic>?)
-                      ?.cast<String>()
-                      .toList() ??
+  Future<UserEntity?> get({
+    required String documentId,
+    bool isProfessor = false,
+  }) async {
+    try {
+      final doc = await _fireStore.getDocument(
+        path: _path,
+        documentId: documentId,
+      );
+      final data = doc.data();
+      if (data == null) {
+        log('User not found');
+        return null;
+      }
+      final courses =
+          isProfessor
+              ? <CourseEntity>[]
+              : (await const CoursesRepo().getMultibleCourses(
+                    (data['coursesIds'] as List<dynamic>?)?.cast<String>() ??
+                        [],
+                  ))?.toList() ??
                   [];
-              courses.addAll(
-                (await const CoursesRepo().getMultibleCourses(
-                      coursesIds,
-                    ))?.toList() ??
-                    [],
-              );
-            }
-            final user = UserEntity?.fromMap(data).copyWith(courses: courses);
+      final user = UserEntity.fromMap(data).copyWith(courses: courses);
+      if (!isProfessor) {
+        await SharedPrefSingleton.setString(
+          Endpoints.user,
+          jsonEncode(user.toMap(toSharedPref: true)),
+        );
+      }
+      return user;
+    } on FirebaseException catch (e) {
+      log('Failed to get user: $e');
+      rethrow;
+    }
+  }
+
+  // Future<UserEntity?> aget({
+  //   required String documentId,
+  //   bool isProfessor = false,
+  // }) => _fireStore
+  //     .getDocument(path: _path, documentId: documentId)
+  //     .then((doc) async {
+  //       final data = doc.data();
+  //       final courses = List<CourseEntity>.empty(growable: true);
+  //       if (!isProfessor) {
+  //         final coursesIds =
+  //             (data?['coursesIds'] as List<dynamic>?)
+  //                 ?.cast<String>()
+  //                 .toList() ??
+  //             [];
+  //         courses.addAll(
+  //           (await const CoursesRepo().getMultibleCourses(
+  //                 coursesIds,
+  //               ))?.toList() ??
+  //               [],
+  //         );
+  //       }
+  //       final user = UserEntity?.fromMap(data).copyWith(courses: courses);
+  //       if (!isProfessor) {
+  //         await SharedPrefSingleton.setString(
+  //           Endpoints.user,
+  //           jsonEncode(user.toMap(toSharedPref: true)),
+  //         );
+  //       }
+  //       return user;
+  //     })
+  //     .onError<FirebaseException>((e, _) {
+  //       log('User not found');
+  //       throw Exception('User not found: $e');
+  //     })
+  //     .catchError((e) {
+  //       log('Failed to get user: $e');
+  //       throw Exception('Failed to get user: $e');
+  //     });
+
+  Stream<UserEntity?> getStream({
+    required String documentId,
+    bool isProfessor = false,
+  }) {
+    return _fireStore
+        .getDocumentStream(path: _path, documentId: documentId)
+        .asyncExpand((doc) async* {
+          final data = doc.data();
+          if (data == null) {
+            log('User not found');
+            yield null;
+            return;
+          }
+
+          final coursesIds =
+              (data['coursesIds'] as List<dynamic>?)?.cast<String>();
+          final user = UserEntity.fromMap(data);
+
+          if (coursesIds == null || coursesIds.isEmpty) {
+            yield user;
+            return;
+          }
+
+          // Merge with courses stream
+          yield* const CoursesRepo().getMultibleCoursesStream(coursesIds).map((
+            courses,
+          ) {
+            final updatedUser = user.copyWith(
+              courses: isProfessor ? <CourseEntity>[] : courses?.toList(),
+            );
+
             if (!isProfessor) {
-              await SharedPrefSingleton.setString(
+              SharedPrefSingleton.setString(
                 Endpoints.user,
-                jsonEncode(user.toMap(toSharedPref: true)),
+                jsonEncode(updatedUser.toMap(toSharedPref: true)),
               );
             }
-            return user;
+
+            return updatedUser;
+          });
+        });
+  }
+
+  Stream<UserEntity?> getStreama({
+    required String documentId,
+    bool isProfessor = false,
+  }) => _fireStore.getDocumentStream(path: _path, documentId: documentId).map((
+    doc,
+  ) {
+    final data = doc.data();
+    if (data == null) {
+      log('User not found');
+      return null;
+    }
+    final coursesIds = (data['coursesIds'] as List<dynamic>?)?.cast<String>();
+    final user = UserEntity.fromMap(data);
+    if (coursesIds != null && coursesIds.isNotEmpty) {
+      const CoursesRepo()
+          .getMultibleCoursesStream(coursesIds)
+          .listen(
+            (courses) => user.copyWith(
+              courses: isProfessor ? <CourseEntity>[] : courses?.toList(),
+            ),
+          );
+      if (!isProfessor) {
+        SharedPrefSingleton.setString(
+          Endpoints.user,
+          jsonEncode(user.toMap(toSharedPref: true)),
+        );
+      }
+    }
+    return user;
+  });
+
+  Future<List<UserEntity>?> getMultipleUsers(List<String?>? userIds) =>
+      _fireStore
+          .getMultibleDocuments(path: _path, documentIds: userIds)
+          .then((docs) async {
+            log('${docs?.length} Users fetched successfully!');
+            return Future.wait(
+              docs?.map((e) async {
+                    final data = e.data();
+                    return UserEntity.fromMap(data);
+                  }).toList() ??
+                  <Future<UserEntity>>[],
+            );
           })
           .onError<FirebaseException>((e, _) {
-            log('User not found');
-            throw Exception('User not found: $e');
-          })
-          .catchError((e) {
-            log('Failed to get user: $e');
-            throw Exception('Failed to get user: $e');
+            log('Users not found');
+            throw Exception('Users not found: $e');
           });
 
   Future<void> delete({String? documentId}) => _fireStore
