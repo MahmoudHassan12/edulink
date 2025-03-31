@@ -5,6 +5,8 @@ mixin SharedPrefSingleton {
   static Future<SharedPreferences> init() async =>
       _instance = await SharedPreferences.getInstance();
 
+  static Future<void> reload() => _instance.reload();
+
   /// Setters
   static Future<bool> setString(String key, String value) =>
       _instance.setString(key, value);

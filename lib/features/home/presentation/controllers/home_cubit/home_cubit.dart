@@ -12,9 +12,13 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> getInitialData() async {
     emit(const HomeLoading());
-    final userStream = const UserRepo().getStream(documentId: getUser!.id!);
-    await for (final _ in userStream) {
-      emit(HomeSuccess());
+    try {
+      final userStream = const UserRepo().getStream(documentId: getUser!.id!);
+      await for (final _ in userStream) {
+        emit(HomeSuccess());
+      }
+    } catch (error) {
+      emit(HomeFailure(error.toString()));
     }
   }
 }

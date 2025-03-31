@@ -89,118 +89,69 @@ class UserRepo {
     }
   }
 
-  // Future<UserEntity?> aget({
-  //   required String documentId,
-  //   bool isProfessor = false,
-  // }) => _fireStore
-  //     .getDocument(path: _path, documentId: documentId)
-  //     .then((doc) async {
-  //       final data = doc.data();
-  //       final courses = List<CourseEntity>.empty(growable: true);
-  //       if (!isProfessor) {
-  //         final coursesIds =
-  //             (data?['coursesIds'] as List<dynamic>?)
-  //                 ?.cast<String>()
-  //                 .toList() ??
-  //             [];
-  //         courses.addAll(
-  //           (await const CoursesRepo().getMultibleCourses(
-  //                 coursesIds,
-  //               ))?.toList() ??
-  //               [],
-  //         );
-  //       }
-  //       final user = UserEntity?.fromMap(data).copyWith(courses: courses);
-  //       if (!isProfessor) {
-  //         await SharedPrefSingleton.setString(
-  //           Endpoints.user,
-  //           jsonEncode(user.toMap(toSharedPref: true)),
-  //         );
-  //       }
-  //       return user;
-  //     })
-  //     .onError<FirebaseException>((e, _) {
-  //       log('User not found');
-  //       throw Exception('User not found: $e');
-  //     })
-  //     .catchError((e) {
-  //       log('Failed to get user: $e');
-  //       throw Exception('Failed to get user: $e');
-  //     });
-
   Stream<UserEntity?> getStream({
     required String documentId,
     bool isProfessor = false,
-  }) {
-    return _fireStore
-        .getDocumentStream(path: _path, documentId: documentId)
-        .asyncExpand((doc) async* {
-          final data = doc.data();
-          if (data == null) {
-            log('User not found');
-            yield null;
-            return;
-          }
-
-          final coursesIds =
-              (data['coursesIds'] as List<dynamic>?)?.cast<String>();
-          final user = UserEntity.fromMap(data);
-
-          if (coursesIds == null || coursesIds.isEmpty) {
-            yield user;
-            return;
-          }
-
-          // Merge with courses stream
-          yield* const CoursesRepo().getMultibleCoursesStream(coursesIds).map((
-            courses,
-          ) {
-            final updatedUser = user.copyWith(
-              courses: isProfessor ? <CourseEntity>[] : courses?.toList(),
-            );
-
-            if (!isProfessor) {
-              SharedPrefSingleton.setString(
-                Endpoints.user,
-                jsonEncode(updatedUser.toMap(toSharedPref: true)),
-              );
-            }
-
-            return updatedUser;
-          });
-        });
-  }
+  }) => _fireStore
+      .getDocumentStream(path: _path, documentId: documentId)
+      .asyncMap((doc) async {
+        final data = doc.data();
+        if (data == null) {
+          log('User not found');
+          return null;
+        }
+        final coursesIds =
+            (data['coursesIds'] as List<dynamic>?)?.cast<String>();
+        final user = UserEntity.fromMap(data);
+        if (coursesIds?.isEmpty ?? true) return user;
+        final courses = await const CoursesRepo().getMultibleCourses(
+          coursesIds,
+        );
+        final updatedUser = user.copyWith(courses: courses?.toList());
+        if (!isProfessor) {
+          await SharedPrefSingleton.setString(
+            Endpoints.user,
+            jsonEncode(updatedUser.toMap(toSharedPref: true)),
+          );
+        }
+        return updatedUser;
+      });
 
   Stream<UserEntity?> getStreama({
     required String documentId,
     bool isProfessor = false,
-  }) => _fireStore.getDocumentStream(path: _path, documentId: documentId).map((
-    doc,
-  ) {
-    final data = doc.data();
-    if (data == null) {
-      log('User not found');
-      return null;
-    }
-    final coursesIds = (data['coursesIds'] as List<dynamic>?)?.cast<String>();
-    final user = UserEntity.fromMap(data);
-    if (coursesIds != null && coursesIds.isNotEmpty) {
-      const CoursesRepo()
-          .getMultibleCoursesStream(coursesIds)
-          .listen(
-            (courses) => user.copyWith(
-              courses: isProfessor ? <CourseEntity>[] : courses?.toList(),
-            ),
+  }) => _fireStore
+      .getDocumentStream(path: _path, documentId: documentId)
+      .asyncExpand((doc) async* {
+        final data = doc.data();
+        if (data == null) {
+          log('User not found');
+          yield null;
+          return;
+        }
+        final coursesIds =
+            (data['coursesIds'] as List<dynamic>?)?.cast<String>();
+        final user = UserEntity.fromMap(data);
+        if (coursesIds?.isEmpty ?? true) {
+          yield user;
+          return;
+        }
+        // Merge with courses stream
+        yield* const CoursesRepo().getMultibleCoursesStream(coursesIds).map((
+          courses,
+        ) {
+          final updatedUser = user.copyWith(
+            courses: isProfessor ? <CourseEntity>[] : courses?.toList(),
           );
-      if (!isProfessor) {
-        SharedPrefSingleton.setString(
-          Endpoints.user,
-          jsonEncode(user.toMap(toSharedPref: true)),
-        );
-      }
-    }
-    return user;
-  });
+          if (!isProfessor) {
+            SharedPrefSingleton.setString(
+              Endpoints.user,
+              jsonEncode(updatedUser.toMap(toSharedPref: true)),
+            );
+          }
+          return updatedUser;
+        });
+      });
 
   Future<List<UserEntity>?> getMultipleUsers(List<String?>? userIds) =>
       _fireStore

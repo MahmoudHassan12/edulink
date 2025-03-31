@@ -19,7 +19,6 @@ class RegisterCoursesViewBody extends StatefulWidget {
 
 class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
   final List<String> selectedCourses = [];
-
   @override
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: () async {
