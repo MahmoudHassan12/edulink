@@ -64,10 +64,10 @@ class Course extends StatelessWidget {
                         fit: OverflowBoxFit.deferToChild,
                         child: ListTile(
                           title: EText(
-                            course.code!,
+                            course.code ?? 'No Code',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          subtitle: EText(course.title!),
+                          subtitle: EText(course.title ?? 'No Title'),
                           trailing: const FavoriteButton(),
                           minVerticalPadding: 0,
                           contentPadding: const EdgeInsets.symmetric(
@@ -109,8 +109,8 @@ class Course extends StatelessWidget {
               child: ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 title: const EText('By'),
-                subtitle: EText(professor!.name!),
-                trailing: UserPhoto(imageUrl: professor.imageUrl),
+                subtitle: EText(professor?.name ?? 'No Name'),
+                trailing: UserPhoto(imageUrl: professor?.imageUrl),
               ),
             ),
           ],

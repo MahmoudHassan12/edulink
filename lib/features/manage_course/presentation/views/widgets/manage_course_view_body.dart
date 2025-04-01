@@ -1,9 +1,12 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/duration_entity.dart'
+    show DurationEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
-import 'package:edu_link/core/helpers/text_id_generator.dart';
 import 'package:edu_link/core/repos/courses_repo.dart' show CoursesRepo;
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
+import 'package:edu_link/features/manage_course/presentation/controllers/manage_course_cubit/manage_course_cubit.dart'
+    show ManageCourseCubit;
 import 'package:edu_link/features/manage_course/presentation/views/widgets/code_field.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/credit_hour_field.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/department_field.dart';
@@ -14,6 +17,7 @@ import 'package:edu_link/features/manage_course/presentation/views/widgets/semes
 import 'package:edu_link/features/manage_course/presentation/views/widgets/title_field.dart';
 import 'package:edu_link/features/manage_course/presentation/views/widgets/type_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageCourseViewBody extends StatefulWidget {
   const ManageCourseViewBody({super.key, this.course});
@@ -64,10 +68,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      PickImage(
-        imageUrl: widget.course?.imageUrl,
-        courseId: '55d1lpJ',
-      ), //TODO(Yossouf): Replace with real courseId
+      PickImage(imageUrl: widget.course?.imageUrl),
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         sliver: SliverList.list(
@@ -98,34 +99,34 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
             DescriptionField(controller: _descriptionController),
             CustomElevatedButton(
               onPressed: () async {
-                final course = CourseEntity(
-                  id: TextIdGenerator(_codeController.text).generateId(),
-                  code: _codeController.text,
-                  title: _titleController.text,
-                  description: _descriptionController.text,
-                  // TODO(Mahmoud): شوف هاترفع الصور إزاي
-                  imageUrl: widget.course?.imageUrl ?? '',
-                  type: _typeController.text,
-                  level: _levelController.text,
-                  department: _departmentController.text,
-                  semester: _semesterController.text,
-                  creditHour: int.tryParse(_creditHourController.text),
-                  // TODO(Mahmoud): Don't forget this line
-                  lectures: widget.course?.lectures,
-                  // TODO(Mahmoud): Don't forget this line
-                  duration: widget.course?.duration,
-                  professor: getUser(),
-                );
-                if (course.isValid()) {
+                final cubit =
+                    context.read<ManageCourseCubit>()
+                      ..setCode(_codeController.text)
+                      ..setTitle(_titleController.text)
+                      ..setDescription(_descriptionController.text)
+                      ..setType(_typeController.text)
+                      ..setLevel(_levelController.text)
+                      ..setDepartment(_departmentController.text)
+                      ..setSemester(_semesterController.text)
+                      ..setCreditHour(
+                        int.tryParse(_creditHourController.text) ?? 0,
+                      )
+                      // TODO(Mahmoud): Don't forget this line
+                      ..setLectures(widget.course?.lectures ?? 0)
+                      // TODO(Mahmoud): Don't forget this line
+                      ..setDuration(
+                        widget.course?.duration ?? const DurationEntity(),
+                      )
+                      ..setProfessor(getUser!);
+                final course = cubit.course;
+                if (course.isValid) {
                   widget.course != null
                       ? await const CoursesRepo().update(
                         data: course.toMap(),
                         documentId: course.id,
                       )
-                      : await const CoursesRepo().add(
-                        data: course.toMap(),
-                        documentId: course.id,
-                      );
+                      : cubit.upload();
+                  await const CoursesRepo().addCoursesIds([course.id!]);
                 } else {
                   showSnackbar(
                     context,

@@ -1,9 +1,11 @@
-import 'package:edu_link/core/helpers/auth_service.dart' show AuthService;
+import 'dart:developer';
+
 import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/services/auth_service.dart' show AuthService;
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart'
     show CustomElevatedButton;
-import 'package:edu_link/core/widgets/buttons/custom_filled_button_tonal.dart'
-    show CustomFilledButtonTonal;
+import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart'
+    show CustomFilledButton;
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:edu_link/features/profile/presentation/views/widgets/first_panal_with_decoration.dart'
     show FirstPanalWithDecoration;
@@ -26,17 +28,19 @@ class ProfileViewBody extends StatelessWidget {
             const _Label('Contact Information'),
             const SecondPanal(),
             const SizedBox(height: 12),
-            if (getUser()?.isProfessor ?? false) ...[
+            if (getUser?.isProfessor ?? false) ...[
               const _Label('Office hours & availability'),
               const ThirdPanal(),
             ] else
               CustomElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  log('${getUser?.courses?.length}');
+                },
                 label: 'More Details',
                 icon: Icons.arrow_forward_ios_rounded,
               ),
             const SizedBox(height: 12),
-            CustomFilledButtonTonal.icon(
+            CustomFilledButton.tonalIcon(
               onPressed: () async => const AuthService().signOut(context),
               label: 'Log Out',
               icon: Icons.logout_rounded,

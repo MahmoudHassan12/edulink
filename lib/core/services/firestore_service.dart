@@ -1,0 +1,159 @@
+import 'dart:developer' show log;
+import 'package:cloud_firestore/cloud_firestore.dart'
+    show
+        DocumentSnapshot,
+        FieldPath,
+        FieldValue,
+        FirebaseException,
+        FirebaseFirestore,
+        QuerySnapshot,
+        SetOptions;
+
+class FirestoreService {
+  const FirestoreService();
+  static final FirebaseFirestore _instance = FirebaseFirestore.instance;
+
+  /// It can be used to add a course to the database or update an existing one
+  Future<void> addDocument({
+    required Map<String, dynamic> data,
+    required String path,
+    String? documentId,
+  }) => _instance
+      .collection(path)
+      .doc(documentId)
+      .set(data, SetOptions(merge: true))
+      .onError<FirebaseException>(
+        (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
+      )
+      .catchError((e) => log('$e'));
+
+  Future<void> addListInDocument({
+    required String path,
+    required String listKey,
+    required List<dynamic> list,
+    String? documentId,
+  }) => _instance
+      .collection(path)
+      .doc(documentId)
+      .update({listKey: FieldValue.arrayUnion(list)})
+      .onError<FirebaseException>(
+        (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
+      )
+      .catchError((e) => log('$e'));
+
+  Future<void> update({
+    required Map<String, dynamic> data,
+    required String path,
+    String? documentId,
+  }) => _instance
+      .collection(path)
+      .doc(documentId)
+      .set(data)
+      .onError<FirebaseException>(
+        (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
+      )
+      .catchError((e) => log('$e'));
+  Future<DocumentSnapshot<Map<String, dynamic>>> getDocument({
+    required String path,
+    required String documentId,
+  }) => _instance
+      .collection(path)
+      .doc(documentId)
+      .get()
+      .onError<FirebaseException>((e, _) {
+        log('Code: ${e.code}, Message: ${e.message}, $e');
+        throw e;
+      })
+      .catchError((e) {
+        log('$e');
+        throw e;
+      });
+
+  Future<List<DocumentSnapshot<Map<String, dynamic>>>?> getMultibleDocuments({
+    required String path,
+    List<String?>? documentIds,
+  }) async {
+    if (documentIds == null) return null;
+    return Future.wait(
+      documentIds
+          .map(
+            (id) => _instance
+                .collection(path)
+                .doc(id)
+                .get()
+                .onError<FirebaseException>((e, _) {
+                  log('Code: ${e.code}, Message: ${e.message}, $e');
+                  throw e;
+                })
+                .catchError((e) {
+                  log('$e');
+                  throw e;
+                }),
+          )
+          .toList(),
+    );
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getAll({required String path}) =>
+      _instance
+          .collection(path)
+          .get()
+          .onError<FirebaseException>((e, _) {
+            log('Code: ${e.code}, Message: ${e.message}, $e');
+            throw e;
+          })
+          .catchError((e) {
+            log('$e');
+            throw e;
+          });
+
+  /// Streams
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getDocumentStream({
+    required String path,
+    required String documentId,
+  }) async* {
+    final snapshots = _instance.collection(path).doc(documentId).snapshots();
+    await for (final snapshot in snapshots) {
+      yield snapshot;
+    }
+  }
+
+  Stream<List<DocumentSnapshot<Map<String, dynamic>>>>
+  getMultibleDocumentStream({
+    required String path,
+    List<String?>? documentIds,
+  }) async* {
+    if (documentIds == null || documentIds.isEmpty) {
+      yield [];
+      return;
+    }
+
+    final stream =
+        _instance
+            .collection(path)
+            .where(FieldPath.documentId, whereIn: documentIds)
+            .snapshots();
+
+    await for (final snapshot in stream) {
+      yield snapshot.docs;
+    }
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> getAllStream({
+    required String path,
+  }) async* {
+    final snapshots = _instance.collection(path).snapshots();
+    await for (final snapshot in snapshots) {
+      yield snapshot;
+    }
+  }
+
+  Future<void> delete({required String path, String? documentId}) => _instance
+      .collection(path)
+      .doc(documentId)
+      .delete()
+      .onError<FirebaseException>(
+        (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
+      )
+      .catchError((e) => log('$e'));
+}

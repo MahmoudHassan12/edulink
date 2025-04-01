@@ -53,7 +53,7 @@ class _DrawerHeader extends StatelessWidget {
   const _DrawerHeader();
   @override
   Widget build(BuildContext context) {
-    final user = getUser();
+    final user = getUser;
     return DrawerHeader(
       padding: EdgeInsets.zero,
       child: Column(

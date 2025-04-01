@@ -27,7 +27,7 @@ class ProgramField extends StatelessWidget {
               )
               .toList(),
       onSelected: (value) => cubit.setProgram(value!),
-      enabled: department?.isValid() ?? false,
+      enabled: department?.isValid ?? false,
     );
   }
 }

@@ -42,6 +42,7 @@ class CustomTextFormField extends StatelessWidget {
     this.suffixText,
     this.suffixIcon,
     this.isDecorationCollapsed = false,
+    this.hasHeight = true,
   });
   final TextDirection? textDirection;
   final TextEditingController? controller;
@@ -63,10 +64,11 @@ class CustomTextFormField extends StatelessWidget {
   final String? suffixText;
   final Widget? suffixIcon;
   final bool isDecorationCollapsed;
+  final bool hasHeight;
   @override
   SizedBox build(BuildContext context) => SizedBox(
     height:
-        isDecorationCollapsed
+        isDecorationCollapsed || !hasHeight
             ? null
             : 80 + 4, // 4 is the padding of the text error.
     child: TextFormField(

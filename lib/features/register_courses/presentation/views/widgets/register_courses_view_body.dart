@@ -1,14 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImageProvider;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/constants/borders.dart';
-import 'package:edu_link/core/constants/endpoints.dart';
 import 'package:edu_link/core/controllers/cubits/courses_cubit.dart/courses_cubit.dart';
+import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
-import 'package:edu_link/core/repos/user_repo.dart';
+import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder, ReadContext;
 
@@ -20,8 +18,7 @@ class RegisterCoursesViewBody extends StatefulWidget {
 }
 
 class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
-  final Set<String> selectedCourses = {};
-
+  final List<String> selectedCourses = [];
   @override
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: () async {
@@ -98,42 +95,24 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({required this.selectedCourses, super.key});
-  final Set<String> selectedCourses;
-
+  final List<String> selectedCourses;
   @override
   Widget build(BuildContext context) => SliverToBoxAdapter(
     child: Padding(
       padding: const EdgeInsets.all(8),
       child: CustomFilledButton(
         label: 'Register',
-        onPressed: () async {
-          await _registerCourses(selectedCourses);
-          await homeNavigation(context);
-        },
+        onPressed:
+            () async => Future.wait<void>([
+              const CoursesRepo().addCoursesIds(selectedCourses),
+              homeNavigation(context),
+            ]),
       ),
     ),
   );
-
-  Future<void> _registerCourses(Set<String> courseIds) async {
-    final auth = FirebaseAuth.instance;
-    final userId = auth.currentUser?.uid;
-
-    if (userId == null) return;
-
-    final userRef = FirebaseFirestore.instance.collection('users').doc(userId);
-
-    await userRef.update({
-      'courses': FieldValue.arrayUnion(courseIds.toList()),
-    });
-    // await _addCourses(courses);
-  }
 }
 
-/* 
-Future<void> _addCourses(List<Map<String, dynamic>> courses) async => UserRepo()
-    .update(data: {Endpoints.courses: FieldValue.arrayUnion(courses)});
-*/
-class ChooseCourse extends StatefulWidget {
+class ChooseCourse extends StatelessWidget {
   const ChooseCourse({
     required this.courseId,
     required this.selectedCourses,
@@ -141,23 +120,26 @@ class ChooseCourse extends StatefulWidget {
     super.key,
   });
   final String courseId;
-  final Set<String> selectedCourses;
+  final List<String> selectedCourses;
   final ValueChanged<bool> onSelectionChanged;
-
   @override
-  State<ChooseCourse> createState() => _ChooseCourseState();
-}
-
-class _ChooseCourseState extends State<ChooseCourse> {
-  bool get _isSelected => widget.selectedCourses.contains(widget.courseId);
-
-  @override
-  Widget build(BuildContext context) => Checkbox(
-    value: _isSelected,
-    onChanged: (value) {
-      if (value != null) {
-        widget.onSelectionChanged(value);
-      }
-    },
-  );
+  Widget build(BuildContext context) {
+    final registeredCoursesIds = getUser?.courses?.map((e) => e.id).toList();
+    return Checkbox(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      value:
+          (registeredCoursesIds?.contains(courseId) ?? false) ||
+          selectedCourses.contains(courseId),
+      onChanged:
+          registeredCoursesIds?.contains(courseId) ?? true
+              ? null
+              : (value) {
+                if (value != null) {
+                  onSelectionChanged(value);
+                }
+              },
+    );
+  }
 }

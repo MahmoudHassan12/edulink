@@ -14,7 +14,7 @@ class ManageProfileView extends StatelessWidget {
   @override
   Scaffold build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: EText(getUser() == null ? 'Add User' : 'Edit User'),
+      title: EText(getUser == null ? 'Add User' : 'Edit User'),
       centerTitle: true,
     ),
     body: BlocProvider<ManageProfileCubit>(

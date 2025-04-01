@@ -30,7 +30,7 @@ class _UserName extends StatelessWidget {
   const _UserName();
   @override
   Widget build(BuildContext context) {
-    final user = getUser();
+    final user = getUser;
     return EText(
       user?.isProfessor ?? false ? 'Dr. ${user?.name}' : user?.name ?? '',
       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
@@ -42,7 +42,7 @@ class _UserInfoFirstPanal extends StatelessWidget {
   const _UserInfoFirstPanal();
   @override
   Widget build(BuildContext context) {
-    final user = getUser();
+    final user = getUser;
     final studentInfo = {
       'Credit Level': user?.level,
       'Student ID': user?.id,

@@ -1,8 +1,10 @@
+import 'dart:io' show File;
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/department_entity.dart';
 import 'package:edu_link/core/domain/entities/office_entity.dart';
 import 'package:edu_link/core/domain/entities/program_entity.dart';
 import 'package:edu_link/core/helpers/entities_handlers.dart';
+import 'package:edu_link/core/helpers/pick_image.dart' show pickImage;
 
 class UserEntity {
   const UserEntity({
@@ -10,10 +12,11 @@ class UserEntity {
     this.name,
     this.email,
     this.phone,
+    this.image,
     this.imageUrl,
     this.department,
     this.level,
-    this.courses = const [],
+    this.courses,
     this.isProfessor,
     this.program,
     this.ssn,
@@ -21,26 +24,38 @@ class UserEntity {
     this.office,
   });
 
-  factory UserEntity.fromMap(Map<String, dynamic>? data) => UserEntity(
-    id: data?['id'],
-    name: data?['name'],
-    email: data?['email'],
-    phone: data?['phone'],
-    imageUrl: data?['imageUrl'],
-    department: complexEntity(data?['department'], DepartmentEntity.fromMap),
-    level: data?['level'],
-    courses: complexListEntity(data?['courses'], CourseEntity.fromMap),
-    isProfessor: data?['isProfessor'],
-    program: complexEntity(data?['program'], ProgramEntity.fromMap),
-    ssn: data?['ssn'],
-    academicTitle: data?['academicTitle'],
-    office: complexEntity(data?['office'], OfficeEntity.fromMap),
-  );
+  factory UserEntity.fromMap(Map<String, dynamic>? data) {
+    final getCourses =
+        data?['courses'] != null
+            ? complexListEntity<CourseEntity>(
+              data?['courses'],
+              (e) => CourseEntity.fromMap(e),
+            )
+            : (data?['coursesIds'] as List<dynamic>?)
+                ?.map((id) => CourseEntity(id: id))
+                .toList();
+    return UserEntity(
+      id: data?['id'],
+      name: data?['name'],
+      email: data?['email'],
+      phone: data?['phone'],
+      imageUrl: data?['imageUrl'],
+      department: complexEntity(data?['department'], DepartmentEntity.fromMap),
+      level: data?['level'],
+      courses: getCourses,
+      isProfessor: data?['isProfessor'],
+      program: complexEntity(data?['program'], ProgramEntity.fromMap),
+      ssn: data?['ssn'],
+      academicTitle: data?['academicTitle'],
+      office: complexEntity(data?['office'], OfficeEntity.fromMap),
+    );
+  }
 
   final String? id;
   final String? name;
   final String? email;
   final String? phone;
+  final File? image;
   final String? imageUrl;
   final DepartmentEntity? department;
   final String? level;
@@ -51,7 +66,7 @@ class UserEntity {
   final String? academicTitle;
   final OfficeEntity? office;
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap({bool toSharedPref = false}) => {
     'id': id,
     'name': name,
     'email': email,
@@ -59,7 +74,11 @@ class UserEntity {
     'imageUrl': imageUrl,
     'department': department?.toMap(),
     'level': level,
-    'courses': courses?.map((course) => course.toMap()).toList(),
+    if (toSharedPref)
+      'courses':
+          courses?.map((course) => course.toMap(toSharedPref: true)).toList()
+    else
+      'coursesIds': courses?.map((course) => course.id).toList(),
     'isProfessor': isProfessor ?? false,
     'program': program?.toMap(),
     'ssn': ssn,
@@ -72,6 +91,7 @@ class UserEntity {
     String? name,
     String? email,
     String? phone,
+    File? image,
     String? imageUrl,
     DepartmentEntity? department,
     String? level,
@@ -86,6 +106,7 @@ class UserEntity {
     name: name ?? this.name,
     email: email ?? this.email,
     phone: phone ?? this.phone,
+    image: image ?? this.image,
     imageUrl: imageUrl ?? this.imageUrl,
     department: department ?? this.department,
     level: level ?? this.level,
@@ -96,10 +117,10 @@ class UserEntity {
     academicTitle: academicTitle ?? this.academicTitle,
     office: office ?? this.office,
   );
-
   UserEntity setName(String name) => copyWith(name: name);
   UserEntity setEmail(String email) => copyWith(email: email);
   UserEntity setPhone(String phone) => copyWith(phone: phone);
+  Future<UserEntity> setImage() async => copyWith(image: await pickImage());
   UserEntity setImageUrl(String imageUrl) => copyWith(imageUrl: imageUrl);
   UserEntity setDepartment(DepartmentEntity department) =>
       copyWith(department: department);
@@ -110,12 +131,12 @@ class UserEntity {
       copyWith(academicTitle: academicTitle);
   UserEntity setOffice(OfficeEntity office) => copyWith(office: office);
 
-  bool isValid() =>
+  bool get isValid =>
       (name?.isNotEmpty ?? false) &&
       (email?.isNotEmpty ?? false) &&
       (phone?.isNotEmpty ?? false) &&
-      (department?.isValid() ?? false) &&
+      (department?.isValid ?? false) &&
       (level?.isNotEmpty ?? false) &&
-      (program?.isValid() ?? false) &&
+      (program?.isValid ?? false) &&
       (ssn?.isNotEmpty ?? false);
 }
