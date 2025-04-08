@@ -13,7 +13,9 @@ class HomeLoading extends HomeState {
   const HomeLoading();
 }
 
-class HomeSuccess extends HomeState {}
+class HomeSuccess extends HomeState {
+  const HomeSuccess();
+}
 
 class HomeFailure extends HomeState {
   const HomeFailure(this.message);

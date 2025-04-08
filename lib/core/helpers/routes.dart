@@ -52,7 +52,8 @@ abstract class Routes {
 final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes with arguments
   Routes.courseDetailsView:
-      (context, args) => CourseDetailsView(course: args! as CourseEntity),
+      (context, args) =>
+          CourseDetailsView(courseStream: args! as Stream<CourseEntity>),
   Routes.manageCourseView:
       (context, args) => ManageCourseView(course: args as CourseEntity?),
   Routes.manageProfileView: (context, args) => const ManageProfileView(),

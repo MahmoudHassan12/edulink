@@ -8,7 +8,6 @@ part 'question_manager_state.dart';
 
 class QuestionManagerCubit extends Cubit<QuestionManagerState> {
   QuestionManagerCubit(this._courseId) : super(const _QuestionManagerInitial());
-
   final String _courseId;
   QuestionEntity _question = const QuestionEntity();
 

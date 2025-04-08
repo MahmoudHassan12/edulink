@@ -74,8 +74,10 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
                           },
                         ),
                         onTap:
-                            () async =>
-                                courseDetailsNavigation(context, extra: course),
+                            () async => courseDetailsNavigation(
+                              context,
+                              extra: Stream.value(course),
+                            ),
                       ),
                     );
                   },
