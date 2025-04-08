@@ -1,3 +1,4 @@
+import 'dart:async' show StreamController;
 import 'dart:convert' show jsonEncode;
 import 'dart:developer' show log;
 import 'dart:io' show File;
@@ -89,70 +90,6 @@ class UserRepo {
     }
   }
 
-  Stream<UserEntity?> getStream({
-    required String documentId,
-    bool isProfessor = false,
-  }) => _fireStore
-      .getDocumentStream(path: _path, documentId: documentId)
-      .asyncMap((doc) async {
-        final data = doc.data();
-        if (data == null) {
-          log('User not found');
-          return null;
-        }
-        final coursesIds =
-            (data['coursesIds'] as List<dynamic>?)?.cast<String>();
-        final user = UserEntity.fromMap(data);
-        if (coursesIds?.isEmpty ?? true) return user;
-        final courses = await const CoursesRepo().getMultibleCourses(
-          coursesIds,
-        );
-        final updatedUser = user.copyWith(courses: courses?.toList());
-        if (!isProfessor) {
-          await SharedPrefSingleton.setString(
-            Endpoints.user,
-            jsonEncode(updatedUser.toMap(toSharedPref: true)),
-          );
-        }
-        return updatedUser;
-      });
-
-  Stream<UserEntity?> getStreama({
-    required String documentId,
-    bool isProfessor = false,
-  }) => _fireStore
-      .getDocumentStream(path: _path, documentId: documentId)
-      .asyncExpand((doc) async* {
-        final data = doc.data();
-        if (data == null) {
-          log('User not found');
-          yield null;
-          return;
-        }
-        final coursesIds =
-            (data['coursesIds'] as List<dynamic>?)?.cast<String>();
-        final user = UserEntity.fromMap(data);
-        if (coursesIds?.isEmpty ?? true) {
-          yield user;
-          return;
-        }
-        // Merge with courses stream
-        yield* const CoursesRepo().getMultibleCoursesStream(coursesIds).map((
-          courses,
-        ) {
-          final updatedUser = user.copyWith(
-            courses: isProfessor ? <CourseEntity>[] : courses?.toList(),
-          );
-          if (!isProfessor) {
-            SharedPrefSingleton.setString(
-              Endpoints.user,
-              jsonEncode(updatedUser.toMap(toSharedPref: true)),
-            );
-          }
-          return updatedUser;
-        });
-      });
-
   Future<List<UserEntity>?> getMultipleUsers(List<String?>? userIds) =>
       _fireStore
           .getMultibleDocuments(path: _path, documentIds: userIds)
@@ -169,6 +106,47 @@ class UserRepo {
           .onError<FirebaseException>((e, _) {
             log('Users not found');
             throw Exception('Users not found: $e');
+          });
+
+  /// Streams
+  Stream<UserEntity?> getStream({
+    required String documentId,
+    bool isProfessor = false,
+  }) async* {
+    final controller = StreamController<UserEntity?>();
+    _fireStore.getDocumentStream(path: _path, documentId: documentId).listen((
+      doc,
+    ) async {
+      final data = doc.data();
+      final user = UserEntity.fromMap(data);
+      controller.add(user);
+      if (isProfessor) return;
+      final coursesIds =
+          (data?['coursesIds'] as List<dynamic>?)?.cast<String>();
+      const CoursesRepo().getMultibleCoursesStream(coursesIds).listen((
+        courses,
+      ) async {
+        controller.add(user.copyWith(courses: courses));
+      });
+    });
+    controller.onCancel =
+        () async => !controller.isClosed ? controller.close() : null;
+    await for (final user in controller.stream) {
+      yield user;
+    }
+  }
+
+  Stream<List<UserEntity>?> getMultibleUsersStream(List<String?>? userIds) =>
+      _fireStore
+          .getMultibleDocumentStream(path: _path, documentIds: userIds)
+          .asyncMap((docs) async {
+            log('${docs.length} Users fetched successfully!');
+            return Future.wait<UserEntity>(
+              docs.map((e) async {
+                final data = e.data();
+                return UserEntity.fromMap(data);
+              }).toList(),
+            );
           });
 
   Future<void> delete({String? documentId}) => _fireStore

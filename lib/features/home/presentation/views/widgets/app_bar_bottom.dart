@@ -52,7 +52,10 @@ Iterable<ListTile> _suggestions(
         title: Text(courseCode!),
         subtitle: Text(courseTitle!),
         onTap:
-            () async => courseDetailsNavigation(context, extra: course).then(
+            () async => courseDetailsNavigation(
+              context,
+              extra: Stream<CourseEntity>.value(course),
+            ).then(
               (_) =>
                   controller
                     ..clear()

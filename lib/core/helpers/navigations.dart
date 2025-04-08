@@ -1,3 +1,5 @@
+import 'package:edu_link/core/domain/entities/course_entity.dart'
+    show CourseEntity;
 import 'package:edu_link/core/helpers/routes.dart' show Routes;
 import 'package:flutter/material.dart' show BuildContext;
 import 'package:go_router/go_router.dart' show GoRouter, RouteMatchList;
@@ -24,8 +26,10 @@ Future<void> signinNavigation(BuildContext context) =>
     _navigateTo(context, Routes.signinView, clearStack: true);
 
 /// Navigations with extra data
-Future<void> courseDetailsNavigation(BuildContext context, {Object? extra}) =>
-    _navigateTo(context, Routes.courseDetailsView, extra: extra);
+Future<void> courseDetailsNavigation(
+  BuildContext context, {
+  required Stream<CourseEntity> extra,
+}) => _navigateTo(context, Routes.courseDetailsView, extra: extra);
 Future<void> manageCourseNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.manageCourseView, extra: extra);
 Future<void> qAForumNavigation(BuildContext context, {Object? extra}) =>

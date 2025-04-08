@@ -21,7 +21,7 @@ class QAForumAppBar extends StatelessWidget {
       // ),
       background: CachedNetworkImage(
         imageUrl:
-            'https://s3-alpha-sig.figma.com/img/bd66/c69e/40464c0d1d8ac792277c082db1450a30?Expires=1743984000&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=bOE9sV~vY6f8hmod-FYKGUInUR67ChZTY3yx7siq9b7K5ZI9FQIoYTNfp5gnJW4QgdiMmZpOc2OTd25te4oVD~bTxzOs1rvTmEOZPDkanOKRKZ9MKqwuNsolPk7b0ZlgmS31947BAoDnnXzdlqJENZfA-Rc8qA7zMsUl~8kxXB1-sGfpEczn4qZiotg7-Q1SIhripfqRpv1EDmW9f--HI88HrurQ4pVQ639Vv7fAMCuMVjBtVpAXdTLgSeK3HhmGya-4ci8Cb9SKXFUxkjpefuWjfV1B1PfL6mxL-vTALPoLGLGV6es-5WhLnJ7FzqI0QYtu71aTj6AoVbS2V-sVYA__',
+            'https://s3-alpha-sig.figma.com/img/bd66/c69e/40464c0d1d8ac792277c082db1450a30?Expires=1745193600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=Y4iH71wfhZUg45PCGEEzotEaBEC~PeIEgmxjiHGz7zoQb8gcacdSlg2YYB0gekMZsWBYxPrZGUZrJXnRTLWSP~HEZ5HWt-EyNnLkL6uxN4rbaz-QviEvAnJi-yY18Dc3h3ZnJgx2XTtIapl3~WOeCaYxTXLxC0~bDELL4XbBB2ExwpUCp8vC3CZPHBNeIaD8GRXPOzWxk3XsrWdGHJUAAlAPoxHpObGcWWDNMLnS90mNu~2IlS0Oblgbd9Gsse25iB9JrXGBPnxue7qp2NYIYdbcLjyRgmiaRIgJENQ2R6QK3h2FrlezuAB3zvYRFTDi03b5mdAUp8i~CyF-YRWF7g__',
         fit: BoxFit.cover,
         color: Colors.black.withAlpha(100),
         colorBlendMode: BlendMode.darken,

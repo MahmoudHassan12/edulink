@@ -1,4 +1,3 @@
-import 'dart:convert' show jsonEncode;
 import 'dart:developer' show log;
 import 'dart:io' show File;
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
@@ -9,8 +8,6 @@ import 'package:edu_link/core/domain/entities/question_entity.dart'
     show QuestionEntity;
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
-import 'package:edu_link/core/helpers/shared_pref.dart'
-    show SharedPrefSingleton;
 import 'package:edu_link/core/repos/user_repo.dart' show UserRepo;
 import 'package:edu_link/core/services/firestore_service.dart'
     show FirestoreService;
@@ -40,16 +37,7 @@ class CoursesRepo {
         list: courseIds,
         documentId: getUser?.id,
       )
-      .then((_) {
-        final courses = List<CourseEntity>.empty(growable: true);
-        courseIds.map((id) => courses.add(CourseEntity(id: id))).toList();
-        final user = getUser?.copyWith(courses: courses);
-        SharedPrefSingleton.setString(
-          Endpoints.user,
-          jsonEncode(user?.toMap(toSharedPref: true)),
-        );
-        log('User added successfully!');
-      });
+      .then((_) => log('Courses added successfully!'));
 
   Future<void> addQuestion(QuestionEntity question, String? courseId) =>
       _fireStore
@@ -96,14 +84,19 @@ class CoursesRepo {
         .getMultibleDocumentStream(path: _coursesPath, documentIds: courseIds)
         .asyncMap((docs) async {
           log('${docs.length} Courses fetched successfully!');
-          return Future.wait(
+          return Future.wait<CourseEntity>(
             docs.map((e) async {
               final data = e.data();
-              final professor = await const UserRepo().get(
+              final professorStream = const UserRepo().getStream(
                 documentId: data?['professorId'],
                 isProfessor: true,
               );
-              return CourseEntity.fromMap(data).copyWith(professor: professor);
+              await for (final professor in professorStream) {
+                return CourseEntity.fromMap(
+                  data,
+                ).copyWith(professor: professor);
+              }
+              throw Exception('Professor stream ended without value');
             }).toList(),
           );
         });
