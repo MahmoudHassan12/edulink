@@ -12,8 +12,8 @@ import 'package:edu_link/features/auth/presentation/views/reset_password_view.da
     show ResetPasswordView;
 import 'package:edu_link/features/auth/presentation/views/signin_view.dart'
     show SigninView;
-import 'package:edu_link/features/chat/widgets/chat_view_body.dart'
-    show ChatScreen;
+import 'package:edu_link/features/chat/presentation/views/chat_view.dart'
+    show ChatView;
 import 'package:edu_link/features/course_details/presentation/views/course_details_view.dart'
     show CourseDetailsView;
 import 'package:edu_link/features/home/presentation/views/home_view.dart'
@@ -55,23 +55,21 @@ abstract class Routes {
 
 final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes with arguments
-  Routes.chatView:
-      (context, args) =>
-          ChatScreen(sender: getUser!, receiver: args! as UserEntity),
+  Routes.chatView: (context, args) => ChatView(receiver: args! as UserEntity),
   Routes.courseDetailsView:
       (context, args) => CourseDetailsView(course: args! as CourseEntity),
   Routes.manageCourseView:
       (context, args) => ManageCourseView(course: args as CourseEntity?),
-  Routes.manageProfileView: (context, args) => const ManageProfileView(),
   Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
-
-  /// Routes without arguments
-  Routes.aboutView: (context, args) => const AboutView(),
-  Routes.homeView: (context, args) => const HomeView(),
   Routes.qaForumView:
       (context, args) => QAForumView(course: args! as CourseEntity),
   Routes.questionDetailsView:
       (context, args) => QuestionDetailsView(qa: args! as QuestionEntity),
+
+  /// Routes without arguments
+  Routes.aboutView: (context, args) => const AboutView(),
+  Routes.homeView: (context, args) => const HomeView(),
+  Routes.manageProfileView: (context, args) => const ManageProfileView(),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),
   Routes.registerView: (context, args) => const RegisterView(),
   Routes.resetPasswordView: (context, args) => const ResetPasswordView(),

@@ -1,25 +1,24 @@
 import 'dart:async';
-
 import 'package:edu_link/core/domain/entities/message_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/services/chat_service.dart';
-import 'package:edu_link/features/chat/widgets/chat_bubble.dart';
-import 'package:edu_link/features/chat/widgets/chat_header.dart';
-import 'package:edu_link/features/chat/widgets/send_message_input.dart';
+import 'package:edu_link/features/chat/presentation/views/widgets/chat_bubble.dart';
+import 'package:edu_link/features/chat/presentation/views/widgets/send_message_input.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({required this.sender, required this.receiver, super.key});
-  final UserEntity sender;
+class ChatViewBody extends StatefulWidget {
+  const ChatViewBody({required this.receiver, super.key});
   final UserEntity receiver;
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  State<ChatViewBody> createState() => _ChatViewBodyState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatViewBodyState extends State<ChatViewBody> {
   late ChatService _chatService;
   late List<Message> _messages;
   late TextEditingController _messageController;
+  final UserEntity? _sender = getUser;
   @override
   void initState() {
     super.initState();
@@ -30,36 +29,31 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _initializeChat() =>
-      _chatService.createChat(widget.sender.id!, widget.receiver.id!);
+      _chatService.createChat(_sender!.id!, widget.receiver.id!);
 
   Future<void> _sendMessage() async {
     if (_messageController.text.isEmpty) return;
-    final sender = widget.sender;
     final receiver = widget.receiver;
     final message = Message(
-      userId: sender.id!,
+      userId: _sender!.id!,
       text: _messageController.text,
-      timestamp: DateTime.now().millisecondsSinceEpoch,
-      messageId: '',
+      date: DateTime.now(),
     );
-
-    await _chatService.sendMessage(sender.id!, receiver.id!, message);
+    await _chatService.sendMessage(_sender.id!, receiver.id!, message);
     _messageController.clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    final sender = widget.sender;
     final receiver = widget.receiver;
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 165, 212, 236),
-      appBar: ChatHeader(userName: receiver.name!, imgUrl: receiver.imageUrl!),
-      body: Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Column(
         children: [
           Expanded(
             child: StreamBuilder<List<Message>>(
-              stream: _chatService.getChatMessages(sender.id!, receiver.id!),
-              builder: (context, snapshot) {
+              stream: _chatService.getChatMessages(_sender!.id!, receiver.id!),
+              builder: (_, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -70,15 +64,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 return ListView.builder(
                   reverse: true,
                   itemCount: _messages.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (_, index) {
                     final message = _messages[index];
-                    var isSender = message.userId == sender.id;
+                    final isSender = message.userId == _sender.id;
                     return ChatBubble(
-                      text: message.text,
-                      userId: sender.id!,
-                      senderId: message.userId,
+                      text: message.text!,
+                      user: isSender ? _sender : receiver,
                       isSender: isSender,
-                      imgUrl: isSender ? sender.imageUrl : receiver.imageUrl,
+                      isSameUser:
+                          index < _messages.length - 1 &&
+                          _messages[index + 1].userId == message.userId,
                     );
                   },
                 );
@@ -87,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           SendMessageInput(
             controller: _messageController,
-            onSendMessage: _sendMessage,
+            onSendMessage: () async => _sendMessage(),
           ),
         ],
       ),
