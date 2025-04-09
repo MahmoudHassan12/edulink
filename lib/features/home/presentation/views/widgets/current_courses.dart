@@ -1,4 +1,3 @@
-import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/features/home/presentation/controllers/home_cubit/home_cubit.dart'
     show HomeCubit, HomeFailure, HomeState, HomeSuccess;
 import 'package:edu_link/features/home/presentation/views/widgets/course.dart';
@@ -18,7 +17,7 @@ class CurrentCourses extends StatelessWidget {
             itemSnapping: true,
             enableSplash: false,
             children:
-                getUser?.courses
+                state.courses
                     ?.map((course) => Course(course: course))
                     .toList() ??
                 [],
@@ -27,7 +26,6 @@ class CurrentCourses extends StatelessWidget {
         if (state is HomeFailure) {
           return Center(child: Text(state.message));
         }
-
         return const Center(child: CircularProgressIndicator());
       },
     ),

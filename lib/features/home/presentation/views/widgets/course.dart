@@ -25,11 +25,7 @@ class Course extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(28)),
       ),
       child: InkWell(
-        onTap:
-            () async => courseDetailsNavigation(
-              context,
-              extra: Stream<CourseEntity>.value(course),
-            ),
+        onTap: () async => courseDetailsNavigation(context, extra: course.id!),
         child: Column(
           children: [
             Expanded(
@@ -114,7 +110,7 @@ class Course extends StatelessWidget {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 title: const EText('By'),
                 subtitle: EText(professor?.name ?? 'No Name'),
-                trailing: UserPhoto(imageUrl: professor?.imageUrl),
+                trailing: UserPhoto(user: professor!),
               ),
             ),
           ],

@@ -60,16 +60,16 @@ class _DrawerHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
-            leading: const UserPhoto(),
-            title: EText(user?.name ?? 'No Name'),
+            leading: UserPhoto(user: user!),
+            title: EText(user.name ?? 'No Name'),
             subtitle: FittedBox(
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
-              child: EText(user?.email ?? 'No Email'),
+              child: EText(user.email ?? 'No Email'),
             ),
           ),
           OutlinedButton(
-            onPressed: () async => profileNavigation(context),
+            onPressed: () async => profileNavigation(context, extra: user),
             child: const Text('Manage your Account'),
           ),
         ],

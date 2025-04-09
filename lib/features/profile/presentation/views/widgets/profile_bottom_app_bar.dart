@@ -1,10 +1,11 @@
-import 'dart:developer';
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileBottomAppBar extends StatelessWidget {
-  const ProfileBottomAppBar({super.key});
+  const ProfileBottomAppBar({required this.user, super.key});
+  final UserEntity user;
   @override
   Widget build(BuildContext context) => BottomAppBar(
     color: Colors.transparent,
@@ -28,12 +29,20 @@ class ProfileBottomAppBar extends StatelessWidget {
   );
 }
 
-Future<void> _launchUrl(url) async {
+Future<void> _launchUrl(String url) {
   final uri = Uri.parse(url);
-  if (await canLaunchUrl(uri)) {
-    log('Url Lanched');
-    await launchUrl(uri);
-  } else {
-    log("Can't Launch URL");
-  }
+  return canLaunchUrl(uri).then(
+    (canLaunch) =>
+        canLaunch
+            ? launchUrl(
+              uri,
+              mode: LaunchMode.externalNonBrowserApplication,
+              webOnlyWindowName: '_blank',
+              webViewConfiguration: const WebViewConfiguration(
+                headers: <String, String>{'my_header_key': 'my_header_value'},
+              ),
+              browserConfiguration: const BrowserConfiguration(showTitle: true),
+            )
+            : null,
+  );
 }

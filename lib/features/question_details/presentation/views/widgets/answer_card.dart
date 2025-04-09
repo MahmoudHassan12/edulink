@@ -21,11 +21,11 @@ class AnswerCard extends StatelessWidget {
           ListTile(
             minTileHeight: 56,
             contentPadding: EdgeInsets.zero,
-            leading: UserPhoto(imageUrl: user?.imageUrl),
+            leading: UserPhoto(user: user!),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                EText(user!.name!, style: const TextStyle(fontSize: 14)),
+                EText(user.name!, style: const TextStyle(fontSize: 14)),
               ],
             ),
             subtitle: EText(

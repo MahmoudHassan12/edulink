@@ -1,6 +1,7 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
 import 'package:edu_link/core/domain/entities/question_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/services/auth_service.dart' show AuthService;
 import 'package:edu_link/features/about/presentation/views/about_view.dart'
@@ -52,18 +53,16 @@ abstract class Routes {
 final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes with arguments
   Routes.courseDetailsView:
-      (context, args) =>
-          CourseDetailsView(courseStream: args! as Stream<CourseEntity>),
+      (context, args) => CourseDetailsView(courseId: args! as String),
   Routes.manageCourseView:
       (context, args) => ManageCourseView(course: args as CourseEntity?),
   Routes.manageProfileView: (context, args) => const ManageProfileView(),
-  Routes.profileView: (context, args) => const ProfileView(),
+  Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
 
   /// Routes without arguments
   Routes.aboutView: (context, args) => const AboutView(),
   Routes.homeView: (context, args) => const HomeView(),
-  Routes.qaForumView:
-      (context, args) => QAForumView(course: args! as CourseEntity),
+  Routes.qaForumView: (context, args) => QAForumView(courseId: args! as String),
   Routes.questionDetailsView:
       (context, args) => QuestionDetailsView(qa: args! as QuestionEntity),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),

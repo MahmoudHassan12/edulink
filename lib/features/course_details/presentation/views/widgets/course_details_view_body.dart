@@ -39,7 +39,8 @@ class CourseDetailsViewBody extends StatelessWidget {
           title: EText(course.code!),
           subtitle: EText('${course.title}\nBy ${course.professor?.name}'),
           trailing: IconButton(
-            onPressed: () async => qAForumNavigation(context, extra: course),
+            onPressed:
+                () async => qAForumNavigation(context, extra: course.id!),
             icon: const Icon(Icons.message_rounded),
           ),
         ),

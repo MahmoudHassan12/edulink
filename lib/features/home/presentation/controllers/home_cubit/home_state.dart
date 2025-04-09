@@ -14,7 +14,8 @@ class HomeLoading extends HomeState {
 }
 
 class HomeSuccess extends HomeState {
-  const HomeSuccess();
+  const HomeSuccess(this.courses);
+  final List<CourseEntity>? courses;
 }
 
 class HomeFailure extends HomeState {

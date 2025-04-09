@@ -1,14 +1,15 @@
-import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:edu_link/features/profile/presentation/views/widgets/profile_panal.dart'
     show ProfilePanal;
 import 'package:flutter/material.dart';
 
 class ThirdPanal extends StatelessWidget {
-  const ThirdPanal({super.key});
+  const ThirdPanal({required this.user, super.key});
+  final UserEntity user;
   @override
   Widget build(BuildContext context) {
-    final office = getUser?.office;
+    final office = user.office;
     final location = office?.location;
     final allTimes = office?.availability?.times
         ?.expand<String?>((e) {

@@ -1,5 +1,4 @@
-import 'package:edu_link/core/domain/entities/course_entity.dart'
-    show CourseEntity;
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/routes.dart' show Routes;
 import 'package:flutter/material.dart' show BuildContext;
 import 'package:go_router/go_router.dart' show GoRouter, RouteMatchList;
@@ -28,11 +27,15 @@ Future<void> signinNavigation(BuildContext context) =>
 /// Navigations with extra data
 Future<void> courseDetailsNavigation(
   BuildContext context, {
-  required Stream<CourseEntity> extra,
+  required String extra,
 }) => _navigateTo(context, Routes.courseDetailsView, extra: extra);
 Future<void> manageCourseNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.manageCourseView, extra: extra);
-Future<void> qAForumNavigation(BuildContext context, {Object? extra}) =>
+Future<void> profileNavigation(
+  BuildContext context, {
+  required UserEntity extra,
+}) => _navigateTo(context, Routes.profileView, extra: extra);
+Future<void> qAForumNavigation(BuildContext context, {required String extra}) =>
     _navigateTo(context, Routes.qaForumView, extra: extra);
 Future<void> questionDetailsNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.questionDetailsView, extra: extra);
@@ -42,8 +45,6 @@ Future<void> aboutNavigation(BuildContext context) =>
     _navigateTo(context, Routes.aboutView);
 Future<void> manageProfileNavigation(BuildContext context) =>
     _navigateTo(context, Routes.manageProfileView);
-Future<void> profileNavigation(BuildContext context) =>
-    _navigateTo(context, Routes.profileView);
 Future<void> registerCoursesNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerCoursesView);
 Future<void> registerNavigation(BuildContext context) =>

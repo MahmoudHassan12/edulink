@@ -33,12 +33,12 @@ class QuestionCard extends StatelessWidget {
               ListTile(
                 minTileHeight: 56,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                leading: UserPhoto(imageUrl: user?.imageUrl),
+                leading: UserPhoto(user: user!),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     EText(
-                      user?.name ?? 'Anonymous',
+                      user.name ?? 'Anonymous',
                       style: const TextStyle(fontSize: 14),
                     ),
                     EText(

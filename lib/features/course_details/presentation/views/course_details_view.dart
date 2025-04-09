@@ -1,27 +1,29 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/features/course_details/presentation/views/widgets/course_details_view_body.dart'
     show CourseDetailsViewBody;
+import 'package:edu_link/features/home/presentation/controllers/home_cubit/home_cubit.dart';
 import 'package:flutter/material.dart'
-    show
-        BuildContext,
-        Center,
-        CircularProgressIndicator,
-        Scaffold,
-        StatelessWidget,
-        StreamBuilder,
-        Widget;
+    show BuildContext, Center, Scaffold, StatelessWidget, Text, Widget;
+import 'package:flutter_bloc/flutter_bloc.dart' show BlocSelector;
 
 class CourseDetailsView extends StatelessWidget {
-  const CourseDetailsView({required this.courseStream, super.key});
-  final Stream<CourseEntity> courseStream;
+  const CourseDetailsView({required this.courseId, super.key});
+  final String courseId;
   @override
-  Widget build(BuildContext context) => StreamBuilder<CourseEntity>(
-    stream: courseStream,
-    builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        return Scaffold(body: CourseDetailsViewBody(course: snapshot.data!));
-      }
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    },
+  Widget build(BuildContext context) => Scaffold(
+    body: BlocSelector<HomeCubit, HomeState, CourseEntity?>(
+      selector: (state) {
+        if (state is HomeSuccess) {
+          return state.courses?.firstWhere((course) => course.id == courseId);
+        }
+        return null;
+      },
+      builder: (_, course) {
+        if (course == null) {
+          return const Center(child: Text('Course not found'));
+        }
+        return CourseDetailsViewBody(course: course);
+      },
+    ),
   );
 }
