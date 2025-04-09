@@ -25,7 +25,7 @@ class Course extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(28)),
       ),
       child: InkWell(
-        onTap: () async => courseDetailsNavigation(context, extra: course.id!),
+        onTap: () async => courseDetailsNavigation(context, extra: course),
         child: Column(
           children: [
             Expanded(

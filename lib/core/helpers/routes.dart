@@ -12,6 +12,8 @@ import 'package:edu_link/features/auth/presentation/views/reset_password_view.da
     show ResetPasswordView;
 import 'package:edu_link/features/auth/presentation/views/signin_view.dart'
     show SigninView;
+import 'package:edu_link/features/chat/widgets/chat_view_body.dart'
+    show ChatScreen;
 import 'package:edu_link/features/course_details/presentation/views/course_details_view.dart'
     show CourseDetailsView;
 import 'package:edu_link/features/home/presentation/views/home_view.dart'
@@ -36,6 +38,7 @@ import 'package:go_router/go_router.dart'
 abstract class Routes {
   const Routes();
   static const String aboutView = '/about';
+  static const String chatView = '/chat';
   static const String courseDetailsView = '/course-details';
   static const String homeView = '/';
   static const String manageCourseView = '/manage-course';
@@ -52,8 +55,11 @@ abstract class Routes {
 
 final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes with arguments
+  Routes.chatView:
+      (context, args) =>
+          ChatScreen(sender: getUser!, receiver: args! as UserEntity),
   Routes.courseDetailsView:
-      (context, args) => CourseDetailsView(courseId: args! as String),
+      (context, args) => CourseDetailsView(course: args! as CourseEntity),
   Routes.manageCourseView:
       (context, args) => ManageCourseView(course: args as CourseEntity?),
   Routes.manageProfileView: (context, args) => const ManageProfileView(),
@@ -62,7 +68,8 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes without arguments
   Routes.aboutView: (context, args) => const AboutView(),
   Routes.homeView: (context, args) => const HomeView(),
-  Routes.qaForumView: (context, args) => QAForumView(courseId: args! as String),
+  Routes.qaForumView:
+      (context, args) => QAForumView(course: args! as CourseEntity),
   Routes.questionDetailsView:
       (context, args) => QuestionDetailsView(qa: args! as QuestionEntity),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),

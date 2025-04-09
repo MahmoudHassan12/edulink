@@ -9,14 +9,17 @@ import 'package:flutter/material.dart'
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocSelector;
 
 class QAForumView extends StatelessWidget {
-  const QAForumView({required this.courseId, super.key});
-  final String courseId;
+  const QAForumView({required this.course, super.key});
+  final CourseEntity course;
   @override
   Scaffold build(BuildContext context) => Scaffold(
     body: BlocSelector<HomeCubit, HomeState, CourseEntity?>(
       selector: (state) {
         if (state is HomeSuccess) {
-          return state.courses?.firstWhere((course) => course.id == courseId);
+          return state.courses?.firstWhere(
+            (e) => e.id == course.id,
+            orElse: () => course,
+          );
         }
         return null;
       },

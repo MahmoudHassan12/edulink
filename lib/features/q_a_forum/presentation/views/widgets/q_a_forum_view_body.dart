@@ -1,5 +1,6 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/q_a_forum/presentation/views/widgets/q_a_forum_app_bar.dart';
@@ -35,13 +36,16 @@ class QAForumViewBody extends StatelessWidget {
                         (_) => Dialog(
                           child: AnswerTextField(
                             controller: controller,
-                            onSend:
-                                () =>
-                                    context.read<QuestionManagerCubit>()
-                                      ..setQuestion(controller.text)
-                                      ..setDate(DateTime.now())
-                                      ..setUser(getUser!)
-                                      ..addQuestion(),
+                            onSend: () {
+                              context.read<QuestionManagerCubit>()
+                                ..setQuestion(controller.text)
+                                ..setDate(DateTime.now())
+                                ..setUser(getUser!)
+                                ..addQuestion().then((_) {
+                                  controller.clear();
+                                  if (context.mounted) popNavigation(context);
+                                });
+                            },
                           ),
                         ),
                   ),

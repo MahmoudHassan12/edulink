@@ -2,8 +2,6 @@ import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
-import 'package:edu_link/features/chat/widgets/chat_view_body.dart'
-    show ChatScreen;
 import 'package:flutter/material.dart';
 
 class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -29,21 +27,7 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       else
         IconButton(
           icon: const Icon(Icons.chat_rounded),
-          onPressed:
-              () async => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder:
-                      (context) => ChatScreen(
-                        userId1: getUser!.id!,
-                        userId2: user.id!,
-                        user1Name: getUser!.name!,
-                        user2Name: user.name!,
-                        user1ImgUrl: getUser!.imageUrl!,
-                        user2ImgUrl: user.imageUrl!,
-                        currentUserId: getUser!.id!,
-                      ),
-                ),
-              ),
+          onPressed: () async => chatNavigation(context, extra: user),
           color: Theme.of(context).colorScheme.onPrimary,
         ),
       const SizedBox(width: 8),

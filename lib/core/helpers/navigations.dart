@@ -1,3 +1,4 @@
+import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/routes.dart' show Routes;
 import 'package:flutter/material.dart' show BuildContext;
@@ -25,9 +26,13 @@ Future<void> signinNavigation(BuildContext context) =>
     _navigateTo(context, Routes.signinView, clearStack: true);
 
 /// Navigations with extra data
+Future<void> chatNavigation(
+  BuildContext context, {
+  required UserEntity extra,
+}) => _navigateTo(context, Routes.chatView, extra: extra);
 Future<void> courseDetailsNavigation(
   BuildContext context, {
-  required String extra,
+  required CourseEntity extra,
 }) => _navigateTo(context, Routes.courseDetailsView, extra: extra);
 Future<void> manageCourseNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.manageCourseView, extra: extra);
@@ -35,8 +40,10 @@ Future<void> profileNavigation(
   BuildContext context, {
   required UserEntity extra,
 }) => _navigateTo(context, Routes.profileView, extra: extra);
-Future<void> qAForumNavigation(BuildContext context, {required String extra}) =>
-    _navigateTo(context, Routes.qaForumView, extra: extra);
+Future<void> qAForumNavigation(
+  BuildContext context, {
+  required CourseEntity extra,
+}) => _navigateTo(context, Routes.qaForumView, extra: extra);
 Future<void> questionDetailsNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.questionDetailsView, extra: extra);
 
