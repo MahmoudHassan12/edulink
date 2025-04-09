@@ -24,7 +24,7 @@ class SendMessageInput extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withAlpha(50),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
