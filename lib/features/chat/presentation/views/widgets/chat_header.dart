@@ -9,7 +9,6 @@ class ChatHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) => AppBar(
     backgroundColor: Colors.transparent,
-
     title: ListTile(
       contentPadding: EdgeInsets.zero,
       leading: UserPhoto(user: user),

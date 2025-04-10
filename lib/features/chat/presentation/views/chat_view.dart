@@ -24,17 +24,12 @@ class _ChatBackGround extends StatelessWidget {
   const _ChatBackGround();
   @override
   Widget build(BuildContext context) {
-    final backgrounds = List<SvgPicture>.generate(4, (index) {
-      final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-      final color = isDarkMode ? Colors.white : Colors.black;
-      return SvgPicture.asset(
-        'assets/images/chat_background.svg',
-        fit: BoxFit.cover,
-        colorFilter: ColorFilter.mode(color.withAlpha(25), BlendMode.srcIn),
-      );
-    });
-    return Column(
-      children: backgrounds.map((e) => Flexible(child: e)).toList(),
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final color = isDarkMode ? Colors.white : Colors.black;
+    return SvgPicture.asset(
+      'assets/images/chat_background.svg',
+      fit: BoxFit.cover,
+      colorFilter: ColorFilter.mode(color.withAlpha(25), BlendMode.srcIn),
     );
   }
 }

@@ -18,7 +18,7 @@ class ChatBubble extends StatelessWidget {
   final bool isSameUser;
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 4),
+    padding: EdgeInsets.only(top: isSameUser ? 2 : 8),
     child:
         isSender
             ? _SenderBubble(user: user, text: text, isSameUser: isSameUser)
@@ -40,10 +40,7 @@ class _ReceiverBubble extends StatelessWidget {
     spacing: 8,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      if (!isSameUser)
-        UserPhoto(user: user, radius: 20)
-      else
-        const SizedBox(width: 40),
+      if (!isSameUser) UserPhoto(user: user) else const SizedBox(width: 40),
       _ReceiverMessage(text: text),
     ],
   );
@@ -53,20 +50,10 @@ class _ReceiverMessage extends StatelessWidget {
   const _ReceiverMessage({required this.text});
   final String text;
   @override
-  Widget build(BuildContext context) => Container(
-    constraints: BoxConstraints(
-      maxWidth: MediaQuery.sizeOf(context).width - 112,
-    ),
-    decoration: BoxDecoration(
-      color: Colors.grey.shade200,
-      borderRadius: xxsBorder,
-    ),
-    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-    child: EText(
-      text,
-      style: const TextStyle(color: Colors.black87, fontSize: 16),
-      softWrap: true,
-    ),
+  Widget build(BuildContext context) => _Message(
+    text: text,
+    textColor: Colors.black87,
+    backgroundColor: Colors.grey.shade200,
   );
 }
 
@@ -95,18 +82,28 @@ class _SenderMessage extends StatelessWidget {
   const _SenderMessage({required this.text});
   final String text;
   @override
+  Widget build(BuildContext context) => _Message(
+    text: text,
+    textColor: Colors.white,
+    backgroundColor: Colors.blue.shade600,
+  );
+}
+
+class _Message extends StatelessWidget {
+  const _Message({required this.text, this.textColor, this.backgroundColor});
+  final String text;
+  final Color? textColor;
+  final Color? backgroundColor;
+  @override
   Widget build(BuildContext context) => Container(
     constraints: BoxConstraints(
       maxWidth: MediaQuery.sizeOf(context).width - 112,
     ),
-    decoration: const BoxDecoration(
-      color: Colors.blue,
-      borderRadius: xxsBorder,
-    ),
+    decoration: BoxDecoration(color: backgroundColor, borderRadius: xxsBorder),
     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
     child: EText(
       text,
-      style: const TextStyle(color: Colors.white, fontSize: 16),
+      style: TextStyle(color: textColor, fontSize: 16),
       softWrap: true,
     ),
   );
