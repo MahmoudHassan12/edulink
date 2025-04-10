@@ -64,7 +64,6 @@ class CoursesRepo {
                     final data = e.data();
                     final professor = await const UserRepo().get(
                       documentId: data?['professorId'],
-                      isProfessor: true,
                     );
                     return CourseEntity.fromMap(
                       data,
@@ -118,7 +117,6 @@ class CoursesRepo {
             final data = e.data();
             final professor = await const UserRepo().get(
               documentId: data['professorId'],
-              isProfessor: true,
             );
             final course = CourseEntity.fromMap(
               data,

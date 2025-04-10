@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:edu_link/core/domain/entities/chat_entity.dart';
 import 'package:edu_link/core/domain/entities/message_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
@@ -15,33 +16,41 @@ class ChatViewBody extends StatefulWidget {
 }
 
 class _ChatViewBodyState extends State<ChatViewBody> {
-  late ChatService _chatService;
-  late List<Message> _messages;
-  late TextEditingController _messageController;
-  final UserEntity? _sender = getUser;
+  late final ChatService _chatService;
+  late final TextEditingController _messageController;
+  late final UserEntity? _sender;
   @override
   void initState() {
     super.initState();
-    _chatService = ChatService();
-    _messages = [];
+    _chatService = const ChatService();
     _messageController = TextEditingController();
+    _sender = getUser;
     unawaited(_initializeChat());
   }
 
-  Future<void> _initializeChat() =>
-      _chatService.createChat(_sender!.id!, widget.receiver.id!);
-
-  Future<void> _sendMessage() async {
-    if (_messageController.text.isEmpty) return;
-    final receiver = widget.receiver;
-    final message = Message(
-      userId: _sender!.id!,
-      text: _messageController.text,
-      date: DateTime.now(),
-    );
-    await _chatService.sendMessage(_sender.id!, receiver.id!, message);
-    _messageController.clear();
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
   }
+
+  Future<void> _initializeChat() =>
+      _chatService.init(_sender!.id!, widget.receiver.id!);
+
+  Future<void> _sendMessage() async =>
+      _messageController.text.isEmpty
+          ? null
+          : _chatService
+              .sendMessage(
+                _sender!.id!,
+                widget.receiver.id!,
+                MessageEntity(
+                  user: _sender,
+                  text: _messageController.text,
+                  date: DateTime.now(),
+                ),
+              )
+              .then((_) => _messageController.clear());
 
   @override
   Widget build(BuildContext context) {
@@ -51,29 +60,29 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       child: Column(
         children: [
           Expanded(
-            child: StreamBuilder<List<Message>>(
-              stream: _chatService.getChatMessages(_sender!.id!, receiver.id!),
+            child: StreamBuilder<ChatEntity>(
+              stream: _chatService.getChat(_sender!.id!, receiver.id!),
               builder: (_, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                if (!snapshot.hasData) {
                   return const Center(child: Text('No messages yet.'));
                 }
-                _messages = snapshot.data!;
+                final messages = snapshot.data?.messages?.reversed.toList();
                 return ListView.builder(
                   reverse: true,
-                  itemCount: _messages.length,
+                  itemCount: messages?.length,
                   itemBuilder: (_, index) {
-                    final message = _messages[index];
-                    final isSender = message.userId == _sender.id;
+                    final message = messages?[index];
+                    final isSender = message?.user?.id == _sender.id;
                     return ChatBubble(
-                      text: message.text!,
+                      text: message!.text!,
                       user: isSender ? _sender : receiver,
                       isSender: isSender,
                       isSameUser:
-                          index < _messages.length - 1 &&
-                          _messages[index + 1].userId == message.userId,
+                          index < (messages?.length ?? 0) - 1 &&
+                          messages?[index + 1].user?.id == message.user?.id,
                     );
                   },
                 );

@@ -1,30 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 
-class Message {
-  Message({this.userId, this.text, this.date, this.id});
-
-  factory Message.fromFirestore(Map<String, dynamic> data, String messageId) {
-    final date = switch (data['date']) {
+class MessageEntity {
+  MessageEntity({this.user, this.text, this.date});
+  factory MessageEntity.fromMap(Map<String, dynamic>? data) {
+    final date = switch (data?['date']) {
       Timestamp t => t.toDate(),
       DateTime d => d,
       _ => DateTime.now(),
     };
-    return Message(
-      userId: data['userId'],
-      text: data['text'],
+    return MessageEntity(
+      user: UserEntity(id: data?['userId']),
+      text: data?['text'],
       date: date,
-      id: messageId,
     );
   }
-  final String? userId;
+  final UserEntity? user;
   final String? text;
   final DateTime? date;
-  final String? id;
-
-  Map<String, dynamic> toFirestore() => {
-    'userId': userId,
+  Map<String, dynamic> toMap() => {
+    'userId': user?.id,
     'text': text,
     'date': date,
-    'id': id,
   };
 }

@@ -56,7 +56,8 @@ class UserRepo {
 
   Future<UserEntity?> get({
     required String documentId,
-    bool isProfessor = false,
+    bool getCourses = false,
+    bool toSharedPref = false,
   }) async {
     try {
       final doc = await _fireStore.getDocument(
@@ -69,15 +70,15 @@ class UserRepo {
         return null;
       }
       final courses =
-          isProfessor
-              ? <CourseEntity>[]
-              : (await const CoursesRepo().getMultibleCourses(
+          getCourses
+              ? (await const CoursesRepo().getMultibleCourses(
                     (data['coursesIds'] as List<dynamic>?)?.cast<String>() ??
                         [],
                   ))?.toList() ??
-                  [];
+                  []
+              : <CourseEntity>[];
       final user = UserEntity.fromMap(data).copyWith(courses: courses);
-      if (!isProfessor) {
+      if (toSharedPref) {
         await SharedPrefSingleton.setString(
           Endpoints.user,
           jsonEncode(user.toMap(toSharedPref: true)),
@@ -129,11 +130,11 @@ class UserRepo {
         controller.add(user.copyWith(courses: courses));
       });
     });
-    controller.onCancel =
-        () async => !controller.isClosed ? controller.close() : null;
     await for (final user in controller.stream) {
       yield user;
     }
+    controller.onCancel =
+        () async => !controller.isClosed ? controller.close() : null;
   }
 
   Stream<List<UserEntity>?> getMultibleUsersStream(List<String?>? userIds) =>

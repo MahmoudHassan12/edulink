@@ -1,27 +1,41 @@
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/features/chat/presentation/views/chat_list_view.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/app_drawer.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/e_navigation_bar.dart';
 import 'package:edu_link/features/home/presentation/views/widgets/home_view_body.dart'
     show HomeViewBody;
 import 'package:flutter/material.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  int _selectedIndex = 1;
+  void _onDestinationSelected(int index) =>
+      index != _selectedIndex ? setState(() => _selectedIndex = index) : null;
+  @override
   Widget build(BuildContext context) => Scaffold(
-    body: const HomeViewBody(),
+    body: _pages[_selectedIndex],
     floatingActionButton:
         (getUser?.isProfessor ?? false)
-            ? const AddCourseFloatingButton()
+            ? const _AddCourseFloatingButton()
             : null,
     drawer: const AppDrawer(),
-    bottomNavigationBar: const ENavigationBar(),
+    bottomNavigationBar: ENavigationBar(
+      selectedIndex: _selectedIndex,
+      onDestinationSelected: _onDestinationSelected,
+    ),
   );
 }
 
-class AddCourseFloatingButton extends StatelessWidget {
-  const AddCourseFloatingButton({super.key});
+const List<Widget> _pages = [ChatListView(), HomeViewBody(), SizedBox()];
+
+class _AddCourseFloatingButton extends StatelessWidget {
+  const _AddCourseFloatingButton();
   @override
   FloatingActionButton build(BuildContext context) => FloatingActionButton(
     onPressed: () async => manageCourseNavigation(context),

@@ -74,8 +74,11 @@ class AuthRepo {
             log('Failed to add user: $e');
           });
 
-  Future<UserEntity?> _get({required String documentId}) =>
-      _userRepo.get(documentId: documentId);
+  Future<UserEntity?> _get({required String documentId}) => _userRepo.get(
+    documentId: documentId,
+    getCourses: true,
+    toSharedPref: true,
+  );
 
   Future<void> update() => _userRepo
       .update(data: getUser!.toMap(), documentId: _uid)

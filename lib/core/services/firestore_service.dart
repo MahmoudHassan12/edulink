@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'
         FirebaseFirestore,
         QuerySnapshot,
         SetOptions;
+import 'package:edu_link/core/domain/entities/order_by_entity.dart';
 
 class FirestoreService {
   const FirestoreService();
@@ -48,7 +49,7 @@ class FirestoreService {
   }) => _instance
       .collection(path)
       .doc(documentId)
-      .set(data)
+      .set(data, SetOptions(merge: true))
       .onError<FirebaseException>(
         (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
       )
@@ -111,8 +112,14 @@ class FirestoreService {
   Stream<DocumentSnapshot<Map<String, dynamic>>> getDocumentStream({
     required String path,
     required String documentId,
+    OrderByEntity? orderBy,
   }) async* {
-    final snapshots = _instance.collection(path).doc(documentId).snapshots();
+    var collection = _instance.collection(path);
+    if (orderBy != null) {
+      collection =
+          collection..orderBy(orderBy.field, descending: orderBy.descending);
+    }
+    final snapshots = collection.doc(documentId).snapshots();
     await for (final snapshot in snapshots) {
       yield snapshot;
     }
@@ -127,13 +134,32 @@ class FirestoreService {
       yield [];
       return;
     }
-
     final stream =
         _instance
             .collection(path)
             .where(FieldPath.documentId, whereIn: documentIds)
             .snapshots();
 
+    await for (final snapshot in stream) {
+      yield snapshot.docs;
+    }
+  }
+
+  Stream<List<DocumentSnapshot<Map<String, dynamic>>>>
+  getMultibleDocumentStreamWithSpecificIds({
+    required String path,
+    required String field,
+    String? documentId,
+  }) async* {
+    if (documentId == null || documentId.isEmpty) {
+      yield [];
+      return;
+    }
+    final stream =
+        _instance
+            .collection(path)
+            .where(field, arrayContains: documentId)
+            .snapshots();
     await for (final snapshot in stream) {
       yield snapshot.docs;
     }
