@@ -53,8 +53,8 @@ class CourseDetailsViewBody extends StatelessWidget {
             EText(course.description!),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: () {},
-              //  onPressed: () => courseContentNavigation(context, extra: course),
+              onPressed:
+                  () async => contentNavigation(context, extra: course.id),
               icon: const Icon(Icons.folder_rounded),
               label: const Text('Course Content'),
               style: ElevatedButton.styleFrom(

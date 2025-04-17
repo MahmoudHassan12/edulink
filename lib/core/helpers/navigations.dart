@@ -46,10 +46,13 @@ Future<void> qAForumNavigation(
 }) => _navigateTo(context, Routes.qaForumView, extra: extra);
 Future<void> questionDetailsNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.questionDetailsView, extra: extra);
+Future<void> contentNavigation(BuildContext context, {Object? extra}) =>
+    _navigateTo(context, Routes.contentView, extra: extra);
 
 /// Normal Navigations
 Future<void> aboutNavigation(BuildContext context) =>
     _navigateTo(context, Routes.aboutView);
+
 Future<void> manageProfileNavigation(BuildContext context) =>
     _navigateTo(context, Routes.manageProfileView);
 Future<void> registerCoursesNavigation(BuildContext context) =>
