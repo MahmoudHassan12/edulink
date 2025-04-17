@@ -51,6 +51,25 @@ class CourseDetailsViewBody extends StatelessWidget {
             const Divider(),
             const SizedBox(height: 8),
             EText(course.description!),
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () {},
+              //  onPressed: () => courseContentNavigation(context, extra: course),
+              icon: const Icon(Icons.folder_rounded),
+              label: const Text('Course Content'),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
           ],
         ),
       ),

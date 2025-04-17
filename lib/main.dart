@@ -1,5 +1,6 @@
 import 'package:edu_link/core/helpers/bloc_observe.dart' show BlocObserve;
 import 'package:edu_link/core/helpers/shared_pref.dart';
+import 'package:edu_link/core/services/notification_service.dart';
 import 'package:edu_link/core/services/supabase_service.dart'
     show SupabaseService;
 import 'package:edu_link/features/home/presentation/controllers/home_cubit/home_cubit.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPrefSingleton.init();
   await SupabaseService.init();
+  //await NotificationService.init();
   runApp(
     BlocProvider(create: (context) => HomeCubit(), child: const MainApp()),
   );

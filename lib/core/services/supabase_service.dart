@@ -37,8 +37,8 @@ class SupabaseService {
           })
           .onError<StorageException>((e, _) => throw e);
     }
-    return _getPublicUrl(id, filePath);
+    return getPublicUrl(id, filePath);
   }
 
-  String _getPublicUrl(String id, String path) => _from(id).getPublicUrl(path);
+  String getPublicUrl(String id, String path) => _from(id).getPublicUrl(path);
 }
