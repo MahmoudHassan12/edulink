@@ -8,6 +8,7 @@ import 'package:edu_link/features/question_details/presentation/views/widgets/qu
     show QuestionDetailsViewBody;
 import 'package:flutter/material.dart'
     show AppBar, BuildContext, Scaffold, StatelessWidget, TextEditingController;
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'
     show BlocProvider, BlocSelector, ReadContext;
 
@@ -47,27 +48,31 @@ class QuestionDetailsView extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          final testController = TextEditingController();
-          Future<void> testOnSend() async {
-            final cubit =
-                context.read<AnswerManagerCubit>()
-                  ..setQuestion(testController.text)
-                  ..setDate(DateTime.now())
-                  ..setUser(getUser!);
-            return cubit.addQuestion();
-          }
-
           return BlocProvider<AnswerManagerCubit>(
             create: (context) => AnswerManagerCubit(courseId, state.id!),
             child: Scaffold(
               appBar: AppBar(title: const EText('Question Details')),
               body: QuestionDetailsViewBody(qa: state),
-              bottomSheet: AnswerTextField(
-                labelText: 'Answer',
-                courseId: courseId,
-                questionId: state.id,
-                controller: testController,
-                onSend: () async => testOnSend(),
+              bottomSheet: Builder(
+                builder: (context) {
+                  final testController = TextEditingController();
+                  Future<void> testOnSend() async {
+                    final cubit =
+                        context.read<AnswerManagerCubit>()
+                          ..setQuestion(testController.text)
+                          ..setDate(DateTime.now())
+                          ..setUser(getUser!);
+                    return cubit.addQuestion();
+                  }
+
+                  return AnswerTextField(
+                    labelText: 'Answer',
+                    courseId: courseId,
+                    questionId: state.id,
+                    controller: testController,
+                    onSend: () async => testOnSend(),
+                  );
+                },
               ),
             ),
           );

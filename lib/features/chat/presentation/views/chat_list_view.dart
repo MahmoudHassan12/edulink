@@ -36,37 +36,42 @@ class ChatListViewBody extends StatelessWidget {
           stream: const ChatService().getChates(),
           builder: (_, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SliverToBoxAdapter(
+              return const SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator()),
               );
             }
             if (snapshot.hasError) {
-              return const SliverToBoxAdapter(
+              return const SliverFillRemaining(
                 child: Center(child: EText('Error loading chats')),
               );
             }
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const SliverToBoxAdapter(
+              return const SliverFillRemaining(
                 child: Center(child: EText('No chats available')),
               );
             }
             if (snapshot.hasData) {
-              final chats = snapshot.data!;
-              if (chats.isEmpty) {
-                return const SliverToBoxAdapter(
-                  child: Center(child: EText('No chats available')),
-                );
+              final chats =
+                  snapshot.data
+                      ?.where((chat) => chat.messages?.isNotEmpty ?? false)
+                      .toList()
+                    ?..sort(
+                      (a, b) =>
+                          b.messages?.last.date?.compareTo(
+                            a.messages?.last.date ?? DateTime.now(),
+                          ) ??
+                          0,
+                    );
+              if (chats?.isNotEmpty ?? false) {
+                return ChatList(chats: chats ?? []);
               }
+              return const SliverFillRemaining(
+                child: Center(child: EText('No chats available')),
+              );
             }
-            final chats =
-                snapshot.data?..sort(
-                  (a, b) =>
-                      b.messages?.last.date?.compareTo(
-                        a.messages?.last.date ?? DateTime.now(),
-                      ) ??
-                      0,
-                );
-            return ChatList(chats: chats ?? []);
+            return const SliverFillRemaining(
+              child: Center(child: EText('No chats available')),
+            );
           },
         ),
       ],
@@ -92,9 +97,13 @@ class ChatList extends StatelessWidget {
 class ChatTile extends StatelessWidget {
   const ChatTile({required this.chat, super.key});
   final ChatEntity chat;
-  Future<ChatEntity> get _init => const UserRepo()
-      .get(documentId: chat.users?.last.id ?? '')
-      .then((user) => chat.copyWith(users: [getUser!, user!]));
+  Future<ChatEntity> get _init {
+    final reciver = chat.users?.firstWhere((user) => user.id != getUser?.id);
+    return const UserRepo()
+        .get(documentId: reciver!.id!)
+        .then((user) => chat.copyWith(users: [getUser!, user!]));
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
