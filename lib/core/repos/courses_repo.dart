@@ -1,6 +1,7 @@
 import 'dart:developer' show log;
 import 'dart:io' show File;
 import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
+import 'package:edu_link/core/domain/entities/answer_entity.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/question_entity.dart'
     show QuestionEntity;
@@ -54,19 +55,50 @@ class CoursesRepo {
             log('Failed to add questions: $e');
           });
 
-  Future<List<CourseEntity>?> getMultibleCourses(List<String?>? courseIds) =>
+  Future<void> deleteQuestion(QuestionEntity question, String? courseId) =>
+      _fireStore
+          .removeListInDocument(
+            path: _coursesPath,
+            listKey: 'questions',
+            list: [question.toMap()],
+            documentId: courseId,
+          )
+          .then((_) => log('Question deleted successfully!'));
+
+  Future<void> addAnswer(
+    String courseId,
+    String questionId,
+    AnswerEntity answer,
+  ) async {
+    final course = await getCourse(courseId);
+    final questions = course.questions;
+    final question = questions?.firstWhere((q) => q.id == questionId);
+    final answers = question?.answers;
+    final tempQuestion = question!.copyWith(answers: [...?answers, answer]);
+    await deleteQuestion(question, courseId);
+    await addQuestion(tempQuestion, courseId);
+  }
+
+  Future<CourseEntity> getCourse(String courseId) => _fireStore
+      .getDocument(path: _coursesPath, documentId: courseId)
+      .then((doc) async {
+        log('Course fetched successfully!');
+        final data = doc.data();
+        return CourseEntity.fromMap(data);
+      });
+
+  Future<List<CourseEntity>?> getMultibleCourses(List<String> courseIds) =>
       _fireStore
           .getMultibleDocuments(path: _coursesPath, documentIds: courseIds)
           .then((docs) async {
             log('${docs?.length} Courses fetched successfully!');
             return Future.wait(
               docs?.map((e) async {
-                    final data = e.data();
                     final professor = await const UserRepo().get(
-                      documentId: data?['professorId'],
+                      documentId: e['professorId'],
                     );
                     return CourseEntity.fromMap(
-                      data,
+                      e,
                     ).copyWith(professor: professor);
                   }).toList() ??
                   <Future<CourseEntity>>[],
@@ -82,15 +114,12 @@ class CoursesRepo {
           log('${docs.length} Courses fetched successfully!');
           return Future.wait<CourseEntity>(
             docs.map((e) async {
-              final data = e.data();
               final professorStream = const UserRepo().getStream(
-                documentId: data?['professorId'],
+                documentId: e['professorId'],
                 isProfessor: true,
               );
               await for (final professor in professorStream) {
-                return CourseEntity.fromMap(
-                  data,
-                ).copyWith(professor: professor);
+                return CourseEntity.fromMap(e).copyWith(professor: professor);
               }
               throw Exception('Professor stream ended without value');
             }).toList(),

@@ -98,8 +98,7 @@ class UserRepo {
             log('${docs?.length} Users fetched successfully!');
             return Future.wait(
               docs?.map((e) async {
-                    final data = e.data();
-                    return UserEntity.fromMap(data);
+                    return UserEntity.fromMap(e);
                   }).toList() ??
                   <Future<UserEntity>>[],
             );
@@ -143,10 +142,7 @@ class UserRepo {
           .asyncMap((docs) async {
             log('${docs.length} Users fetched successfully!');
             return Future.wait<UserEntity>(
-              docs.map((e) async {
-                final data = e.data();
-                return UserEntity.fromMap(data);
-              }).toList(),
+              docs.map((e) async => UserEntity.fromMap(e)).toList(),
             );
           });
 

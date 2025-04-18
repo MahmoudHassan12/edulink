@@ -44,8 +44,10 @@ Future<void> qAForumNavigation(
   BuildContext context, {
   required CourseEntity extra,
 }) => _navigateTo(context, Routes.qaForumView, extra: extra);
-Future<void> questionDetailsNavigation(BuildContext context, {Object? extra}) =>
-    _navigateTo(context, Routes.questionDetailsView, extra: extra);
+Future<void> questionDetailsNavigation(
+  BuildContext context, {
+  required Map<String, dynamic> extra,
+}) => _navigateTo(context, Routes.questionDetailsView, extra: extra);
 Future<void> contentNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.contentView, extra: extra);
 

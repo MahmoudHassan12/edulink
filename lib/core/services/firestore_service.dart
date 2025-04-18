@@ -42,6 +42,38 @@ class FirestoreService {
       )
       .catchError((e) => log('$e'));
 
+  Future<void> removeListInDocument({
+    required String path,
+    required String listKey,
+    required List<dynamic> list,
+    String? documentId,
+  }) => _instance
+      .collection(path)
+      .doc(documentId)
+      .update({listKey: FieldValue.arrayRemove(list)})
+      .onError<FirebaseException>(
+        (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
+      )
+      .catchError((e) => log('$e'));
+
+  Future<void> addNestedListInListInDocument({
+    required String path,
+    required String listKey,
+    required String nestedListKey,
+    required String nestedId,
+    required List<dynamic> list,
+    String? documentId,
+  }) => _instance
+      .collection(path)
+      .doc(documentId)
+      .update({
+        '$listKey.$nestedListKey.$nestedId': FieldValue.arrayUnion(list),
+      })
+      .onError<FirebaseException>(
+        (e, _) => log('Code: ${e.code}, Message: ${e.message}, $e'),
+      )
+      .catchError((e) => log('$e'));
+
   Future<void> update({
     required Map<String, dynamic> data,
     required String path,
@@ -70,31 +102,34 @@ class FirestoreService {
         throw e;
       });
 
-  Future<List<DocumentSnapshot<Map<String, dynamic>>>?> getMultibleDocuments({
+  Future<List<Map<String, dynamic>>?> getMultibleDocuments({
     required String path,
-    List<String?>? documentIds,
-  }) async {
-    if (documentIds == null) return null;
-    return Future.wait(
-      documentIds
-          .map(
-            (id) => _instance
-                .collection(path)
-                .doc(id)
-                .get()
-                .onError<FirebaseException>((e, _) {
-                  log('Code: ${e.code}, Message: ${e.message}, $e');
-                  throw e;
-                })
-                .catchError((e) {
-                  log('$e');
-                  throw e;
-                }),
-          )
-          .toList(),
-    );
-  }
+    required List<String?>? documentIds,
+  }) => _instance
+      .collection(path)
+      .where(FieldPath.documentId, whereIn: documentIds)
+      .get()
+      .then((value) => value.docs.map((e) => e.data()).toList());
 
+  // if (documentIds == null) return null;
+  // return Future.wait(
+  //   documentIds
+  //       .map(
+  //         (id) => _instance
+  //             .collection(path)
+  //             .doc(id)
+  //             .get()
+  //             .onError<FirebaseException>((e, _) {
+  //               log('Code: ${e.code}, Message: ${e.message}, $e');
+  //               throw e;
+  //             })
+  //             .catchError((e) {
+  //               log('$e');
+  //               throw e;
+  //             }),
+  //       )
+  //       .toList(),
+  // );
   Future<QuerySnapshot<Map<String, dynamic>>> getAll({required String path}) =>
       _instance
           .collection(path)
@@ -125,25 +160,14 @@ class FirestoreService {
     }
   }
 
-  Stream<List<DocumentSnapshot<Map<String, dynamic>>>>
-  getMultibleDocumentStream({
+  Stream<List<Map<String, dynamic>>> getMultibleDocumentStream({
     required String path,
     List<String?>? documentIds,
-  }) async* {
-    if (documentIds == null || documentIds.isEmpty) {
-      yield [];
-      return;
-    }
-    final stream =
-        _instance
-            .collection(path)
-            .where(FieldPath.documentId, whereIn: documentIds)
-            .snapshots();
-
-    await for (final snapshot in stream) {
-      yield snapshot.docs;
-    }
-  }
+  }) => _instance
+      .collection(path)
+      .where(FieldPath.documentId, whereIn: documentIds)
+      .snapshots()
+      .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
 
   Stream<List<DocumentSnapshot<Map<String, dynamic>>>>
   getMultibleDocumentStreamWithSpecificIds({

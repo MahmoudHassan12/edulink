@@ -1,5 +1,6 @@
 import 'package:edu_link/core/constants/borders.dart' show xsBorder;
 import 'package:edu_link/core/domain/entities/question_entity.dart';
+import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart'
     show questionDetailsNavigation;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
@@ -11,8 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class QuestionCard extends StatelessWidget {
-  const QuestionCard({required this.qa, super.key});
+  const QuestionCard({required this.qa, this.courseId, super.key});
   final QuestionEntity qa;
+  final String? courseId;
   @override
   Widget build(BuildContext context) {
     final aLength = qa.answers?.length ?? 0;
@@ -26,19 +28,23 @@ class QuestionCard extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: () async => questionDetailsNavigation(context, extra: qa),
+          onTap:
+              () async => questionDetailsNavigation(
+                context,
+                extra: {'qa': qa, 'context': context, 'courseId': courseId},
+              ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
                 minTileHeight: 56,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                leading: UserPhoto(user: user!),
+                leading: UserPhoto(user: user),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     EText(
-                      user.name ?? 'Anonymous',
+                      user?.name ?? 'Anonymous',
                       style: const TextStyle(fontSize: 14),
                     ),
                     EText(
@@ -74,7 +80,8 @@ class QuestionCard extends StatelessWidget {
                       label: 'Answer',
                       hasMinimumSize: false,
                     ),
-                    TextButton(onPressed: () {}, child: const Text('Delete')),
+                    if (user?.id == getUser?.id)
+                      TextButton(onPressed: () {}, child: const Text('Delete')),
                     const Spacer(),
                     const FavoriteButton(),
                   ],

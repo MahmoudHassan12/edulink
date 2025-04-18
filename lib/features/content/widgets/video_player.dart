@@ -11,20 +11,30 @@ class VideoPlayerScreen extends StatefulWidget {
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  late VideoPlayerController _controller;
+  late final VideoPlayerController _controller;
   late final Uri vidUrl;
-  late Timer _timer;
+  late final Timer _timer;
 
   @override
   void initState() {
     super.initState();
     vidUrl = Uri.parse(widget.videoUrl);
-    _controller = VideoPlayerController.networkUrl(vidUrl)
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.play();
-        _startPositionUpdater();
-      });
+    unawaited(_initVideoContoller());
+    // _controller = VideoPlayerController.networkUrl(vidUrl)
+    //   ..initialize().then((_) {
+    //     setState(() {});
+    //     _controller.play();
+    //     _startPositionUpdater();
+    //   });
+  }
+
+  Future<void> _initVideoContoller() {
+    _controller = VideoPlayerController.networkUrl(vidUrl);
+    return _controller.initialize().then((_) {
+      setState(() {});
+      _controller.play();
+      _startPositionUpdater();
+    });
   }
 
   void _startPositionUpdater() {
@@ -35,11 +45,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     });
   }
 
-  void _seekToPosition(double value) {
+  Future<void> _seekToPosition(double value) async {
     final position = Duration(seconds: value.toInt());
-    setState(() {
-      _controller.seekTo(position);
-    });
+    await _controller.seekTo(position);
+    setState(() {});
   }
 
   @override
@@ -75,7 +84,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 Slider(
                   value: _controller.value.position.inSeconds.toDouble(),
                   max: _controller.value.duration.inSeconds.toDouble(),
-                  onChanged: _seekToPosition,
+                  onChanged: (value) async => _seekToPosition(value),
                 ),
               ],
             )
@@ -93,12 +102,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
                 },
               ),
               FloatingActionButton(
-                onPressed: () {
-                  setState(() {
-                    _controller.value.isPlaying
-                        ? _controller.pause()
-                        : _controller.play();
-                  });
+                onPressed: () async {
+                  _controller.value.isPlaying
+                      ? await _controller.pause()
+                      : await _controller.play();
+                  setState(() {});
                 },
                 child: Icon(
                   _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
@@ -129,7 +137,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    unawaited(_controller.dispose());
     _timer.cancel();
     super.dispose();
   }

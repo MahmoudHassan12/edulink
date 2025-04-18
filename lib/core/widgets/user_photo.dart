@@ -12,20 +12,20 @@ class UserPhoto extends StatelessWidget {
     this.hasNavigation = true,
     super.key,
   });
-  final UserEntity user;
+  final UserEntity? user;
   final double? radius;
   final bool isHero;
   final bool hasNavigation;
   @override
   Widget build(BuildContext context) {
     final url =
-        user.imageUrl ??
+        user?.imageUrl ??
         getUser?.imageUrl ??
         'https://avatar.iran.liara.run/public/32';
     final circleAvatar = GestureDetector(
       onTap:
           hasNavigation
-              ? () async => profileNavigation(context, extra: user)
+              ? () async => profileNavigation(context, extra: user ?? getUser!)
               : null,
       child: CircleAvatar(
         backgroundImage: CachedNetworkImageProvider(url),

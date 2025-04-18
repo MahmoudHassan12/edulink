@@ -3,7 +3,7 @@ import 'package:edu_link/features/content/domain/content_item_entity.dart';
 import 'package:edu_link/features/content/widgets/content_card.dart';
 import 'package:flutter/material.dart';
 
-class ContentViewBody extends StatefulWidget {
+class ContentViewBody extends StatelessWidget {
   const ContentViewBody({required this.courseId, super.key});
   final String courseId;
 

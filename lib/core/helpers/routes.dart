@@ -1,6 +1,5 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
-import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/services/auth_service.dart' show AuthService;
@@ -65,8 +64,14 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
   Routes.qaForumView:
       (context, args) => QAForumView(course: args! as CourseEntity),
-  Routes.questionDetailsView:
-      (context, args) => QuestionDetailsView(qa: args! as QuestionEntity),
+  Routes.questionDetailsView: (context, args) {
+    final arg = args as Map<String, dynamic>?;
+    return QuestionDetailsView(
+      qa: arg!['qa'],
+      qDContext: arg['context'],
+      courseId: arg['courseId'],
+    );
+  },
   Routes.contentView: (context, args) => ContentView(courseId: args! as String),
 
   /// Routes without arguments
