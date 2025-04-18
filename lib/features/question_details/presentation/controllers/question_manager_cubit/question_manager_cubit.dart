@@ -14,6 +14,12 @@ class QuestionManagerCubit extends Cubit<QuestionManagerState> {
   QuestionEntity _updateQuestion(QuestionEntity question) =>
       _question = question;
 
+  void setId() {
+    final result = _question.setId();
+    _updateQuestion(result);
+    emit(_QuestionUpdated());
+  }
+
   void setQuestion(String question) {
     final result = _question.setQuestion(question);
     _updateQuestion(result);

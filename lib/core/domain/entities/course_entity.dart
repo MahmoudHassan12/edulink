@@ -81,10 +81,9 @@ class CourseEntity {
     'creditHour': creditHour,
     'lectures': lectures,
     'duration': duration?.toMap(),
-    if (toSharedPref)
-      'professor': professor?.toMap(toSharedPref: true)
-    else
-      'professorId': professor?.id,
+    ...(toSharedPref
+        ? {'professor': professor?.toMap(toSharedPref: true)}
+        : {'professorId': professor?.id}),
     'questions':
         questions?.map((e) => e.toMap(toSharedPref: toSharedPref)).toList(),
   };

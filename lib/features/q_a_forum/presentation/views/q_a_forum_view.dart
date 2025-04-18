@@ -4,8 +4,7 @@ import 'package:edu_link/features/q_a_forum/presentation/views/widgets/q_a_forum
     show QAForumViewBody;
 import 'package:edu_link/features/question_details/presentation/controllers/question_manager_cubit/question_manager_cubit.dart'
     show QuestionManagerCubit;
-import 'package:flutter/material.dart'
-    show BuildContext, Scaffold, StatelessWidget;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocSelector;
 
 class QAForumView extends StatelessWidget {
@@ -17,17 +16,22 @@ class QAForumView extends StatelessWidget {
       selector: (state) {
         if (state is HomeSuccess) {
           return state.courses?.firstWhere(
-            (e) => e.id == course.id,
+            (e) => e.id == course.copyWith().id,
             orElse: () => course,
           );
         }
         return null;
       },
-      builder:
-          (_, course) => BlocProvider<QuestionManagerCubit>(
-            create: (_) => QuestionManagerCubit(course.id!),
-            child: QAForumViewBody(course: course!),
+      builder: (_, course) {
+        return BlocProvider<QuestionManagerCubit>(
+          create: (context) => QuestionManagerCubit(course.id!),
+          child: QAForumViewBody(
+            course: course!.copyWith(
+              questions: course.questions?.reversed.toList(),
+            ),
           ),
+        );
+      },
     ),
   );
 }
