@@ -4,9 +4,13 @@ import 'package:edu_link/features/content/widgets/content_card.dart';
 import 'package:flutter/material.dart';
 
 class ContentViewBody extends StatefulWidget {
-  const ContentViewBody({required this.courseId, super.key});
+  const ContentViewBody({
+    required this.courseId,
+    required this.isProfessor,
+    super.key,
+  });
   final String courseId;
-
+  final bool isProfessor;
   @override
   State<ContentViewBody> createState() => _ContentViewBodyState();
 }
@@ -118,21 +122,26 @@ class _ContentViewBodyState extends State<ContentViewBody> {
       itemCount: _contentItems.length,
       itemBuilder: (context, index) {
         final item = _contentItems[index];
-        return Dismissible(
-          key: Key(item.url),
-          direction: DismissDirection.endToStart,
-          confirmDismiss: (direction) => _confirmDismiss(context, item),
-          onDismissed: (direction) {
-            _deleteContent(item);
-          },
-          background: Container(
-            color: Colors.red,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            alignment: Alignment.centerRight,
-            child: const Icon(Icons.delete, color: Colors.white, size: 30),
-          ),
-          child: ContentItemCard(item: item),
-        );
+
+        if (widget.isProfessor) {
+          return Dismissible(
+            key: Key(item.url),
+            direction: DismissDirection.endToStart,
+            confirmDismiss: (direction) => _confirmDismiss(context, item),
+            onDismissed: (direction) {
+              _deleteContent(item);
+            },
+            background: Container(
+              color: Colors.red,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              alignment: Alignment.centerRight,
+              child: const Icon(Icons.delete, color: Colors.white, size: 30),
+            ),
+            child: ContentItemCard(item: item),
+          );
+        } else {
+          return ContentItemCard(item: item);
+        }
       },
     );
   }

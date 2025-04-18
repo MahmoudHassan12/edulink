@@ -21,7 +21,10 @@ class _ContentViewState extends State<ContentView> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: const ContentAppbar(),
-    body: ContentViewBody(courseId: widget.courseId),
+    body: ContentViewBody(
+      courseId: widget.courseId,
+      isProfessor: getUser?.isProfessor ?? false,
+    ),
     floatingActionButton:
         getUser?.isProfessor ?? false
             ? FloatingActionButton(
