@@ -17,6 +17,27 @@ class ContentService {
     return _supabaseService.upload('courses', '$courseId/$folder', file);
   }
 
+  Future<void> deleteContent(
+    String courseId,
+    ContentType type,
+    String fileName,
+  ) async {
+    final folder = _getFolderName(type);
+    final path = '$courseId/$folder/$fileName';
+
+    try {
+      final removedPaths = await _supabase.client.storage
+          .from('courses')
+          .remove([path]);
+
+      if (removedPaths.isEmpty) {
+        throw Exception('File not found or could not be deleted.');
+      }
+    } catch (e) {
+      throw Exception('Failed to delete file: $e');
+    }
+  }
+
   Future<List<ContentItem>> fetchContentsForCourse(String courseId) async {
     final contents = <ContentItem>[];
 
@@ -33,6 +54,7 @@ class ContentService {
         );
         contents.add(
           ContentItem(
+            id: file.name,
             title: file.name,
             description: 'Uploaded ${_typeName(type)}',
             type: type,

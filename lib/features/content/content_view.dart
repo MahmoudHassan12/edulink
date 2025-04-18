@@ -43,9 +43,8 @@ class _ContentViewState extends State<ContentView> {
           // ignore: use_if_null_to_convert_nulls_to_bools
           _user?.isProfessor == true
               ? FloatingActionButton(
-                child: const Icon(Icons.add),
-
                 onPressed: handleUploading,
+                child: const Icon(Icons.add),
               )
               : null,
     );
