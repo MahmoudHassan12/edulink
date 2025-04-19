@@ -7,8 +7,13 @@ import 'package:edu_link/features/question_details/presentation/views/answer_tex
 import 'package:edu_link/features/question_details/presentation/views/widgets/question_details_view_body.dart'
     show QuestionDetailsViewBody;
 import 'package:flutter/material.dart'
-    show AppBar, BuildContext, Scaffold, StatelessWidget, TextEditingController;
-import 'package:flutter/src/widgets/basic.dart';
+    show
+        AppBar,
+        BuildContext,
+        Builder,
+        Scaffold,
+        StatelessWidget,
+        TextEditingController;
 import 'package:flutter_bloc/flutter_bloc.dart'
     show BlocProvider, BlocSelector, ReadContext;
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:edu_link/core/services/content_service.dart';
 import 'package:edu_link/features/content/domain/content_item_entity.dart';
 import 'package:edu_link/features/content/widgets/content_card.dart';
@@ -23,7 +25,7 @@ class _ContentViewBodyState extends State<ContentViewBody> {
   @override
   void initState() {
     super.initState();
-    _loadContent();
+    unawaited(_loadContent());
   }
 
   Future<void> _loadContent() async {
@@ -39,15 +41,17 @@ class _ContentViewBodyState extends State<ContentViewBody> {
       setState(() {
         _isLoading = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Error loading content: $e',
-            style: const TextStyle(color: Colors.white),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Error loading content: $e',
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
           ),
-          backgroundColor: Colors.red,
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -59,26 +63,29 @@ class _ContentViewBodyState extends State<ContentViewBody> {
       setState(() {
         _contentItems.remove(item);
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Content deleted successfully.',
-            style: const TextStyle(color: Colors.white),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Content deleted successfully.',
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
           ),
-          backgroundColor: Colors.red,
-        ),
-      );
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Failed to delete: $e',
-            style: const TextStyle(color: Colors.white),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Failed to delete: $e',
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
           ),
-          backgroundColor: Colors.red,
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -127,10 +134,8 @@ class _ContentViewBodyState extends State<ContentViewBody> {
           return Dismissible(
             key: Key(item.url),
             direction: DismissDirection.endToStart,
-            confirmDismiss: (direction) => _confirmDismiss(context, item),
-            onDismissed: (direction) {
-              _deleteContent(item);
-            },
+            confirmDismiss: (direction) async => _confirmDismiss(context, item),
+            onDismissed: (direction) async => _deleteContent(item),
             background: Container(
               color: Colors.red,
               padding: const EdgeInsets.symmetric(horizontal: 20),
