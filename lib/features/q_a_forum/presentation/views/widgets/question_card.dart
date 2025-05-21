@@ -12,9 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class QuestionCard extends StatelessWidget {
-  const QuestionCard({required this.qa, this.courseId, super.key});
+  const QuestionCard({
+    required this.qa,
+    this.courseId,
+    this.clickable = true,
+    super.key,
+  });
   final QuestionEntity qa;
   final String? courseId;
+  final bool clickable;
   @override
   Widget build(BuildContext context) {
     final aLength = qa.answers?.length ?? 0;
@@ -24,15 +30,16 @@ class QuestionCard extends StatelessWidget {
     return Hero(
       tag: qa.hashCode,
       child: Card.filled(
-        shape: const RoundedRectangleBorder(borderRadius: xsBorder),
+        shape: const RoundedSuperellipseBorder(borderRadius: xsBorder),
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap:
-              () async => questionDetailsNavigation(
-                context,
-                extra: {'qa': qa, 'context': context, 'courseId': courseId},
-              ),
+          onTap: clickable
+              ? () async => questionDetailsNavigation(
+                  context,
+                  extra: {'qa': qa, 'context': context, 'courseId': courseId},
+                )
+              : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

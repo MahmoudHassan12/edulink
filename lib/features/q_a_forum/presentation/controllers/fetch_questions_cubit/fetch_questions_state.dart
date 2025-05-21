@@ -1,24 +1,24 @@
 part of 'fetch_questions_cubit.dart';
 
 @immutable
-sealed class FetchQuestionState {
-  const FetchQuestionState();
+sealed class FetchQuestionsState {
+  const FetchQuestionsState();
 }
 
-final class _FetchQuestionInitial extends FetchQuestionState {
+final class _FetchQuestionInitial extends FetchQuestionsState {
   const _FetchQuestionInitial();
 }
 
-final class QuestionLoading extends FetchQuestionState {
+final class QuestionLoading extends FetchQuestionsState {
   const QuestionLoading();
 }
 
-final class QuestionSuccess extends FetchQuestionState {
+final class QuestionSuccess extends FetchQuestionsState {
   const QuestionSuccess(this.questions);
   final List<QuestionEntity> questions;
 }
 
-final class QuestionFailure extends FetchQuestionState {
+final class QuestionFailure extends FetchQuestionsState {
   const QuestionFailure(this.message);
   final String message;
 }

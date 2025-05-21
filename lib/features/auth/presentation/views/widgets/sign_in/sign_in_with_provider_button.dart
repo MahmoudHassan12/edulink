@@ -21,7 +21,7 @@ class SignInWithProviderButton extends StatelessWidget {
       onPressed: isLoading ? null : onPressed,
       style: OutlinedButton.styleFrom(
         minimumSize: Size(MediaQuery.sizeOf(context).longestSide, 56),
-        shape: const RoundedRectangleBorder(borderRadius: xsBorder),
+        shape: const RoundedSuperellipseBorder(borderRadius: xsBorder),
       ),
       icon: Icon(iconData, size: 24, color: onSurface),
       label: EText(label, style: TextStyle(color: onSurface, fontSize: 16)),

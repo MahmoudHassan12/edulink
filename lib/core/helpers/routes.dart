@@ -57,18 +57,18 @@ abstract class Routes {
 final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   /// Routes with arguments
   Routes.chatView: (context, args) => ChatView(receiver: args! as UserEntity),
-  Routes.courseDetailsView:
-      (context, args) => CourseDetailsView(course: args! as CourseEntity),
-  Routes.manageCourseView:
-      (context, args) => ManageCourseView(course: args as CourseEntity?),
+  Routes.courseDetailsView: (context, args) =>
+      CourseDetailsView(course: args! as CourseEntity),
+  Routes.manageCourseView: (context, args) =>
+      ManageCourseView(course: args as CourseEntity?),
   Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
-  Routes.qaForumView:
-      (context, args) => QAForumView(course: args! as CourseEntity),
+  Routes.qaForumView: (context, args) =>
+      QAForumView(course: args! as CourseEntity),
   Routes.questionDetailsView: (context, args) {
     final arg = args as Map<String, dynamic>?;
     return QuestionDetailsView(
       qa: arg!['qa'],
-      qDContext: arg['context'],
+      qaContext: arg['context'],
       courseId: arg['courseId'],
     );
   },
@@ -86,20 +86,18 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
 };
 
 RouterConfig<RouteMatchList> routerConfig = GoRouter(
-  initialLocation:
-      const AuthService().isSignedIn()
-          ? (getUser?.isValid ?? false)
-              ? Routes.homeView
-              : Routes.manageProfileView
-          : Routes.signinView,
-  routes:
-      _routes.entries
-          .map(
-            (entry) => GoRoute(
-              path: entry.key,
-              name: entry.key,
-              builder: (context, state) => entry.value(context, state.extra),
-            ),
-          )
-          .toList(),
+  initialLocation: const AuthService().isSignedIn()
+      ? (getUser?.isValid ?? false)
+            ? Routes.homeView
+            : Routes.manageProfileView
+      : Routes.signinView,
+  routes: _routes.entries
+      .map(
+        (entry) => GoRoute(
+          path: entry.key,
+          name: entry.key,
+          builder: (context, state) => entry.value(context, state.extra),
+        ),
+      )
+      .toList(),
 );

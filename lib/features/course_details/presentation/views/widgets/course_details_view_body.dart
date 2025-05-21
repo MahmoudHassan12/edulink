@@ -16,17 +16,15 @@ class CourseDetailsViewBody extends StatelessWidget {
         centerTitle: true,
         floating: true,
         snap: true,
-        actions:
-            (getUser?.isProfessor ?? false)
-                ? [
-                  IconButton(
-                    onPressed:
-                        () async =>
-                            manageCourseNavigation(context, extra: course),
-                    icon: const Icon(Icons.edit_rounded),
-                  ),
-                ]
-                : null,
+        actions: (getUser?.isProfessor ?? false)
+            ? [
+                IconButton(
+                  onPressed: () async =>
+                      manageCourseNavigation(context, extra: course),
+                  icon: const Icon(Icons.edit_rounded),
+                ),
+              ]
+            : null,
       ),
       SliverToBoxAdapter(
         child: AspectRatio(
@@ -53,12 +51,12 @@ class CourseDetailsViewBody extends StatelessWidget {
             EText(course.description!),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed:
-                  () async => contentNavigation(context, extra: course.id),
+              onPressed: () async =>
+                  contentNavigation(context, extra: course.id),
               icon: const Icon(Icons.folder_rounded),
               label: const Text('Course Content'),
               style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
+                shape: RoundedSuperellipseBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 14),

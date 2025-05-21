@@ -1,4 +1,5 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/navigations.dart'
     show courseDetailsNavigation;
 import 'package:edu_link/core/widgets/course_image.dart';
@@ -21,7 +22,7 @@ class Course extends StatelessWidget {
     return Card.filled(
       margin: EdgeInsets.zero,
       elevation: 0,
-      shape: const RoundedRectangleBorder(
+      shape: const RoundedSuperellipseBorder(
         borderRadius: BorderRadius.all(Radius.circular(28)),
       ),
       child: InkWell(
@@ -51,10 +52,9 @@ class Course extends StatelessWidget {
                           ],
                         ),
                       ),
-                      child:
-                          course.imageUrl == null
-                              ? const Center(child: Icon(Icons.error))
-                              : CourseImage(imageUrl: course.imageUrl!),
+                      child: course.imageUrl == null
+                          ? const Center(child: Icon(Icons.error))
+                          : CourseImage(imageUrl: course.imageUrl!),
                     ),
                     Align(
                       alignment: Alignment.topCenter,
@@ -110,7 +110,7 @@ class Course extends StatelessWidget {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 title: const EText('By'),
                 subtitle: EText(professor?.name ?? 'No Name'),
-                trailing: UserPhoto(user: professor!),
+                trailing: UserPhoto(user: professor ?? const UserEntity()),
               ),
             ),
           ],

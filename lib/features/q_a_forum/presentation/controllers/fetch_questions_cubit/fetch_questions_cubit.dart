@@ -1,7 +1,6 @@
 import 'dart:async' show StreamSubscription, unawaited;
 
 import 'package:edu_link/core/domain/entities/question_entity.dart';
-import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:flutter/foundation.dart' show immutable;
@@ -9,35 +8,57 @@ import 'package:flutter_bloc/flutter_bloc.dart' show Cubit;
 
 part 'fetch_questions_state.dart';
 
-class FetchQuestionsCubit extends Cubit<FetchQuestionState> {
-  FetchQuestionsCubit(this.courseId) : super(const _FetchQuestionInitial()) {
-    fetchQuestions();
+class FetchQuestionsCubit extends Cubit<FetchQuestionsState> {
+  FetchQuestionsCubit(this._courseId) : super(const _FetchQuestionInitial()) {
+    _fetchQuestions();
   }
-  final String courseId;
+  final String _courseId;
 
   late StreamSubscription<List<QuestionEntity>> _questionSubscription;
 
-  StreamSubscription<List<QuestionEntity>> fetchQuestions() {
+  StreamSubscription<List<QuestionEntity>> _fetchQuestions() {
     emit(const QuestionLoading());
     try {
       return _questionSubscription = const CoursesRepo()
-          .streamQuestions(courseId)
+          .streamQuestions(_courseId)
           .listen((questions) async {
+            if (questions.isEmpty) {
+              return emit(const QuestionSuccess([]));
+            }
             final usersIds = questions
                 .map((question) => question.user!.id!)
                 .toList();
-            final users = await const UserRepo().getMultipleUsers(usersIds);
-            final updatedQuestions = questions
-                .map(
-                  (question) => question.copyWith(
-                    user: users?.firstWhere(
-                      (user) => user.id == question.user?.id,
-                      orElse: () => const UserEntity(),
-                    ),
+            final questionUsers = await const UserRepo().getMultipleUsers(
+              usersIds,
+            );
+            final updatedQuestions = await Future.wait<QuestionEntity>(
+              questions.map((question) async {
+                final answers = question.answers;
+                final usersIds = answers
+                    ?.map((answer) => answer.user!.id!)
+                    .toList();
+                final users = usersIds?.isNotEmpty ?? false
+                    ? await const UserRepo().getMultipleUsers(usersIds!)
+                    : null;
+                return question.copyWith(
+                  user: questionUsers?.firstWhere(
+                    (user) => user.id == question.user?.id,
                   ),
-                )
-                .toList();
-            emit(QuestionSuccess(updatedQuestions));
+                  answers: answers
+                      ?.map(
+                        (answer) => answer.copyWith(
+                          user: users?.firstWhere(
+                            (user) => user.id == answer.user?.id,
+                          ),
+                        ),
+                      )
+                      .toList()
+                      .reversed
+                      .toList(),
+                );
+              }).toList(),
+            );
+            return emit(QuestionSuccess(updatedQuestions));
           });
     } catch (e) {
       emit(QuestionFailure(e.toString()));

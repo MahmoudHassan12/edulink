@@ -44,7 +44,7 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
                     final course = state.courses[index];
                     return Card.filled(
                       margin: const EdgeInsets.symmetric(vertical: 4),
-                      shape: const RoundedRectangleBorder(
+                      shape: const RoundedSuperellipseBorder(
                         borderRadius: sBorder,
                       ),
                       clipBehavior: Clip.antiAlias,
@@ -73,9 +73,8 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
                             });
                           },
                         ),
-                        onTap:
-                            () async =>
-                                courseDetailsNavigation(context, extra: course),
+                        onTap: () async =>
+                            courseDetailsNavigation(context, extra: course),
                       ),
                     );
                   },
@@ -102,11 +101,10 @@ class RegisterButton extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: CustomFilledButton(
         label: 'Register',
-        onPressed:
-            () async => Future.wait<void>([
-              const CoursesRepo().addCoursesIds(selectedCourses),
-              homeNavigation(context),
-            ]),
+        onPressed: () async => Future.wait<void>([
+          const CoursesRepo().addCoursesIds(selectedCourses),
+          homeNavigation(context),
+        ]),
       ),
     ),
   );
@@ -126,20 +124,19 @@ class ChooseCourse extends StatelessWidget {
   Widget build(BuildContext context) {
     final registeredCoursesIds = getUser?.courses?.map((e) => e.id).toList();
     return Checkbox(
-      shape: const RoundedRectangleBorder(
+      shape: const RoundedSuperellipseBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       value:
           (registeredCoursesIds?.contains(courseId) ?? false) ||
           selectedCourses.contains(courseId),
-      onChanged:
-          registeredCoursesIds?.contains(courseId) ?? true
-              ? null
-              : (value) {
-                if (value != null) {
-                  onSelectionChanged(value);
-                }
-              },
+      onChanged: registeredCoursesIds?.contains(courseId) ?? true
+          ? null
+          : (value) {
+              if (value != null) {
+                onSelectionChanged(value);
+              }
+            },
     );
   }
 }

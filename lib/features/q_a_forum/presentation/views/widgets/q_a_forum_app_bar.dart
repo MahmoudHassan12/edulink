@@ -29,7 +29,7 @@ class QAForumAppBar extends StatelessWidget {
       centerTitle: false,
       expandedTitleScale: 1,
     ),
-    shape: const RoundedRectangleBorder(
+    shape: const RoundedSuperellipseBorder(
       borderRadius: BorderRadius.all(Radius.circular(100)),
     ),
   );

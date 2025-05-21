@@ -9,7 +9,7 @@ import 'package:flutter/material.dart'
         MediaQuery,
         MenuStyle,
         OutlineInputBorder,
-        RoundedRectangleBorder,
+        RoundedSuperellipseBorder,
         SizedBox,
         StatelessWidget,
         Text,
@@ -45,7 +45,7 @@ class CustomDropdownMenu<T> extends StatelessWidget {
         keyboardType: TextInputType.name,
         menuStyle: const MenuStyle(
           shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: xsBorder),
+            RoundedSuperellipseBorder(borderRadius: xsBorder),
           ),
           padding: WidgetStatePropertyAll(EdgeInsets.zero),
         ),

@@ -20,9 +20,7 @@ class QAForumView extends StatelessWidget {
         ),
         BlocProvider(create: (context) => FetchQuestionsCubit(course.id!)),
       ],
-      child: QAForumViewBody(
-        course: course.copyWith(questions: course.questions?.reversed.toList()),
-      ),
+      child: QAForumViewBody(course: course),
     ),
   );
 }

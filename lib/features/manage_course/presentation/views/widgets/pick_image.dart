@@ -24,20 +24,22 @@ class PickImage extends StatelessWidget {
                       ? Image.file(image, fit: BoxFit.cover)
                       : (imageUrl?.isNotEmpty ?? false)
                       ? CachedNetworkImage(
-                        imageUrl: imageUrl!,
-                        fit: BoxFit.cover,
-                      )
+                          imageUrl: imageUrl!,
+                          fit: BoxFit.cover,
+                        )
                       : const Card(
-                        margin: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(borderRadius: mBorder),
-                        clipBehavior: Clip.antiAlias,
-                        child: Center(
-                          child: Icon(
-                            Icons.add_photo_alternate_rounded,
-                            size: 100,
+                          margin: EdgeInsets.zero,
+                          shape: RoundedSuperellipseBorder(
+                            borderRadius: mBorder,
                           ),
-                        ),
-                      );
+                          clipBehavior: Clip.antiAlias,
+                          child: Center(
+                            child: Icon(
+                              Icons.add_photo_alternate_rounded,
+                              size: 100,
+                            ),
+                          ),
+                        );
                 },
               ),
             ],

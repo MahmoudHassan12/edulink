@@ -52,7 +52,7 @@ class QAForumViewBody extends StatelessWidget {
             ),
           ),
         ),
-        BlocBuilder<FetchQuestionsCubit, FetchQuestionState>(
+        BlocBuilder<FetchQuestionsCubit, FetchQuestionsState>(
           builder: (_, state) {
             if (state is QuestionLoading) {
               return const SliverToBoxAdapter(

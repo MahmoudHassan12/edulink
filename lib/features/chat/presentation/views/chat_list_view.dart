@@ -129,7 +129,7 @@ class ChatTile extends StatelessWidget {
         ).format(lastMessage?.date ?? DateTime.now());
         return Card.filled(
           margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          shape: const RoundedRectangleBorder(borderRadius: xsBorder),
+          shape: const RoundedSuperellipseBorder(borderRadius: xsBorder),
           clipBehavior: Clip.antiAlias,
           elevation: 0,
           child: ListTile(

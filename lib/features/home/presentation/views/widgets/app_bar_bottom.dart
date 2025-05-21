@@ -11,9 +11,8 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 8),
     child: SearchAnchor.bar(
-      suggestionsBuilder:
-          (context, controller) =>
-              _suggestions(context, getUser?.courses, controller),
+      suggestionsBuilder: (context, controller) =>
+          _suggestions(context, getUser?.courses, controller),
       viewHintText: 'Search',
       barHintText: 'Search',
       viewTrailing: [
@@ -26,7 +25,7 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
         ),
       ],
       barShape: const WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: xsBorder),
+        RoundedSuperellipseBorder(borderRadius: xsBorder),
       ),
       constraints: const BoxConstraints(minHeight: 48),
       barElevation: const WidgetStatePropertyAll(0),
@@ -51,13 +50,11 @@ Iterable<ListTile> _suggestions(
       yield ListTile(
         title: Text(courseCode!),
         subtitle: Text(courseTitle!),
-        onTap:
-            () async => courseDetailsNavigation(context, extra: course).then(
-              (_) =>
-                  controller
-                    ..clear()
-                    ..closeView(null),
-            ),
+        onTap: () async => courseDetailsNavigation(context, extra: course).then(
+          (_) => controller
+            ..clear()
+            ..closeView(null),
+        ),
       );
     }
   }

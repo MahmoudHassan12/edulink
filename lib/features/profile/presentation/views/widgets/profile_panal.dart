@@ -8,7 +8,7 @@ class ProfilePanal extends StatelessWidget {
   Widget build(BuildContext context) => Card.filled(
     margin: EdgeInsets.zero,
     elevation: 1,
-    shape: const RoundedRectangleBorder(borderRadius: mBorder),
+    shape: const RoundedSuperellipseBorder(borderRadius: mBorder),
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: child,
