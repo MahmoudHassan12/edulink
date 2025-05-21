@@ -99,32 +99,29 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
             DescriptionField(controller: _descriptionController),
             CustomElevatedButton(
               onPressed: () async {
-                final cubit =
-                    context.read<ManageCourseCubit>()
-                      ..setCode(_codeController.text)
-                      ..setTitle(_titleController.text)
-                      ..setDescription(_descriptionController.text)
-                      ..setType(_typeController.text)
-                      ..setLevel(_levelController.text)
-                      ..setDepartment(_departmentController.text)
-                      ..setSemester(_semesterController.text)
-                      ..setCreditHour(
-                        int.tryParse(_creditHourController.text) ?? 0,
-                      )
-                      // TODO(Mahmoud): Don't forget this line
-                      ..setLectures(widget.course?.lectures ?? 0)
-                      // TODO(Mahmoud): Don't forget this line
-                      ..setDuration(
-                        widget.course?.duration ?? const DurationEntity(),
-                      )
-                      ..setProfessor(getUser!);
+                final cubit = context.read<ManageCourseCubit>()
+                  ..setCode(_codeController.text)
+                  ..setTitle(_titleController.text)
+                  ..setDescription(_descriptionController.text)
+                  ..setType(_typeController.text)
+                  ..setLevel(_levelController.text)
+                  ..setDepartment(_departmentController.text)
+                  ..setSemester(_semesterController.text)
+                  ..setCreditHour(int.tryParse(_creditHourController.text) ?? 0)
+                  // TODO(Mahmoud): Don't forget this line
+                  ..setLectures(widget.course?.lectures ?? 0)
+                  // TODO(Mahmoud): Don't forget this line
+                  ..setDuration(
+                    widget.course?.duration ?? const DurationEntity(),
+                  )
+                  ..setProfessor(getUser!);
                 final course = cubit.course;
                 if (course.isValid) {
                   widget.course != null
                       ? await const CoursesRepo().update(
-                        data: course.toMap(),
-                        documentId: course.id,
-                      )
+                          data: course.toMap(),
+                          documentId: course.id!,
+                        )
                       : cubit.upload();
                   await const CoursesRepo().addCoursesIds([course.id!]);
                 } else {

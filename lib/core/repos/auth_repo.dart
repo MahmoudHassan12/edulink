@@ -20,9 +20,9 @@ class AuthRepo {
       });
 
   Future<User?> signUpWithEmail(String email, String password) =>
-      _auth.signUpWithEmail(email, password).then((user) {
+      _auth.signUpWithEmail(email, password).then((user) async {
         final data = UserEntity(email: email, id: user?.uid).toMap();
-        _add(data: data, documentId: user?.uid);
+        await _add(data: data, documentId: user!.uid);
         return user;
       });
 
@@ -32,14 +32,13 @@ class AuthRepo {
         if ((await _get(documentId: user.uid)) != null) {
           await _get(documentId: user.uid);
         } else {
-          final data =
-              UserEntity(
-                id: user.uid,
-                name: user.displayName,
-                email: user.email,
-                imageUrl: user.photoURL,
-                phone: user.phoneNumber,
-              ).toMap();
+          final data = UserEntity(
+            id: user.uid,
+            name: user.displayName,
+            email: user.email,
+            imageUrl: user.photoURL,
+            phone: user.phoneNumber,
+          ).toMap();
           await _add(data: data, documentId: user.uid);
         }
         return user;
@@ -51,28 +50,29 @@ class AuthRepo {
         if ((await _get(documentId: user.uid)) != null) {
           await _get(documentId: user.uid);
         } else {
-          final data =
-              UserEntity(
-                id: user.uid,
-                name: user.displayName,
-                email: user.email,
-                imageUrl: user.photoURL,
-                phone: user.phoneNumber,
-              ).toMap();
+          final data = UserEntity(
+            id: user.uid,
+            name: user.displayName,
+            email: user.email,
+            imageUrl: user.photoURL,
+            phone: user.phoneNumber,
+          ).toMap();
           await _add(data: data, documentId: user.uid);
         }
         return user;
       });
 
-  Future<void> _add({required Map<String, dynamic> data, String? documentId}) =>
-      _userRepo
-          .addUser(data: data, documentId: documentId)
-          .onError<FirebaseException>((e, _) {
-            log('Failed to add user: $e');
-          })
-          .catchError((e) {
-            log('Failed to add user: $e');
-          });
+  Future<void> _add({
+    required Map<String, dynamic> data,
+    required String documentId,
+  }) => _userRepo
+      .addUser(data: data, documentId: documentId)
+      .onError<FirebaseException>((e, _) {
+        log('Failed to add user: $e');
+      })
+      .catchError((e) {
+        log('Failed to add user: $e');
+      });
 
   Future<UserEntity?> _get({required String documentId}) => _userRepo.get(
     documentId: documentId,
@@ -81,13 +81,13 @@ class AuthRepo {
   );
 
   Future<void> update() => _userRepo
-      .update(data: getUser!.toMap(), documentId: _uid)
+      .update(data: getUser!.toMap(), documentId: _uid!)
       .then((_) => log('User updated successfully!'))
       .onError<FirebaseException>((e, _) => log('Failed to update user: $e'))
       .catchError((e) => log('Failed to update user: $e'));
 
   Future<void> delete() => _userRepo
-      .delete(documentId: _uid)
+      .delete(documentId: _uid!)
       .then((_) => log('User deleted successfully!'))
       .onError<FirebaseException>((e, _) => log('Failed to delete user: $e'))
       .catchError((e) => log('Failed to delete user: $e'));

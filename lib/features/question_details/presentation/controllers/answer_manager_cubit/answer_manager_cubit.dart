@@ -13,27 +13,27 @@ class AnswerManagerCubit extends Cubit<AnswerManagerState> {
   final String _questionId;
   AnswerEntity _answer = const AnswerEntity();
 
-  AnswerEntity _updateQuestion(AnswerEntity question) => _answer = question;
+  AnswerEntity _updateAnswer(AnswerEntity answer) => _answer = answer;
 
   void setQuestion(String question) {
     final result = _answer.setAnswer(question);
-    _updateQuestion(result);
+    _updateAnswer(result);
     emit(_AnswerUpdated());
   }
 
   void setDate(DateTime date) {
     final result = _answer.setDate(date);
-    _updateQuestion(result);
+    _updateAnswer(result);
     emit(_AnswerUpdated());
   }
 
   void setUser(UserEntity user) {
     final result = _answer.setUser(user);
-    _updateQuestion(result);
+    _updateAnswer(result);
     emit(_AnswerUpdated());
   }
 
-  Future<void> addQuestion() async {
+  Future<void> addAnswer() async {
     await const CoursesRepo().addAnswer(_courseId, _questionId, _answer);
     emit(const AnswerSuccess());
   }

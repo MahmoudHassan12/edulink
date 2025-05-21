@@ -2,6 +2,7 @@ import 'package:edu_link/core/domain/entities/chat_entity.dart';
 import 'package:edu_link/core/domain/entities/message_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
+import 'package:edu_link/core/helpers/query_entity.dart';
 import 'package:edu_link/core/services/firestore_service.dart'
     show FirestoreService;
 
@@ -16,36 +17,35 @@ class ChatService {
   }
 
   Stream<ChatEntity> getChat(String userId1, String userId2) => _fireStore
-      .getDocumentStream(
-        path: 'chats',
-        documentId: _getChatId(userId1, userId2),
-      )
-      .map((doc) => ChatEntity.fromMap(doc.data()));
+      .streamDocument(path: 'chats', documentId: _getChatId(userId1, userId2))
+      .map((data) => ChatEntity.fromMap(data));
 
   Stream<List<ChatEntity>> getChates() => _fireStore
-      .getMultibleDocumentStreamWithSpecificIds(
+      .streamCollectionWithQuery(
         path: 'chats',
-        field: 'usersIds',
-        documentId: getUser?.id,
+        query: QueryEntity(
+          fields: [FieldEntity(field: 'usersIds', arrayContains: getUser?.id)],
+        ),
       )
-      .map(
-        (docs) => docs.map((doc) => ChatEntity.fromMap(doc.data())).toList(),
-      );
+      .map((e) => e.map((data) => ChatEntity.fromMap(data)).toList());
 
   Future<void> sendMessage(
     String userId1,
     String userId2,
     MessageEntity message,
-  ) => _fireStore.addListInDocument(
+  ) => _fireStore.addValue(
     path: 'chats',
-    listKey: 'messages',
-    list: [message.toMap()],
     documentId: _getChatId(userId1, userId2),
+    key: 'messages',
+    data: [message.toMap()],
   );
 
   Future<void> _createChat(String userId1, String userId2) {
     final chat = ChatEntity(
-      users: [UserEntity(id: userId1), UserEntity(id: userId2)],
+      users: [
+        UserEntity(id: userId1),
+        UserEntity(id: userId2),
+      ],
       messages: [],
     );
     return _fireStore.addDocument(
@@ -55,9 +55,11 @@ class ChatService {
     );
   }
 
-  Future<bool> _isChatExist(String userId1, String userId2) => _fireStore
-      .getDocument(path: 'chats', documentId: _getChatId(userId1, userId2))
-      .then((doc) => doc.exists);
+  Future<bool> _isChatExist(String userId1, String userId2) =>
+      _fireStore.isDocumentExists(
+        path: 'chats',
+        documentId: _getChatId(userId1, userId2),
+      );
 
   Future<void> init(String userId1, String userId2) async {
     if (await _isChatExist(userId1, userId2)) return;

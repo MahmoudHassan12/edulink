@@ -62,12 +62,11 @@ class QuestionDetailsView extends StatelessWidget {
                 builder: (context) {
                   final testController = TextEditingController();
                   Future<void> testOnSend() async {
-                    final cubit =
-                        context.read<AnswerManagerCubit>()
-                          ..setQuestion(testController.text)
-                          ..setDate(DateTime.now())
-                          ..setUser(getUser!);
-                    return cubit.addQuestion();
+                    final cubit = context.read<AnswerManagerCubit>()
+                      ..setQuestion(testController.text)
+                      ..setDate(DateTime.now())
+                      ..setUser(getUser!);
+                    return cubit.addAnswer();
                   }
 
                   return AnswerTextField(

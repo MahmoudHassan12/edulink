@@ -18,17 +18,15 @@ class ManageCourseView extends StatelessWidget {
     appBar: AppBar(
       title: EText(course == null ? 'Add Course' : 'Edit Course'),
       centerTitle: true,
-      actions:
-          course == null
-              ? null
-              : [
-                IconButton(
-                  icon: const Icon(Icons.delete_rounded),
-                  onPressed:
-                      () async =>
-                          _deleteCourseDialog(context, documentId: course?.id),
-                ),
-              ],
+      actions: course == null
+          ? null
+          : [
+              IconButton(
+                icon: const Icon(Icons.delete_rounded),
+                onPressed: () async =>
+                    _deleteCourseDialog(context, documentId: course!.id!),
+              ),
+            ],
     ),
     body: BlocProvider<ManageCourseCubit>(
       create: (context) => ManageCourseCubit(),
@@ -37,31 +35,32 @@ class ManageCourseView extends StatelessWidget {
   );
 }
 
-Future<void> _deleteCourseDialog(BuildContext context, {String? documentId}) =>
+Future<void> _deleteCourseDialog(
+  BuildContext context, {
+  required String documentId,
+}) =>
     showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const EText('Delete Course'),
-            content: const EText(
-              'Are you sure you want to delete this course?',
-              softWrap: true,
-            ),
-            actions: [
-              TextButton(
-                child: const EText('Cancel'),
-                onPressed: () => popNavigation(context, false),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(foregroundColor: Colors.red),
-                child: const EText('Delete'),
-                onPressed: () => popNavigation(context, true),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const EText('Delete Course'),
+        content: const EText(
+          'Are you sure you want to delete this course?',
+          softWrap: true,
+        ),
+        actions: [
+          TextButton(
+            child: const EText('Cancel'),
+            onPressed: () => popNavigation(context, false),
           ),
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const EText('Delete'),
+            onPressed: () => popNavigation(context, true),
+          ),
+        ],
+      ),
     ).then(
-      (value) =>
-          value ?? false
-              ? const CoursesRepo().delete(documentId: documentId)
-              : null,
+      (value) => value ?? false
+          ? const CoursesRepo().delete(documentId: documentId)
+          : null,
     );

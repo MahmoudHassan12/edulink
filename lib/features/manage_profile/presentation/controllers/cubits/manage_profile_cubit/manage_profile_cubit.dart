@@ -94,7 +94,7 @@ class ManageProfileCubit extends Cubit<ManageProfileState> {
     if (user?.image != null) {
       await userRepo.uploadImage(user!.image!).then((e) => setImageUrl(e));
     }
-    await userRepo.update(data: user!.toMap(), documentId: user?.id);
+    await userRepo.update(data: user!.toMap(), documentId: user!.id!);
     emit(ManageProfileSuccess(user!));
   }
 }

@@ -30,10 +30,10 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   Future<void> _initVideoContoller() {
     _controller = VideoPlayerController.networkUrl(vidUrl);
-    return _controller.initialize().then((_) {
-      setState(() {});
-      _controller.play();
+    return _controller.initialize().then((_) async {
+      await _controller.play();
       _startPositionUpdater();
+      setState(() {});
     });
   }
 
@@ -59,13 +59,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         children: [
           Expanded(
             child: Center(
-              child:
-                  _controller.value.isInitialized
-                      ? AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      )
-                      : const CircularProgressIndicator(),
+              child: _controller.value.isInitialized
+                  ? AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    )
+                  : const CircularProgressIndicator(),
             ),
           ),
           if (_controller.value.isInitialized)
