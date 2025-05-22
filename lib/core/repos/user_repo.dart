@@ -7,6 +7,8 @@ import 'package:edu_link/core/constants/endpoints.dart' show Endpoints;
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
+import 'package:edu_link/core/helpers/entities_handlers.dart';
+import 'package:edu_link/core/helpers/query_entity.dart';
 import 'package:edu_link/core/helpers/shared_pref.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/services/firestore_service.dart'
@@ -83,6 +85,15 @@ class UserRepo {
       rethrow;
     }
   }
+
+  Stream<List<UserEntity>?> streamUsersByCourse(String courseId) => _fireStore
+      .streamCollectionWithQuery(
+        path: _path,
+        query: QueryEntity(
+          fields: [FieldEntity(field: 'coursesIds', arrayContains: courseId)],
+        ),
+      )
+      .map((data) => complexListEntity<UserEntity>(data, UserEntity.fromMap));
 
   Future<List<UserEntity>?> getMultipleUsers(List<String> userIds) => _fireStore
       .getDocuments(path: _path, documentIds: userIds)

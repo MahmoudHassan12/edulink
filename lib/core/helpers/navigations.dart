@@ -48,6 +48,10 @@ Future<void> questionDetailsNavigation(
   BuildContext context, {
   required Map<String, dynamic> extra,
 }) => _navigateTo(context, Routes.questionDetailsView, extra: extra);
+Future<void> registeredUsersNavigation(
+  BuildContext context, {
+  required String extra,
+}) => _navigateTo(context, Routes.registeredUsersView, extra: extra);
 Future<void> contentNavigation(BuildContext context, {Object? extra}) =>
     _navigateTo(context, Routes.contentView, extra: extra);
 
@@ -59,6 +63,7 @@ Future<void> manageProfileNavigation(BuildContext context) =>
     _navigateTo(context, Routes.manageProfileView);
 Future<void> registerCoursesNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerCoursesView);
+
 Future<void> registerNavigation(BuildContext context) =>
     _navigateTo(context, Routes.registerView);
 Future<void> resetPasswordNavigation(BuildContext context) =>

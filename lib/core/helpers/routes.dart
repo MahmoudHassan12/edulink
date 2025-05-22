@@ -16,6 +16,7 @@ import 'package:edu_link/features/chat/presentation/views/chat_view.dart'
 import 'package:edu_link/features/content/content_view.dart';
 import 'package:edu_link/features/course_details/presentation/views/course_details_view.dart'
     show CourseDetailsView;
+import 'package:edu_link/features/course_details/presentation/views/registered_users_view.dart';
 import 'package:edu_link/features/home/presentation/views/home_view.dart'
     show HomeView;
 import 'package:edu_link/features/manage_course/presentation/views/manage_course_view.dart'
@@ -47,6 +48,7 @@ abstract class Routes {
   static const String qaForumView = '/qa-forum';
   static const String questionDetailsView = '/question-details';
   static const String registerCoursesView = '/register-courses';
+  static const String registeredUsersView = '/registered-users';
   static const String registerView = '/register';
   static const String resetPasswordView = '/reset-password';
   static const String settingsView = '/settings';
@@ -79,6 +81,8 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.homeView: (context, args) => const HomeView(),
   Routes.manageProfileView: (context, args) => const ManageProfileView(),
   Routes.registerCoursesView: (context, args) => const RegisterCoursesView(),
+  Routes.registeredUsersView: (context, args) =>
+      RegisteredUsersView(courseId: args! as String),
   Routes.registerView: (context, args) => const RegisterView(),
   Routes.resetPasswordView: (context, args) => const ResetPasswordView(),
   Routes.settingsView: (context, args) => const SettingsView(),

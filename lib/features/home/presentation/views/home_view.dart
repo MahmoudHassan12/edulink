@@ -20,10 +20,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) => Scaffold(
     body: _pages[_selectedIndex],
-    floatingActionButton:
-        (getUser?.isProfessor ?? false)
-            ? const _AddCourseFloatingButton()
-            : null,
+    floatingActionButton: (getUser?.isProfessor ?? false) && _selectedIndex == 1
+        ? const _AddCourseFloatingButton()
+        : null,
     drawer: const AppDrawer(),
     bottomNavigationBar: ENavigationBar(
       selectedIndex: _selectedIndex,

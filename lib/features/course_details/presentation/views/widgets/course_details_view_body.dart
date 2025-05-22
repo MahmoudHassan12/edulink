@@ -1,6 +1,7 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
+import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/course_image.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:flutter/material.dart';
@@ -50,28 +51,22 @@ class CourseDetailsViewBody extends StatelessWidget {
             const SizedBox(height: 8),
             EText(course.description!),
             const SizedBox(height: 16),
-            ElevatedButton.icon(
+            CustomFilledButton.icon(
               onPressed: () async =>
                   contentNavigation(context, extra: course.id),
-              icon: const Icon(Icons.folder_rounded),
-              label: const Text('Course Content'),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedSuperellipseBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
-                textStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              icon: Icons.folder_rounded,
+              label: 'Course Content',
+            ),
+            const SizedBox(height: 16),
+            CustomFilledButton.icon(
+              onPressed: () async =>
+                  registeredUsersNavigation(context, extra: course.id!),
+              icon: Icons.people_rounded,
+              label: 'Registered Users',
             ),
           ],
         ),
       ),
-      const SliverToBoxAdapter(child: SizedBox(height: 1600)),
     ],
   );
 }
