@@ -27,7 +27,7 @@ class AboutViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           const EText(
-            'Authors',
+            'Developed By',
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
@@ -47,7 +47,10 @@ class AboutViewBody extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(12.0),
-                    child: Icon(Icons.person, color: Color.fromARGB(255, 11, 103, 223)),
+                    child: Icon(
+                      Icons.person,
+                      color: Color.fromARGB(255, 11, 103, 223),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(12.0),
@@ -59,7 +62,10 @@ class AboutViewBody extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(12.0),
-                    child: Icon(Icons.person, color: Color.fromARGB(255, 11, 103, 223)),
+                    child: Icon(
+                      Icons.person,
+                      color: Color.fromARGB(255, 11, 103, 223),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(12.0),
@@ -71,7 +77,10 @@ class AboutViewBody extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.all(12.0),
-                    child: Icon(Icons.person, color: Color.fromARGB(255, 11, 103, 223)),
+                    child: Icon(
+                      Icons.person,
+                      color: Color.fromARGB(255, 11, 103, 223),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(12.0),
@@ -79,7 +88,6 @@ class AboutViewBody extends StatelessWidget {
                   ),
                 ],
               ),
-              
             ],
           ),
         ],
