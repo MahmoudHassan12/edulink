@@ -43,6 +43,16 @@ class ManageProfileCubit extends Cubit<ManageProfileState> {
     emit(ManageProfileUpdated());
   }
 
+  void setGitHub(String githubLink) {
+    updateUser(user?.setGitHub(githubLink));
+    emit(ManageProfileUpdated());
+  }
+
+  void setLinkedIn(String linkedinLink) {
+    updateUser(user?.setLinkedIn(linkedinLink));
+    emit(ManageProfileUpdated());
+  }
+
   void setPhone(String phone) {
     updateUser(user?.setPhone(phone));
     emit(ManageProfileUpdated());

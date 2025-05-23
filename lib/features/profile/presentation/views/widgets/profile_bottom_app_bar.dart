@@ -7,42 +7,56 @@ class ProfileBottomAppBar extends StatelessWidget {
   const ProfileBottomAppBar({required this.user, super.key});
   final UserEntity user;
   @override
-  Widget build(BuildContext context) => BottomAppBar(
-    color: Colors.transparent,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-          icon: const Icon(FontAwesomeIcons.linkedinIn),
-          onPressed: () async => _launchUrl('https://www.linkedin.com/'),
-        ),
-        IconButton(
-          icon: const Icon(FontAwesomeIcons.facebookF),
-          onPressed: () async => _launchUrl('https://www.facebook.com/'),
-        ),
-        IconButton(
-          icon: const Icon(FontAwesomeIcons.github),
-          onPressed: () async => _launchUrl('https://www.github.com/'),
-        ),
-      ],
-    ),
-  );
-}
+  Widget build(BuildContext context) {
+    final linkedInLink = user.linkedInLink;
+    final gitHubLink = user.gitHubLink;
 
-Future<void> _launchUrl(String url) {
-  final uri = Uri.parse(url);
-  return canLaunchUrl(uri).then(
-    (canLaunch) =>
-        canLaunch
-            ? launchUrl(
-              uri,
-              mode: LaunchMode.externalNonBrowserApplication,
-              webOnlyWindowName: '_blank',
-              webViewConfiguration: const WebViewConfiguration(
-                headers: <String, String>{'my_header_key': 'my_header_value'},
-              ),
-              browserConfiguration: const BrowserConfiguration(showTitle: true),
-            )
-            : null,
-  );
+    final hasLinkedIn = _isValidUserLink(linkedInLink, 'linkedin.com');
+    final hasGitHub = _isValidUserLink(gitHubLink, 'github.com');
+
+    if (!hasLinkedIn && !hasGitHub) {
+      return const SizedBox.shrink();
+    }
+
+    return BottomAppBar(
+      color: Colors.transparent,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (hasLinkedIn)
+            IconButton(
+              icon: const Icon(FontAwesomeIcons.linkedinIn),
+              onPressed: () async => _launchUrl(linkedInLink!),
+            ),
+          if (hasGitHub)
+            IconButton(
+              icon: const Icon(FontAwesomeIcons.github),
+              onPressed: () async => _launchUrl(gitHubLink!),
+            ),
+        ],
+      ),
+    );
+  }
+
+  bool _isValidUserLink(String? url, String expectedHost) {
+    if (url == null || url.trim().isEmpty) return false;
+    final uri = Uri.tryParse(url.trim());
+    return uri != null &&
+        uri.hasScheme &&
+        uri.hasAuthority &&
+        uri.host.contains(expectedHost);
+  }
+
+  Future<void> _launchUrl(String url) async {
+    var fixedUrl = url.trim();
+    if (!fixedUrl.startsWith('http')) {
+      fixedUrl = 'https://$fixedUrl';
+    }
+    final uri = Uri.parse(fixedUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      debugPrint('Could not launch $fixedUrl');
+    }
+  }
 }

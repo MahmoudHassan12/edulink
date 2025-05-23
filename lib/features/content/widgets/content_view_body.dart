@@ -92,26 +92,20 @@ class _ContentViewBodyState extends State<ContentViewBody> {
   Future<bool?> _confirmDismiss(BuildContext context, ContentItem item) {
     return showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Delete Content'),
-            content: const Text(
-              'Are you sure you want to delete this content?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Content'),
+        content: const Text('Are you sure you want to delete this content?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -125,29 +119,38 @@ class _ContentViewBodyState extends State<ContentViewBody> {
       return const Center(child: Text('No content available'));
     }
 
-    return ListView.builder(
-      itemCount: _contentItems.length,
-      itemBuilder: (context, index) {
-        final item = _contentItems[index];
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: ListView.builder(
+        itemCount: _contentItems.length,
+        itemBuilder: (context, index) {
+          final item = _contentItems[index];
 
-        if (widget.isProfessor) {
-          return Dismissible(
-            key: Key(item.url),
-            direction: DismissDirection.endToStart,
-            confirmDismiss: (direction) async => _confirmDismiss(context, item),
-            onDismissed: (direction) async => _deleteContent(item),
-            background: Container(
-              color: Colors.red,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              alignment: Alignment.centerRight,
-              child: const Icon(Icons.delete, color: Colors.white, size: 30),
-            ),
-            child: ContentItemCard(item: item),
-          );
-        } else {
-          return ContentItemCard(item: item);
-        }
-      },
+          if (widget.isProfessor) {
+            return Dismissible(
+              key: Key(item.url),
+              direction: DismissDirection.endToStart,
+              confirmDismiss: (direction) async =>
+                  _confirmDismiss(context, item),
+              onDismissed: (direction) async => _deleteContent(item),
+              background: Container(
+                color: Colors.red,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                alignment: Alignment.centerRight,
+                child: const Icon(Icons.delete, color: Colors.white, size: 30),
+              ),
+              child: ContentItemCard(item: item),
+            );
+          } else {
+            return ContentItemCard(item: item);
+          }
+        },
+      ),
     );
+  }
+
+  Future<void> _refresh() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    setState(() {});
   }
 }

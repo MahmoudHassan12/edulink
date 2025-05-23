@@ -9,7 +9,6 @@ class AboutViewBody extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const CircleAvatar(
             radius: 60,
@@ -38,22 +37,19 @@ class AboutViewBody extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            columnWidths: const {
-              0: FlexColumnWidth(0.2),
-              1: FlexColumnWidth(1),
-            },
+            columnWidths: const {0: FlexColumnWidth(0.2), 1: FlexColumnWidth()},
             children: const [
               TableRow(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12),
                     child: Icon(
                       Icons.person,
                       color: Color.fromARGB(255, 11, 103, 223),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12),
                     child: Text('Hossam Hassan Ibrahem'),
                   ),
                 ],
@@ -61,14 +57,14 @@ class AboutViewBody extends StatelessWidget {
               TableRow(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12),
                     child: Icon(
                       Icons.person,
                       color: Color.fromARGB(255, 11, 103, 223),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12),
                     child: Text('Mahmoud Hassan Samir'),
                   ),
                 ],
@@ -76,15 +72,15 @@ class AboutViewBody extends StatelessWidget {
               TableRow(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12),
                     child: Icon(
                       Icons.person,
                       color: Color.fromARGB(255, 11, 103, 223),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Text('Yousef Saber Mohammad-Kamal'),
+                    padding: EdgeInsets.all(12),
+                    child: Text('Yousef Saber Mohammad Kamal'),
                   ),
                 ],
               ),

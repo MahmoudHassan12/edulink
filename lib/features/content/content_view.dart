@@ -25,13 +25,12 @@ class _ContentViewState extends State<ContentView> {
       courseId: widget.courseId,
       isProfessor: getUser?.isProfessor ?? false,
     ),
-    floatingActionButton:
-        getUser?.isProfessor ?? false
-            ? FloatingActionButton(
-              onPressed: handleUploading,
-              child: const Icon(Icons.add),
-            )
-            : null,
+    floatingActionButton: getUser?.isProfessor ?? false
+        ? FloatingActionButton(
+            onPressed: handleUploading,
+            child: const Icon(Icons.add),
+          )
+        : null,
   );
 
   Future<void> handleUploading() async {
@@ -60,7 +59,6 @@ class _ContentViewState extends State<ContentView> {
           ),
         );
       }
-      setState(() {});
     }
   }
 }

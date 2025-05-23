@@ -12,7 +12,7 @@ class ContentViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (item.type) {
       case ContentType.video:
-        return VideoPlayerScreen(videoUrl: item.url);
+        return ExternalVideoScreen(videoUrl: item.url);
       case ContentType.pdf:
         return Scaffold(
           appBar: AppBar(title: Text(item.title)),

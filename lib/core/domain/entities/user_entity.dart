@@ -14,6 +14,8 @@ class UserEntity {
     this.phone,
     this.image,
     this.imageUrl,
+    this.linkedInLink,
+    this.gitHubLink,
     this.department,
     this.level,
     this.courses,
@@ -25,21 +27,22 @@ class UserEntity {
   });
 
   factory UserEntity.fromMap(Map<String, dynamic>? data) {
-    final getCourses =
-        data?['courses'] != null
-            ? complexListEntity<CourseEntity>(
-              data?['courses'],
-              (e) => CourseEntity.fromMap(e),
-            )
-            : (data?['coursesIds'] as List<dynamic>?)
-                ?.map((id) => CourseEntity(id: id))
-                .toList();
+    final getCourses = data?['courses'] != null
+        ? complexListEntity<CourseEntity>(
+            data?['courses'],
+            (e) => CourseEntity.fromMap(e),
+          )
+        : (data?['coursesIds'] as List<dynamic>?)
+              ?.map((id) => CourseEntity(id: id))
+              .toList();
     return UserEntity(
       id: data?['id'],
       name: data?['name'],
       email: data?['email'],
       phone: data?['phone'],
       imageUrl: data?['imageUrl'],
+      linkedInLink: data?['linkedInLink'],
+      gitHubLink: data?['gitHubLink'],
       department: complexEntity(data?['department'], DepartmentEntity.fromMap),
       level: data?['level'],
       courses: getCourses,
@@ -57,6 +60,8 @@ class UserEntity {
   final String? phone;
   final File? image;
   final String? imageUrl;
+  final String? linkedInLink;
+  final String? gitHubLink;
   final DepartmentEntity? department;
   final String? level;
   final List<CourseEntity>? courses;
@@ -72,11 +77,14 @@ class UserEntity {
     'email': email,
     'phone': phone,
     'imageUrl': imageUrl,
+    'linkedInLink': linkedInLink,
+    'gitHubLink': gitHubLink,
     'department': department?.toMap(),
     'level': level,
     if (toSharedPref)
-      'courses':
-          courses?.map((course) => course.toMap(toSharedPref: true)).toList()
+      'courses': courses
+          ?.map((course) => course.toMap(toSharedPref: true))
+          .toList()
     else
       'coursesIds': courses?.map((course) => course.id).toList(),
     'isProfessor': isProfessor ?? false,
@@ -93,6 +101,8 @@ class UserEntity {
     String? phone,
     File? image,
     String? imageUrl,
+    String? linkedInLink,
+    String? gitHubLink,
     DepartmentEntity? department,
     String? level,
     List<CourseEntity>? courses,
@@ -105,6 +115,8 @@ class UserEntity {
     id: id ?? this.id,
     name: name ?? this.name,
     email: email ?? this.email,
+    gitHubLink: gitHubLink ?? this.gitHubLink,
+    linkedInLink: linkedInLink ?? this.linkedInLink,
     phone: phone ?? this.phone,
     image: image ?? this.image,
     imageUrl: imageUrl ?? this.imageUrl,
@@ -119,6 +131,10 @@ class UserEntity {
   );
   UserEntity setName(String name) => copyWith(name: name);
   UserEntity setEmail(String email) => copyWith(email: email);
+  UserEntity setGitHub(String githubLink) => copyWith(gitHubLink: githubLink);
+  UserEntity setLinkedIn(String linkedinLink) =>
+      copyWith(linkedInLink: linkedinLink);
+
   UserEntity setPhone(String phone) => copyWith(phone: phone);
   Future<UserEntity> setImage() async => copyWith(image: await pickImage());
   UserEntity setImageUrl(String imageUrl) => copyWith(imageUrl: imageUrl);
