@@ -8,7 +8,8 @@ class ExternalVideoScreen extends StatelessWidget {
   Future<void> _openExternalPlayer(BuildContext context) async {
     final url = Uri.parse(videoUrl);
 
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication) &&
+        context.mounted) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Could not launch video')));

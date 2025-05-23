@@ -17,10 +17,11 @@ class AboutViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           const Text(
-            'EduLink is a smart university platform that bridges communication between students and professors. '
-            'It allows students to apply for courses, access organized course materials, participate in course-specific Q&A forums, '
-            'and chat 1-to-1 with professors. Professors can manage their courses, moderate discussions, and customize their profiles. '
-            'EduLink simplifies academic interaction and brings everything students need into one place.',
+            '''
+EduLink is a smart university platform that bridges communication between students and professors.
+It allows students to apply for courses, access organized course materials, participate in course-specific Q&A forums, and chat 1-to-1 with professors.
+Professors can manage their courses, moderate discussions, and customize their profiles.
+EduLink simplifies academic interaction and brings everything students need into one place.''',
             textAlign: TextAlign.justify,
             style: TextStyle(fontSize: 16, height: 1.6),
           ),

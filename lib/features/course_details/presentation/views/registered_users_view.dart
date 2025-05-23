@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 
 class RegisteredUsersView extends StatelessWidget {
-  const RegisteredUsersView({super.key, required this.courseId});
+  const RegisteredUsersView({required this.courseId, super.key});
   final String courseId;
 
   @override
