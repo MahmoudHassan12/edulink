@@ -6,6 +6,7 @@ import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/user_repo.dart';
+import 'package:edu_link/core/widgets/app_search_anchor.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +29,16 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
     },
     child: CustomScrollView(
       slivers: [
-        const SliverAppBar(title: EText('Register Courses'), centerTitle: true),
+        const SliverAppBar.medium(
+          title: Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.5),
+            child: EText('Register Courses'),
+          ),
+          centerTitle: true,
+          bottom: AppBarBottom(),
+        ),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           sliver: BlocBuilder<CoursesCubit, CoursesState>(
             builder: (context, state) {
               if (state is CoursesFailure) {
@@ -143,4 +151,22 @@ class ChooseCourse extends StatelessWidget {
             },
     );
   }
+}
+
+class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
+  const AppBarBottom({super.key});
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8),
+    child: BlocBuilder<CoursesCubit, CoursesState>(
+      builder: (context, state) {
+        if (state is CoursesSuccess) {
+          return AppSearchAnchor(courses: state.courses);
+        }
+        return const AppSearchAnchor();
+      },
+    ),
+  );
+  @override
+  Size get preferredSize => const Size.fromHeight(48);
 }
