@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImageProvider;
 import 'package:edu_link/core/constants/borders.dart';
 import 'package:edu_link/core/controllers/cubits/courses_cubit.dart/courses_cubit.dart';
+import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
@@ -41,7 +42,7 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
                 return SliverList.builder(
                   itemCount: state.courses.length,
                   itemBuilder: (context, index) {
-                    final course = state.courses[index];
+                    final CourseEntity course = state.courses[index];
                     return Card.filled(
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       shape: const RoundedSuperellipseBorder(
@@ -68,12 +69,12 @@ class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
                               if (isSelected) {
                                 selectedCourses.add(course.id!);
                               } else {
-                                selectedCourses.remove(course.id!);
+                                selectedCourses.remove(course.id);
                               }
                             });
                           },
                         ),
-                        onTap: () async =>
+                        onTap: () =>
                             courseDetailsNavigation(context, extra: course),
                       ),
                     );
@@ -101,7 +102,7 @@ class RegisterButton extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: CustomFilledButton(
         label: 'Register',
-        onPressed: () async => Future.wait<void>([
+        onPressed: () => Future.wait<void>([
           const CoursesRepo().addCoursesIds(selectedCourses),
           homeNavigation(context),
         ]),
@@ -122,7 +123,9 @@ class ChooseCourse extends StatelessWidget {
   final ValueChanged<bool> onSelectionChanged;
   @override
   Widget build(BuildContext context) {
-    final registeredCoursesIds = getUser?.courses?.map((e) => e.id).toList();
+    final List<String?>? registeredCoursesIds = getUser?.courses
+        ?.map((e) => e.id)
+        .toList();
     return Checkbox(
       shape: const RoundedSuperellipseBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),

@@ -1,6 +1,6 @@
 class Endpoints {
-  static const String auth = 'auth';
-  static const String user = 'user';
-  static const String users = 'users';
-  static const String courses = 'courses';
+  static const auth = 'auth';
+  static const user = 'user';
+  static const users = 'users';
+  static const courses = 'courses';
 }

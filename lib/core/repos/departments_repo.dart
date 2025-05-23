@@ -11,6 +11,6 @@ class DepartmentsRepo {
         (value) =>
             List<Map<String, dynamic>>.from(
               value,
-            ).map((e) => DepartmentEntity.fromMap(e)).toList(),
+            ).map(DepartmentEntity.fromMap).toList(),
       );
 }

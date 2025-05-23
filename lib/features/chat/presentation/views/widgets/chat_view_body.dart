@@ -37,24 +37,23 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   Future<void> _initializeChat() =>
       _chatService.init(_sender!.id!, widget.receiver.id!);
 
-  Future<void> _sendMessage() async =>
-      _messageController.text.isEmpty
-          ? null
-          : _chatService
-              .sendMessage(
-                _sender!.id!,
-                widget.receiver.id!,
-                MessageEntity(
-                  user: _sender,
-                  text: _messageController.text,
-                  date: DateTime.now(),
-                ),
-              )
-              .then((_) => _messageController.clear());
+  Future<void> _sendMessage() async => _messageController.text.isEmpty
+      ? null
+      : _chatService
+            .sendMessage(
+              _sender!.id!,
+              widget.receiver.id!,
+              MessageEntity(
+                user: _sender,
+                text: _messageController.text,
+                date: DateTime.now(),
+              ),
+            )
+            .then((_) => _messageController.clear());
 
   @override
   Widget build(BuildContext context) {
-    final receiver = widget.receiver;
+    final UserEntity receiver = widget.receiver;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -69,12 +68,16 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 if (!snapshot.hasData) {
                   return const Center(child: Text('No messages yet.'));
                 }
-                final messages = snapshot.data?.messages?.reversed.toList();
+                final List<MessageEntity>? messages = snapshot
+                    .data
+                    ?.messages
+                    ?.reversed
+                    .toList();
                 return ListView.builder(
                   reverse: true,
                   itemCount: messages?.length,
                   itemBuilder: (_, index) {
-                    final message = messages?[index];
+                    final MessageEntity? message = messages?[index];
                     final isSender = message?.user?.id == _sender.id;
                     return ChatBubble(
                       text: message!.text!,
@@ -91,7 +94,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           ),
           SendMessageInput(
             controller: _messageController,
-            onSendMessage: () async => _sendMessage(),
+            onSendMessage: _sendMessage,
           ),
         ],
       ),

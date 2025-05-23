@@ -23,7 +23,7 @@ class ManageCourseView extends StatelessWidget {
           : [
               IconButton(
                 icon: const Icon(Icons.delete_rounded),
-                onPressed: () async =>
+                onPressed: () =>
                     _deleteCourseDialog(context, documentId: course!.id!),
               ),
             ],

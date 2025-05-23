@@ -27,10 +27,10 @@ class UserEntity {
   });
 
   factory UserEntity.fromMap(Map<String, dynamic>? data) {
-    final getCourses = data?['courses'] != null
+    final List<CourseEntity>? getCourses = data?['courses'] != null
         ? complexListEntity<CourseEntity>(
             data?['courses'],
-            (e) => CourseEntity.fromMap(e),
+            CourseEntity.fromMap,
           )
         : (data?['coursesIds'] as List<dynamic>?)
               ?.map((id) => CourseEntity(id: id))

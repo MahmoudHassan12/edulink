@@ -5,6 +5,7 @@ import 'package:edu_link/core/domain/entities/answer_entity.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/question_entity.dart'
     show QuestionEntity;
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/query_entity.dart';
 import 'package:edu_link/core/repos/user_repo.dart' show UserRepo;
@@ -16,10 +17,10 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseException;
 
 class CoursesRepo {
   const CoursesRepo();
-  static const FirestoreService _fireStore = FirestoreService();
+  static const _fireStore = FirestoreService();
   static const String _coursesPath = Endpoints.courses;
 
-  Future<String> uploadImage(File file) async =>
+  Future<String> uploadImage(File file) =>
       const SupabaseService().upload(_coursesPath, 'images', file);
 
   Future<void> add({required Map<String, dynamic> data, String? documentId}) =>
@@ -89,7 +90,7 @@ class CoursesRepo {
         subCollectionPath: 'questions',
         query: const QueryEntity(orderBy: 'date', descending: true),
       )
-      .map((data) => data.map((e) => QuestionEntity.fromMap(e)).toList());
+      .map((data) => data.map(QuestionEntity.fromMap).toList());
 
   Future<void> deleteAnswer(
     String courseId,
@@ -108,7 +109,7 @@ class CoursesRepo {
 
   Future<CourseEntity> getCourse(String courseId) => _fireStore
       .getDocument(path: _coursesPath, documentId: courseId)
-      .then((data) async {
+      .then((data) {
         log('Course fetched successfully!');
         return CourseEntity.fromMap(data);
       });
@@ -116,11 +117,11 @@ class CoursesRepo {
   Future<List<CourseEntity>?> getMultibleCourses(List<String> courseIds) =>
       _fireStore.getDocuments(path: _coursesPath, documentIds: courseIds).then((
         data,
-      ) async {
+      ) {
         log('${data.length} Courses fetched successfully!');
         return Future.wait(
           data.map((e) async {
-            final professor = await const UserRepo().get(
+            final UserEntity? professor = await const UserRepo().get(
               documentId: e['professorId'],
             );
             return CourseEntity.fromMap(e).copyWith(professor: professor);
@@ -133,14 +134,12 @@ class CoursesRepo {
   ) async* {
     yield* _fireStore
         .streamDocuments(path: _coursesPath, documentIds: courseIds)
-        .asyncMap((docs) async {
+        .asyncMap((docs) {
           log('${docs.length} Courses fetched successfully!');
           return Future.wait<CourseEntity>(
             docs.map((e) async {
-              final professorStream = const UserRepo().getStream(
-                documentId: e['professorId'],
-                isProfessor: true,
-              );
+              final Stream<UserEntity?> professorStream = const UserRepo()
+                  .getStream(documentId: e['professorId'], isProfessor: true);
               await for (final professor in professorStream) {
                 return CourseEntity.fromMap(e).copyWith(professor: professor);
               }
@@ -163,12 +162,12 @@ class CoursesRepo {
       .getCollection(path: _coursesPath)
       .then((e) async {
         log('${e.length} Courses fetched successfully!');
-        final courses = await Future.wait<CourseEntity>(
+        final List<CourseEntity> courses = await Future.wait<CourseEntity>(
           e.map((data) async {
-            final professor = await const UserRepo().get(
+            final UserEntity? professor = await const UserRepo().get(
               documentId: data['professorId'],
             );
-            final course = CourseEntity.fromMap(
+            final CourseEntity course = CourseEntity.fromMap(
               data,
             ).copyWith(professor: professor);
             return course;

@@ -26,7 +26,7 @@ class SignInViewBody extends StatelessWidget {
               isLoading: isLoading,
               content: "Don't have an account?",
               title: 'Sign Up',
-              onTap: () async => registerNavigation(context),
+              onTap: () => registerNavigation(context),
             ),
             const SizedBox(height: 32),
             const OrDivider(),

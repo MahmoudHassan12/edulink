@@ -7,8 +7,7 @@ class SecondPanal extends StatelessWidget {
   const SecondPanal({required this.user, super.key});
   final UserEntity user;
   @override
-  Widget build(BuildContext context) {
-    return ProfilePanal(
+  Widget build(BuildContext context) => ProfilePanal(
       child: Column(
         spacing: 8,
         children: [
@@ -32,5 +31,4 @@ class SecondPanal extends StatelessWidget {
         ],
       ),
     );
-  }
 }

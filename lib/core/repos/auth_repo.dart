@@ -8,31 +8,38 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseException;
 
 class AuthRepo {
   const AuthRepo();
-  static const AuthService _auth = AuthService();
-  static const UserRepo _userRepo = UserRepo();
+  static const _auth = AuthService();
+  static const _userRepo = UserRepo();
   static final String? _uid = _auth.currentUser?.uid;
 
   Future<User?> signInWithEmail(String email, String password) =>
       _auth.signInWithEmail(email, password).then((user) async {
-        if (user == null) return null;
+        if (user == null) {
+          return null;
+        }
         await _get(documentId: user.uid);
         return user;
       });
 
   Future<User?> signUpWithEmail(String email, String password) =>
       _auth.signUpWithEmail(email, password).then((user) async {
-        final data = UserEntity(email: email, id: user?.uid).toMap();
+        final Map<String, dynamic> data = UserEntity(
+          email: email,
+          id: user?.uid,
+        ).toMap();
         await _add(data: data, documentId: user!.uid);
         return user;
       });
 
-  Future<User?> signInWithGoogle() async =>
+  Future<User?> signInWithGoogle() =>
       _auth.signInWithGoogle().then((user) async {
-        if (user == null) return null;
+        if (user == null) {
+          return null;
+        }
         if ((await _get(documentId: user.uid)) != null) {
           await _get(documentId: user.uid);
         } else {
-          final data = UserEntity(
+          final Map<String, dynamic> data = UserEntity(
             id: user.uid,
             name: user.displayName,
             email: user.email,
@@ -44,13 +51,15 @@ class AuthRepo {
         return user;
       });
 
-  Future<User?> signInWithFacebook() async =>
+  Future<User?> signInWithFacebook() =>
       _auth.signInWithFacebook().then((user) async {
-        if (user == null) return null;
+        if (user == null) {
+          return null;
+        }
         if ((await _get(documentId: user.uid)) != null) {
           await _get(documentId: user.uid);
         } else {
-          final data = UserEntity(
+          final Map<String, dynamic> data = UserEntity(
             id: user.uid,
             name: user.displayName,
             email: user.email,

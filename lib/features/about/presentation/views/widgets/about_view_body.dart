@@ -5,8 +5,7 @@ class AboutViewBody extends StatelessWidget {
   const AboutViewBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
+  Widget build(BuildContext context) => SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
         children: [
@@ -90,5 +89,4 @@ EduLink simplifies academic interaction and brings everything students need into
         ],
       ),
     );
-  }
 }

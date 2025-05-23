@@ -3,7 +3,9 @@ class DurationEntity {
 
   /// Creates a `DurationEntity` from a Firestore map
   factory DurationEntity.fromMap(Map<String, dynamic>? data) {
-    if (data == null) return const DurationEntity();
+    if (data == null) {
+      return const DurationEntity();
+    }
     return DurationEntity(
       hours: (data['hours'] as num?)?.toInt() ?? 0,
       minutes: (data['minutes'] as num?)?.toInt() ?? 0,
@@ -12,9 +14,11 @@ class DurationEntity {
   }
 
   /// Converts the `DurationEntity` to a Firestore-compatible map
-  Map<String, int> toMap() {
-    return {'hours': hours, 'minutes': minutes, 'seconds': seconds};
-  }
+  Map<String, int> toMap() => {
+    'hours': hours,
+    'minutes': minutes,
+    'seconds': seconds,
+  };
 
   final int hours;
   final int minutes;

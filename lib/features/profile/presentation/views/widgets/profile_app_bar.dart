@@ -21,13 +21,13 @@ class ProfileAppBar extends StatelessWidget implements PreferredSizeWidget {
       if (user.id == getUser?.id)
         IconButton(
           icon: const Icon(Icons.edit_rounded),
-          onPressed: () async => manageProfileNavigation(context),
+          onPressed: () => manageProfileNavigation(context),
           color: Theme.of(context).colorScheme.onPrimary,
         )
       else
         IconButton(
           icon: const Icon(Icons.chat_rounded),
-          onPressed: () async => chatNavigation(context, extra: user),
+          onPressed: () => chatNavigation(context, extra: user),
           color: Theme.of(context).colorScheme.onPrimary,
         ),
       const SizedBox(width: 8),

@@ -4,9 +4,9 @@ import 'package:edu_link/core/domain/entities/user_entity.dart';
 class MessageEntity {
   MessageEntity({this.user, this.text, this.date});
   factory MessageEntity.fromMap(Map<String, dynamic>? data) {
-    final date = switch (data?['date']) {
-      Timestamp t => t.toDate(),
-      DateTime d => d,
+    final DateTime date = switch (data?['date']) {
+      final Timestamp t => t.toDate(),
+      final DateTime d => d,
       _ => DateTime.now(),
     };
     return MessageEntity(

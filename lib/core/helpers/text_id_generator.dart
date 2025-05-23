@@ -16,7 +16,7 @@ class TextIdGenerator {
     const chars =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     var result = '';
-    var localNumber = number;
+    BigInt localNumber = number;
     while (localNumber > BigInt.zero) {
       result = chars[(localNumber % BigInt.from(62)).toInt()] + result;
       localNumber = localNumber ~/ BigInt.from(62);

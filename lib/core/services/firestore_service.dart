@@ -8,7 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart'
         GeoPoint,
         Query,
         QuerySnapshot,
-        SetOptions;
+        SetOptions,
+        WriteBatch;
 
 import 'package:edu_link/core/errors/exceptions.dart' show DatabaseException;
 import 'package:edu_link/core/helpers/query_entity.dart'
@@ -216,40 +217,40 @@ class FirestoreService {
 
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Map<String, dynamic> _stripEmpty(Map<String, dynamic> src) => src.map((
-    key,
-    rawValue,
-  ) {
-    if (key == 'helpful') {
-      return MapEntry<String, dynamic>(key, rawValue);
-    }
-    bool isItemEmpty(Object? item) =>
-        item == null ||
-        item == 'null' ||
-        (item is String && item.isEmpty) ||
-        (item is num && item.isNaN) ||
-        (item is List && item.isEmpty) ||
-        (item is Map && item.isEmpty) ||
-        (item is GeoPoint && (item.latitude.isNaN || item.longitude.isNaN));
-    if (isItemEmpty(rawValue)) {
-      return MapEntry<String, dynamic>(key, FieldValue.delete());
-    }
-    if (rawValue is Map<String, dynamic>) {
-      var nested = _stripEmpty(rawValue);
-      return MapEntry<String, dynamic>(
-        key,
-        nested.isNotEmpty ? nested : FieldValue.delete(),
-      );
-    }
-    if (rawValue is List) {
-      var cleanedList = rawValue.where((item) => !isItemEmpty(item)).toList();
-      return MapEntry<String, dynamic>(
-        key,
-        cleanedList.isNotEmpty ? cleanedList : FieldValue.delete(),
-      );
-    }
-    return MapEntry<String, dynamic>(key, rawValue);
-  });
+  Map<String, dynamic> _stripEmpty(Map<String, dynamic> src) =>
+      src.map((key, rawValue) {
+        if (key == 'helpful') {
+          return MapEntry<String, dynamic>(key, rawValue);
+        }
+        bool isItemEmpty(Object? item) =>
+            item == null ||
+            item == 'null' ||
+            (item is String && item.isEmpty) ||
+            (item is num && item.isNaN) ||
+            (item is List && item.isEmpty) ||
+            (item is Map && item.isEmpty) ||
+            (item is GeoPoint && (item.latitude.isNaN || item.longitude.isNaN));
+        if (isItemEmpty(rawValue)) {
+          return MapEntry<String, dynamic>(key, FieldValue.delete());
+        }
+        if (rawValue is Map<String, dynamic>) {
+          final Map<String, dynamic> nested = _stripEmpty(rawValue);
+          return MapEntry<String, dynamic>(
+            key,
+            nested.isNotEmpty ? nested : FieldValue.delete(),
+          );
+        }
+        if (rawValue is List) {
+          final List cleanedList = rawValue
+              .where((item) => !isItemEmpty(item))
+              .toList();
+          return MapEntry<String, dynamic>(
+            key,
+            cleanedList.isNotEmpty ? cleanedList : FieldValue.delete(),
+          );
+        }
+        return MapEntry<String, dynamic>(key, rawValue);
+      });
 
   Future<void> _set({
     required DocumentReference<Map<String, dynamic>> document,
@@ -321,7 +322,7 @@ class FirestoreService {
     required Map<String, dynamic> data,
   }) => snapshot
       .then((snapshot) {
-        var batch = _firestore.batch();
+        final WriteBatch batch = _firestore.batch();
         snapshot.docs
             .map(
               (doc) => batch.set(
@@ -381,9 +382,9 @@ class FirestoreService {
       .collection(path)
       .get()
       .then((snapshot) {
-        var batch = _firestore.batch();
+        final WriteBatch batch = _firestore.batch();
         snapshot.docs.map((doc) {
-          var data = doc.data();
+          final Map<String, dynamic> data = doc.data();
           if (data.containsKey(oldKey)) {
             return batch
               ..update(doc.reference, <String, dynamic>{newKey: data[oldKey]})
@@ -453,7 +454,7 @@ class FirestoreService {
     required Query<Map<String, dynamic>> dataQuery,
     required QueryEntity query,
   }) {
-    var temp = dataQuery;
+    Query<Map<String, dynamic>> temp = dataQuery;
     if (query.fields?.isNotEmpty ?? false) {
       temp = _fileds(query.fields!, temp);
     }
@@ -553,7 +554,7 @@ class FirestoreService {
     required Query<Map<String, dynamic>> dataQuery,
     required QueryEntity query,
   }) {
-    var temp = dataQuery;
+    Query<Map<String, dynamic>> temp = dataQuery;
     if (query.fields?.isNotEmpty ?? false) {
       temp = _fileds(query.fields!, temp);
     }
@@ -606,7 +607,7 @@ class FirestoreService {
   Future<void> _deleteList(
     Future<QuerySnapshot<Map<String, dynamic>>> snapshot,
   ) => snapshot.then((snapshot) {
-    var batch = _firestore.batch();
+    final WriteBatch batch = _firestore.batch();
     snapshot.docs.map((doc) => batch.delete(doc.reference));
     return batch.commit();
   });
@@ -641,9 +642,9 @@ class FirestoreService {
     required String key,
     required List<Map<String, dynamic>> data,
   }) async {
-    final batch = _firestore.batch();
-    for (final item in data) {
-      final docRef = _firestore
+    final WriteBatch batch = _firestore.batch();
+    for (final Map<String, dynamic> item in data) {
+      final DocumentReference<Map<String, dynamic>> docRef = _firestore
           .collection(collectionPath)
           .doc(documentId)
           .collection(subCollectionPath)

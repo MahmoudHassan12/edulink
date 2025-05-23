@@ -17,11 +17,11 @@ import 'package:edu_link/core/services/supabase_service.dart';
 
 class UserRepo {
   const UserRepo();
-  static const FirestoreService _fireStore = FirestoreService();
-  static const SupabaseService _supabase = SupabaseService();
+  static const _fireStore = FirestoreService();
+  static const _supabase = SupabaseService();
   static const String _path = Endpoints.users;
 
-  Future<String> uploadImage(File file) async =>
+  Future<String> uploadImage(File file) =>
       _supabase.upload(_path, 'images', file);
 
   Future<void> addUser({
@@ -62,17 +62,19 @@ class UserRepo {
     bool toSharedPref = false,
   }) async {
     try {
-      final data = await _fireStore.getDocument(
+      final Map<String, dynamic> data = await _fireStore.getDocument(
         path: _path,
         documentId: documentId,
       );
-      final courses = getCourses
+      final List<CourseEntity> courses = getCourses
           ? (await const CoursesRepo().getMultibleCourses(
                   (data['coursesIds'] as List<dynamic>?)?.cast<String>() ?? [],
                 ))?.toList() ??
                 []
           : <CourseEntity>[];
-      final user = UserEntity.fromMap(data).copyWith(courses: courses);
+      final UserEntity user = UserEntity.fromMap(
+        data,
+      ).copyWith(courses: courses);
       if (toSharedPref) {
         await SharedPrefSingleton.setString(
           Endpoints.user,
@@ -97,13 +99,9 @@ class UserRepo {
 
   Future<List<UserEntity>?> getMultipleUsers(List<String> userIds) => _fireStore
       .getDocuments(path: _path, documentIds: userIds)
-      .then((e) async {
+      .then((e) {
         log('${e.length} Users fetched successfully!');
-        return Future.wait(
-          e.map((e) async {
-            return UserEntity.fromMap(e);
-          }).toList(),
-        );
+        return e.map(UserEntity.fromMap).toList();
       })
       .onError<FirebaseException>((e, _) {
         log('Users not found');
@@ -118,32 +116,31 @@ class UserRepo {
     final controller = StreamController<UserEntity?>();
     _fireStore.streamDocument(path: _path, documentId: documentId).listen((
       data,
-    ) async {
+    ) {
       final user = UserEntity.fromMap(data);
       controller.add(user);
-      if (isProfessor) return;
-      final coursesIds = (data['coursesIds'] as List<dynamic>).cast<String>();
-      const CoursesRepo().getMultibleCoursesStream(coursesIds).listen((
-        courses,
-      ) async {
-        controller.add(user.copyWith(courses: courses));
-      });
+      if (isProfessor) {
+        return;
+      }
+      final List<String> coursesIds = (data['coursesIds'] as List<dynamic>)
+          .cast<String>();
+      const CoursesRepo()
+          .getMultibleCoursesStream(coursesIds)
+          .listen((courses) => controller.add(user.copyWith(courses: courses)));
     });
-    await for (final user in controller.stream) {
+    await for (final UserEntity? user in controller.stream) {
       yield user;
     }
-    controller.onCancel = () async =>
+    controller.onCancel = () =>
         !controller.isClosed ? controller.close() : null;
   }
 
   Stream<List<UserEntity>?> getMultibleUsersStream(List<String> userIds) =>
       _fireStore.streamDocuments(path: _path, documentIds: userIds).asyncMap((
         docs,
-      ) async {
+      ) {
         log('${docs.length} Users fetched successfully!');
-        return Future.wait<UserEntity>(
-          docs.map((e) async => UserEntity.fromMap(e)).toList(),
-        );
+        return docs.map(UserEntity.fromMap).toList();
       });
 
   Future<void> delete({required String documentId}) => _fireStore

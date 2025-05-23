@@ -25,7 +25,7 @@ final class AuthException extends _Exception {
       super.exception as FirebaseAuthException;
   @override
   String toString() {
-    final message = exception.message;
+    final String? message = exception.message;
     return message == null ? 'Exception' : 'Exception: $message';
   }
 }
@@ -39,7 +39,7 @@ final class DatabaseException extends _Exception {
   FirebaseException get exception => super.exception as FirebaseException;
   @override
   String toString() {
-    final message = exception.message;
+    final String? message = exception.message;
     return message == null ? 'Exception' : 'Exception: $message';
   }
 }
@@ -53,7 +53,7 @@ final class ProviderException extends _Exception {
   PlatformException get exception => super.exception as PlatformException;
   @override
   String toString() {
-    final message = exception.message;
+    final String? message = exception.message;
     return message == null ? 'Exception' : 'Exception: $message';
   }
 }

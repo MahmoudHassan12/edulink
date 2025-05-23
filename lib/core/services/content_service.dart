@@ -4,15 +4,11 @@ import 'package:edu_link/features/content/domain/content_item_entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ContentService {
-  final SupabaseService _supabaseService = const SupabaseService();
+  final _supabaseService = const SupabaseService();
   final Supabase _supabase = Supabase.instance;
 
-  Future<String> uploadContent(
-    File file,
-    String courseId,
-    ContentType type,
-  ) async {
-    final folder = _getFolderName(type);
+  Future<String> uploadContent(File file, String courseId, ContentType type) {
+    final String folder = _getFolderName(type);
     return _supabaseService.upload('courses', '$courseId/$folder', file);
   }
 
@@ -21,11 +17,11 @@ class ContentService {
     ContentType type,
     String fileName,
   ) async {
-    final folder = _getFolderName(type);
+    final String folder = _getFolderName(type);
     final path = '$courseId/$folder/$fileName';
 
     try {
-      final removedPaths = await _supabase.client.storage
+      final List<FileObject> removedPaths = await _supabase.client.storage
           .from('courses')
           .remove([path]);
 
@@ -40,14 +36,14 @@ class ContentService {
   Future<List<ContentItem>> fetchContentsForCourse(String courseId) async {
     final contents = <ContentItem>[];
 
-    for (final type in ContentType.values) {
-      final folder = _getFolderName(type);
-      final files = await _supabase.client.storage
+    for (final ContentType type in ContentType.values) {
+      final String folder = _getFolderName(type);
+      final List<FileObject> files = await _supabase.client.storage
           .from('courses')
           .list(path: '$courseId/$folder');
 
       for (final file in files) {
-        final fileUrl = _supabaseService.getPublicUrl(
+        final String fileUrl = _supabaseService.getPublicUrl(
           'courses',
           '$courseId/$folder/${file.name}',
         );

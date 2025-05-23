@@ -28,7 +28,7 @@ class SendMessageInput extends StatelessWidget {
           ),
         ),
         CustomIconButtonFilledTonal(
-          onPressed: () => onSendMessage(),
+          onPressed: onSendMessage,
           icon: Icons.send_rounded,
           iconSize: 32,
         ),

@@ -4,19 +4,18 @@ import 'package:edu_link/core/domain/entities/user_entity.dart';
 class AnswerEntity {
   const AnswerEntity({this.answer, this.user, this.date});
   factory AnswerEntity.fromMap(Map<String, dynamic>? data) {
-    final date = switch (data?['date']) {
-      String s => DateTime.tryParse(s),
-      int i => DateTime.fromMillisecondsSinceEpoch(i),
-      Timestamp t => t.toDate(),
-      DateTime d => d,
+    final DateTime? date = switch (data?['date']) {
+      final String s => DateTime.tryParse(s),
+      final int i => DateTime.fromMillisecondsSinceEpoch(i),
+      final Timestamp t => t.toDate(),
+      final DateTime d => d,
       _ => null,
     };
     return AnswerEntity(
       answer: data?['answer'],
-      user:
-          data?['user'] != null
-              ? UserEntity.fromMap(data?['user'])
-              : UserEntity(id: data?['userId']),
+      user: data?['user'] != null
+          ? UserEntity.fromMap(data?['user'])
+          : UserEntity(id: data?['userId']),
       date: date,
     );
   }

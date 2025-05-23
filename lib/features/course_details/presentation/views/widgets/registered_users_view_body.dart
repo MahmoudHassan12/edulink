@@ -1,3 +1,4 @@
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:edu_link/features/course_details/presentation/controllers/registered_users_cubit/registered_users_cubit.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,7 @@ class RegisteredUsersViewBody extends StatelessWidget {
   const RegisteredUsersViewBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
+  Widget build(BuildContext context) => CustomScrollView(
       slivers: [
         const SliverAppBar(
           title: Text('Registered Users'),
@@ -19,7 +19,7 @@ class RegisteredUsersViewBody extends StatelessWidget {
         BlocBuilder<RegisteredUsersCubit, RegisteredUsersState>(
           builder: (context, state) {
             if (state is RegisteredUsersSuccess) {
-              final users = state.users;
+              final List<UserEntity>? users = state.users;
               if (users == null || users.isEmpty) {
                 return const SliverToBoxAdapter(
                   child: Center(child: Text('No registered users found')),
@@ -27,7 +27,7 @@ class RegisteredUsersViewBody extends StatelessWidget {
               }
               return SliverList.builder(
                 itemBuilder: (context, index) {
-                  final user = users[index];
+                  final UserEntity user = users[index];
                   return ListTile(
                     leading: UserPhoto(user: user),
                     title: Text(user.name!),
@@ -50,5 +50,4 @@ class RegisteredUsersViewBody extends StatelessWidget {
         ),
       ],
     );
-  }
 }

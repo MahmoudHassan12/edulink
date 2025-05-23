@@ -14,7 +14,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  int _selectedIndex = 1;
+  var _selectedIndex = 1;
   void _onDestinationSelected(int index) =>
       index != _selectedIndex ? setState(() => _selectedIndex = index) : null;
   @override
@@ -37,7 +37,7 @@ class _AddCourseFloatingButton extends StatelessWidget {
   const _AddCourseFloatingButton();
   @override
   FloatingActionButton build(BuildContext context) => FloatingActionButton(
-    onPressed: () async => manageCourseNavigation(context),
+    onPressed: () => manageCourseNavigation(context),
     child: const Icon(Icons.add_rounded),
   );
 }

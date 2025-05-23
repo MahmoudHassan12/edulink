@@ -7,6 +7,6 @@ class MyProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.all(4),
-    child: UserPhoto(user: getUser!, isHero: true),
+    child: UserPhoto(user: getUser, isHero: true),
   );
 }

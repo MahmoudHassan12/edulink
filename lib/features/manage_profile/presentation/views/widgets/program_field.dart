@@ -1,3 +1,4 @@
+import 'package:edu_link/core/domain/entities/department_entity.dart';
 import 'package:edu_link/core/domain/entities/program_entity.dart';
 import 'package:edu_link/core/widgets/custom_dropdown_menu.dart';
 import 'package:edu_link/features/manage_profile/presentation/controllers/cubits/manage_profile_cubit/manage_profile_cubit.dart'
@@ -9,9 +10,9 @@ class ProgramField extends StatelessWidget {
   const ProgramField({super.key});
   @override
   Widget build(BuildContext context) {
-    final cubit = context.watch<ManageProfileCubit>();
-    final department = cubit.user?.department;
-    final program = cubit.user?.program;
+    final ManageProfileCubit cubit = context.watch<ManageProfileCubit>();
+    final DepartmentEntity? department = cubit.user?.department;
+    final ProgramEntity? program = cubit.user?.program;
     return CustomDropdownMenu<ProgramEntity>(
       label: 'Program',
       controller: TextEditingController(text: program?.name),

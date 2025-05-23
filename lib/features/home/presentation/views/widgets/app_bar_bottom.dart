@@ -40,17 +40,19 @@ Iterable<ListTile> _suggestions(
   List<CourseEntity>? courses,
   SearchController controller,
 ) sync* {
-  final searchQuery = controller.value.text.toLowerCase();
-  if (searchQuery.isEmpty) return;
-  for (final course in (courses ?? <CourseEntity>[])) {
-    final courseTitle = course.title;
-    final courseCode = course.code;
+  final String searchQuery = controller.value.text.toLowerCase();
+  if (searchQuery.isEmpty) {
+    return;
+  }
+  for (final CourseEntity course in (courses ?? <CourseEntity>[])) {
+    final String? courseTitle = course.title;
+    final String? courseCode = course.code;
     if ((courseTitle?.toLowerCase().contains(searchQuery) ?? false) ||
         (courseCode?.toLowerCase().contains(searchQuery) ?? false)) {
       yield ListTile(
         title: Text(courseCode!),
         subtitle: Text(courseTitle!),
-        onTap: () async => courseDetailsNavigation(context, extra: course).then(
+        onTap: () => courseDetailsNavigation(context, extra: course).then(
           (_) => controller
             ..clear()
             ..closeView(null),

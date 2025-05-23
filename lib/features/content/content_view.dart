@@ -35,13 +35,13 @@ class _ContentViewState extends State<ContentView> {
 
   Future<void> handleUploading() async {
     log('FAB Pressed');
-    final result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['mp4', 'jpg', 'jpeg', 'png', 'pdf'],
     );
     if (result != null && result.files.single.path != null) {
       final file = File(result.files.single.path!);
-      final extension = result.files.single.extension;
+      final String? extension = result.files.single.extension;
       ContentType type;
       if (['mp4'].contains(extension)) {
         type = ContentType.video;

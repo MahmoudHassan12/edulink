@@ -1,5 +1,6 @@
 import 'package:edu_link/core/constants/borders.dart' show xsBorder;
 import 'package:edu_link/core/domain/entities/question_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart'
     show questionDetailsNavigation;
@@ -23,10 +24,12 @@ class QuestionCard extends StatelessWidget {
   final bool clickable;
   @override
   Widget build(BuildContext context) {
-    final aLength = qa.answers?.length ?? 0;
-    final user = qa.user;
-    final date = DateFormat('MMMM dd, yyyy').format(qa.date ?? DateTime.now());
-    final time = DateFormat('hh:mm a').format(qa.date ?? DateTime.now());
+    final int aLength = qa.answers?.length ?? 0;
+    final UserEntity? user = qa.user;
+    final String date = DateFormat(
+      'MMMM dd, yyyy',
+    ).format(qa.date ?? DateTime.now());
+    final String time = DateFormat('hh:mm a').format(qa.date ?? DateTime.now());
     return Hero(
       tag: qa.hashCode,
       child: Card.filled(
@@ -35,7 +38,7 @@ class QuestionCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: clickable
-              ? () async => questionDetailsNavigation(
+              ? () => questionDetailsNavigation(
                   context,
                   extra: {'qa': qa, 'context': context, 'courseId': courseId},
                 )

@@ -8,11 +8,11 @@ class ProfileBottomAppBar extends StatelessWidget {
   final UserEntity user;
   @override
   Widget build(BuildContext context) {
-    final linkedInLink = user.linkedInLink;
-    final gitHubLink = user.gitHubLink;
+    final String? linkedInLink = user.linkedInLink;
+    final String? gitHubLink = user.gitHubLink;
 
-    final hasLinkedIn = _isValidUserLink(linkedInLink, 'linkedin.com');
-    final hasGitHub = _isValidUserLink(gitHubLink, 'github.com');
+    final bool hasLinkedIn = _isValidUserLink(linkedInLink, 'linkedin.com');
+    final bool hasGitHub = _isValidUserLink(gitHubLink, 'github.com');
 
     if (!hasLinkedIn && !hasGitHub) {
       return const SizedBox.shrink();
@@ -26,12 +26,12 @@ class ProfileBottomAppBar extends StatelessWidget {
           if (hasLinkedIn)
             IconButton(
               icon: const Icon(FontAwesomeIcons.linkedinIn),
-              onPressed: () async => _launchUrl(linkedInLink!),
+              onPressed: () => _launchUrl(linkedInLink!),
             ),
           if (hasGitHub)
             IconButton(
               icon: const Icon(FontAwesomeIcons.github),
-              onPressed: () async => _launchUrl(gitHubLink!),
+              onPressed: () => _launchUrl(gitHubLink!),
             ),
         ],
       ),
@@ -39,8 +39,10 @@ class ProfileBottomAppBar extends StatelessWidget {
   }
 
   bool _isValidUserLink(String? url, String expectedHost) {
-    if (url == null || url.trim().isEmpty) return false;
-    final uri = Uri.tryParse(url.trim());
+    if (url == null || url.trim().isEmpty) {
+      return false;
+    }
+    final Uri? uri = Uri.tryParse(url.trim());
     return uri != null &&
         uri.hasScheme &&
         uri.hasAuthority &&
@@ -48,11 +50,11 @@ class ProfileBottomAppBar extends StatelessWidget {
   }
 
   Future<void> _launchUrl(String url) async {
-    var fixedUrl = url.trim();
+    String fixedUrl = url.trim();
     if (!fixedUrl.startsWith('http')) {
       fixedUrl = 'https://$fixedUrl';
     }
-    final uri = Uri.parse(fixedUrl);
+    final Uri uri = Uri.parse(fixedUrl);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {

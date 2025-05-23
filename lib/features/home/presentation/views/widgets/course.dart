@@ -1,4 +1,5 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/navigations.dart'
     show courseDetailsNavigation;
@@ -15,10 +16,10 @@ class Course extends StatelessWidget {
   final CourseEntity course;
   @override
   Widget build(BuildContext context) {
-    final surface = Theme.of(context).colorScheme.surface.withAlpha(160);
-    final professor = course.professor;
-    final duration = course.duration;
-    final width = MediaQuery.sizeOf(context).width - 88;
+    final Color surface = Theme.of(context).colorScheme.surface.withAlpha(160);
+    final UserEntity? professor = course.professor;
+    final DurationEntity? duration = course.duration;
+    final double width = MediaQuery.sizeOf(context).width - 88;
     return Card.filled(
       margin: EdgeInsets.zero,
       elevation: 0,
@@ -26,7 +27,7 @@ class Course extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(28)),
       ),
       child: InkWell(
-        onTap: () async => courseDetailsNavigation(context, extra: course),
+        onTap: () => courseDetailsNavigation(context, extra: course),
         child: Column(
           children: [
             Expanded(

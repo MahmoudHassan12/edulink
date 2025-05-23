@@ -8,17 +8,16 @@ import 'package:edu_link/core/services/firestore_service.dart'
 
 class ChatService {
   const ChatService();
-  static const FirestoreService _fireStore = FirestoreService();
+  static const _fireStore = FirestoreService();
 
-  String _getChatId(String userId1, String userId2) {
-    return userId1.compareTo(userId2) < 0
-        ? '${userId1}_$userId2'
-        : '${userId2}_$userId1';
-  }
+  String _getChatId(String userId1, String userId2) =>
+      userId1.compareTo(userId2) < 0
+      ? '${userId1}_$userId2'
+      : '${userId2}_$userId1';
 
   Stream<ChatEntity> getChat(String userId1, String userId2) => _fireStore
       .streamDocument(path: 'chats', documentId: _getChatId(userId1, userId2))
-      .map((data) => ChatEntity.fromMap(data));
+      .map(ChatEntity.fromMap);
 
   Stream<List<ChatEntity>> getChates() => _fireStore
       .streamCollectionWithQuery(
@@ -27,7 +26,7 @@ class ChatService {
           fields: [FieldEntity(field: 'usersIds', arrayContains: getUser?.id)],
         ),
       )
-      .map((e) => e.map((data) => ChatEntity.fromMap(data)).toList());
+      .map((e) => e.map(ChatEntity.fromMap).toList());
 
   Future<void> sendMessage(
     String userId1,
@@ -62,7 +61,9 @@ class ChatService {
       );
 
   Future<void> init(String userId1, String userId2) async {
-    if (await _isChatExist(userId1, userId2)) return;
+    if (await _isChatExist(userId1, userId2)) {
+      return;
+    }
     return _createChat(userId1, userId2);
   }
 }

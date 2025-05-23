@@ -8,8 +8,7 @@ class ResetPasswordViewBody extends StatelessWidget {
   const ResetPasswordViewBody({this.isLoading = false, super.key});
   final bool isLoading;
   @override
-  CustomScrollView build(BuildContext context) {
-    return CustomScrollView(
+  CustomScrollView build(BuildContext context) => CustomScrollView(
       slivers: [
         CustomAuthAppBar(isLoading: isLoading, title: 'Reset Password'),
         SliverPadding(
@@ -28,5 +27,4 @@ class ResetPasswordViewBody extends StatelessWidget {
         ),
       ],
     );
-  }
 }

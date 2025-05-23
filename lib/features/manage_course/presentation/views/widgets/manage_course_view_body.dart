@@ -38,7 +38,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
 
   @override
   void initState() {
-    final course = widget.course;
+    final CourseEntity? course = widget.course;
     _codeController = TextEditingController(text: course?.code);
     _titleController = TextEditingController(text: course?.title);
     _creditHourController = TextEditingController(
@@ -99,23 +99,26 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
             DescriptionField(controller: _descriptionController),
             CustomElevatedButton(
               onPressed: () async {
-                final cubit = context.read<ManageCourseCubit>()
-                  ..setCode(_codeController.text)
-                  ..setTitle(_titleController.text)
-                  ..setDescription(_descriptionController.text)
-                  ..setType(_typeController.text)
-                  ..setLevel(_levelController.text)
-                  ..setDepartment(_departmentController.text)
-                  ..setSemester(_semesterController.text)
-                  ..setCreditHour(int.tryParse(_creditHourController.text) ?? 0)
-                  // TODO(Mahmoud): Don't forget this line
-                  ..setLectures(widget.course?.lectures ?? 0)
-                  // TODO(Mahmoud): Don't forget this line
-                  ..setDuration(
-                    widget.course?.duration ?? const DurationEntity(),
-                  )
-                  ..setProfessor(getUser!);
-                final course = cubit.course;
+                final ManageCourseCubit cubit =
+                    context.read<ManageCourseCubit>()
+                      ..setCode(_codeController.text)
+                      ..setTitle(_titleController.text)
+                      ..setDescription(_descriptionController.text)
+                      ..setType(_typeController.text)
+                      ..setLevel(_levelController.text)
+                      ..setDepartment(_departmentController.text)
+                      ..setSemester(_semesterController.text)
+                      ..setCreditHour(
+                        int.tryParse(_creditHourController.text) ?? 0,
+                      )
+                      // TODO(Mahmoud): Don't forget this line
+                      ..setLectures(widget.course?.lectures ?? 0)
+                      // TODO(Mahmoud): Don't forget this line
+                      ..setDuration(
+                        widget.course?.duration ?? const DurationEntity(),
+                      )
+                      ..setProfessor(getUser!);
+                final CourseEntity course = cubit.course;
                 if (course.isValid) {
                   widget.course != null
                       ? await const CoursesRepo().update(

@@ -1,4 +1,5 @@
 import 'package:edu_link/core/domain/entities/answer_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/core/widgets/user_photo.dart' show UserPhoto;
 import 'package:flutter/material.dart';
@@ -10,9 +11,9 @@ class AnswerCard extends StatelessWidget {
   final bool hasDivider;
   @override
   Widget build(BuildContext context) {
-    final user = answer.user;
-    final date = DateFormat('MMMM dd, yyyy').format(answer.date!);
-    final time = DateFormat('hh:mm a').format(answer.date!);
+    final UserEntity? user = answer.user;
+    final String date = DateFormat('MMMM dd, yyyy').format(answer.date!);
+    final String time = DateFormat('hh:mm a').format(answer.date!);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -21,11 +22,11 @@ class AnswerCard extends StatelessWidget {
           ListTile(
             minTileHeight: 56,
             contentPadding: EdgeInsets.zero,
-            leading: UserPhoto(user: user!),
+            leading: UserPhoto(user: user),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                EText(user.name!, style: const TextStyle(fontSize: 14)),
+                EText(user!.name!, style: const TextStyle(fontSize: 14)),
               ],
             ),
             subtitle: EText(

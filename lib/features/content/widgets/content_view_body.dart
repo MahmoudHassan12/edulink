@@ -18,9 +18,9 @@ class ContentViewBody extends StatefulWidget {
 }
 
 class _ContentViewBodyState extends State<ContentViewBody> {
-  final ContentService _contentService = ContentService();
+  final _contentService = ContentService();
   List<ContentItem> _contentItems = [];
-  bool _isLoading = true;
+  var _isLoading = true;
 
   @override
   void initState() {
@@ -30,14 +30,13 @@ class _ContentViewBodyState extends State<ContentViewBody> {
 
   Future<void> _loadContent() async {
     try {
-      final items = await _contentService.fetchContentsForCourse(
-        widget.courseId,
-      );
+      final List<ContentItem> items = await _contentService
+          .fetchContentsForCourse(widget.courseId);
       setState(() {
         _contentItems = items;
         _isLoading = false;
       });
-    } catch (e) {
+    } on Exception catch (e) {
       setState(() {
         _isLoading = false;
       });
@@ -57,7 +56,9 @@ class _ContentViewBodyState extends State<ContentViewBody> {
 
   Future<void> _deleteContent(ContentItem item) async {
     try {
-      final fileName = Uri.decodeFull(Uri.parse(item.url).pathSegments.last);
+      final String fileName = Uri.decodeFull(
+        Uri.parse(item.url).pathSegments.last,
+      );
       await _contentService.deleteContent(widget.courseId, item.type, fileName);
 
       setState(() {
@@ -74,7 +75,7 @@ class _ContentViewBodyState extends State<ContentViewBody> {
           ),
         );
       }
-    } catch (e) {
+    } on Exception catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -89,25 +90,24 @@ class _ContentViewBodyState extends State<ContentViewBody> {
     }
   }
 
-  Future<bool?> _confirmDismiss(BuildContext context, ContentItem item) {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Content'),
-        content: const Text('Are you sure you want to delete this content?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
-    );
-  }
+  Future<bool?> _confirmDismiss(BuildContext context, ContentItem item) =>
+      showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Delete Content'),
+          content: const Text('Are you sure you want to delete this content?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -124,15 +124,14 @@ class _ContentViewBodyState extends State<ContentViewBody> {
       child: ListView.builder(
         itemCount: _contentItems.length,
         itemBuilder: (context, index) {
-          final item = _contentItems[index];
+          final ContentItem item = _contentItems[index];
 
           if (widget.isProfessor) {
             return Dismissible(
               key: Key(item.url),
               direction: DismissDirection.endToStart,
-              confirmDismiss: (direction) async =>
-                  _confirmDismiss(context, item),
-              onDismissed: (direction) async => _deleteContent(item),
+              confirmDismiss: (direction) => _confirmDismiss(context, item),
+              onDismissed: (direction) => _deleteContent(item),
               background: Container(
                 color: Colors.red,
                 padding: const EdgeInsets.symmetric(horizontal: 20),

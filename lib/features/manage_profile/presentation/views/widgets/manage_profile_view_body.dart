@@ -1,3 +1,4 @@
+import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
@@ -39,7 +40,7 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
 
   @override
   void initState() {
-    final user = getUser;
+    final UserEntity? user = getUser;
     _nameController = TextEditingController(text: user?.name);
     _emailController = TextEditingController(text: user?.email);
     _phoneController = TextEditingController(text: user?.phone);
@@ -64,26 +65,34 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
   }
 
   bool _isValidLinkedIn(String? url) {
-    if (url == null || url.trim().isEmpty) return true;
+    if (url == null || url.trim().isEmpty) {
+      return true;
+    }
     const pattern = r'^(https?:\/\/)?(www\.)?linkedin\.com\/.*$';
     return RegExp(pattern).hasMatch(url.trim());
   }
 
   bool _isValidGitHub(String? url) {
-    if (url == null || url.trim().isEmpty) return true;
+    if (url == null || url.trim().isEmpty) {
+      return true;
+    }
     const pattern = r'^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$';
     return RegExp(pattern).hasMatch(url.trim());
   }
 
   bool _isValidEmail(String? email) {
-    if (email == null || email.trim().isEmpty) return false;
+    if (email == null || email.trim().isEmpty) {
+      return false;
+    }
     const pattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     return RegExp(pattern).hasMatch(email.trim());
   }
 
   bool _isValidPhone(String? phone) {
-    if (phone == null || phone.trim().isEmpty) return false;
-    const pattern = r'^\+?\d{10,15}$'; 
+    if (phone == null || phone.trim().isEmpty) {
+      return false;
+    }
+    const pattern = r'^\+?\d{10,15}$';
     return RegExp(pattern).hasMatch(phone.trim());
   }
 
@@ -118,13 +127,13 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
             LinkedinField(controller: _linkedInController),
             CustomElevatedButton(
               onPressed: () async {
-                final name = _nameController.text.trim();
-                final email = _emailController.text.trim();
-                final phone = _phoneController.text.trim();
-                final level = _levelController.text.trim();
-                final ssn = _ssnController.text.trim();
-                final github = _gitHubController.text.trim();
-                final linkedin = _linkedInController.text.trim();
+                final String name = _nameController.text.trim();
+                final String email = _emailController.text.trim();
+                final String phone = _phoneController.text.trim();
+                final String level = _levelController.text.trim();
+                final String ssn = _ssnController.text.trim();
+                final String github = _gitHubController.text.trim();
+                final String linkedin = _linkedInController.text.trim();
 
                 if (!_isValidEmail(email)) {
                   showSnackbar(
@@ -154,18 +163,21 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
                   return;
                 }
 
-                final cubit = context.read<ManageProfileCubit>()
-                  ..setName(name)
-                  ..setEmail(email)
-                  ..setPhone(phone)
-                  ..setLevel(level)
-                  ..setSsn(ssn)
-                  ..setGitHub(github)
-                  ..setLinkedIn(linkedin);
+                final ManageProfileCubit cubit =
+                    context.read<ManageProfileCubit>()
+                      ..setName(name)
+                      ..setEmail(email)
+                      ..setPhone(phone)
+                      ..setLevel(level)
+                      ..setSsn(ssn)
+                      ..setGitHub(github)
+                      ..setLinkedIn(linkedin);
 
                 if (cubit.user?.isValid ?? false) {
                   await cubit.update();
-                  if (context.mounted) await homeNavigation(context);
+                  if (context.mounted) {
+                    await homeNavigation(context);
+                  }
                 } else {
                   showSnackbar(
                     context,

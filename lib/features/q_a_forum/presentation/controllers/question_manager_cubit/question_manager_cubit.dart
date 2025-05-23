@@ -9,31 +9,31 @@ part 'question_manager_state.dart';
 class QuestionManagerCubit extends Cubit<QuestionManagerState> {
   QuestionManagerCubit(this._courseId) : super(const _QuestionManagerInitial());
   final String _courseId;
-  QuestionEntity _question = const QuestionEntity();
+  var _question = const QuestionEntity();
 
   QuestionEntity _updateQuestion(QuestionEntity question) =>
       _question = question;
 
   void setId() {
-    final result = _question.setId();
+    final QuestionEntity result = _question.setId();
     _updateQuestion(result);
     emit(_QuestionUpdated());
   }
 
   void setQuestion(String question) {
-    final result = _question.setQuestion(question);
+    final QuestionEntity result = _question.setQuestion(question);
     _updateQuestion(result);
     emit(_QuestionUpdated());
   }
 
   void setDate(DateTime date) {
-    final result = _question.setDate(date);
+    final QuestionEntity result = _question.setDate(date);
     _updateQuestion(result);
     emit(_QuestionUpdated());
   }
 
   void setUser(UserEntity user) {
-    final result = _question.setUser(user);
+    final QuestionEntity result = _question.setUser(user);
     _updateQuestion(result);
     emit(_QuestionUpdated());
   }

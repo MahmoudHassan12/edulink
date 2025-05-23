@@ -13,7 +13,7 @@ class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
   @override
   Widget build(BuildContext context) {
-    final navigations = [
+    final List<Map<String, Object?>> navigations = [
       {
         'icon': Icons.menu_book_rounded,
         'label': 'Available Courses',
@@ -31,9 +31,8 @@ class AppDrawer extends StatelessWidget {
 
     return NavigationDrawer(
       tilePadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      onDestinationSelected:
-          (index) async => (navigations[index]['action']
-                  as Future<void> Function(BuildContext)?)
+      onDestinationSelected: (index) =>
+          (navigations[index]['action'] as Future<void> Function(BuildContext)?)
               ?.call(context),
       selectedIndex: null,
       children: [
@@ -52,28 +51,25 @@ class AppDrawer extends StatelessWidget {
 class _DrawerHeader extends StatelessWidget {
   const _DrawerHeader();
   @override
-  Widget build(BuildContext context) {
-    final user = getUser;
-    return DrawerHeader(
-      padding: EdgeInsets.zero,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ListTile(
-            leading: UserPhoto(user: user!),
-            title: EText(user.name ?? 'No Name'),
-            subtitle: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: EText(user.email ?? 'No Email'),
-            ),
+  Widget build(BuildContext context) => DrawerHeader(
+    padding: EdgeInsets.zero,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ListTile(
+          leading: UserPhoto(user: getUser),
+          title: EText(getUser?.name ?? 'No Name'),
+          subtitle: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: EText(getUser?.email ?? 'No Email'),
           ),
-          OutlinedButton(
-            onPressed: () async => profileNavigation(context, extra: user),
-            child: const Text('Manage your Account'),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        OutlinedButton(
+          onPressed: () => profileNavigation(context, extra: getUser!),
+          child: const Text('Manage your Account'),
+        ),
+      ],
+    ),
+  );
 }

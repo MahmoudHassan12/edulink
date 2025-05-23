@@ -1,4 +1,5 @@
 import 'package:edu_link/core/domain/entities/course_entity.dart';
+import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
@@ -27,21 +28,24 @@ class QAForumViewBody extends StatelessWidget {
             minTileHeight: 64,
             title: const EText('Questions'),
             trailing: CustomFilledButton(
-              onPressed: () async => showDialog(
+              onPressed: () => showDialog(
                 context: context,
                 builder: (_) => Dialog(
                   child: AnswerTextField(
                     controller: controller,
                     onSend: () async {
-                      final cubit = context.read<QuestionManagerCubit>()
-                        ..setQuestion(controller.text)
-                        ..setDate(DateTime.now())
-                        ..setUser(getUser!)
-                        ..setId();
+                      final QuestionManagerCubit cubit =
+                          context.read<QuestionManagerCubit>()
+                            ..setQuestion(controller.text)
+                            ..setDate(DateTime.now())
+                            ..setUser(getUser!)
+                            ..setId();
 
                       await cubit.addQuestion();
                       controller.clear();
-                      if (context.mounted) popNavigation(context);
+                      if (context.mounted) {
+                        popNavigation(context);
+                      }
                     },
                     labelText: 'Ask',
                   ),
@@ -60,7 +64,7 @@ class QAForumViewBody extends StatelessWidget {
               );
             }
             if (state is QuestionSuccess) {
-              final questions = state.questions;
+              final List<QuestionEntity> questions = state.questions;
               if (questions.isEmpty) {
                 return const SliverToBoxAdapter(
                   child: Center(child: EText('No questions available')),

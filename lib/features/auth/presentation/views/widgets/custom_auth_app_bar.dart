@@ -28,15 +28,14 @@ class CustomAuthAppBar extends StatelessWidget {
   SliverSafeArea build(BuildContext context) => SliverSafeArea(
     sliver: SliverAppBar(
       automaticallyImplyLeading: automaticallyImplyLeading,
-      title:
-          isLoading
-              ? const LinearProgressIndicator(borderRadius: xxsBorder)
-              : null,
+      title: isLoading
+          ? const LinearProgressIndicator(borderRadius: xxsBorder)
+          : null,
       flexibleSpace: FlexibleSpaceBar(
         background: Center(
           // TODO(Anyone): Remove the gesture detector after implementation
           child: GestureDetector(
-            onLongPress: () async => homeNavigation(context),
+            onLongPress: () => homeNavigation(context),
             child: EText(title, style: const TextStyle(fontSize: 36)),
           ),
         ),

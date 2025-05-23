@@ -43,7 +43,7 @@ class ProfileViewBody extends StatelessWidget {
             if (user.id == getUser?.id) ...{
               const SizedBox(height: 12),
               CustomFilledButton.tonalIcon(
-                onPressed: () async => const AuthService().signOut(context),
+                onPressed: () => const AuthService().signOut(context),
                 label: 'Log Out',
                 icon: Icons.logout_rounded,
                 backgroundColor: Theme.of(context).colorScheme.errorContainer,

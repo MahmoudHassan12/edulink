@@ -54,7 +54,7 @@ String? _validateEmail(String? input) {
   }
 }
 
-final RegExp _firebaseEmailRegex = RegExp(
+final _firebaseEmailRegex = RegExp(
   r'^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$',
   caseSensitive: false,
 );

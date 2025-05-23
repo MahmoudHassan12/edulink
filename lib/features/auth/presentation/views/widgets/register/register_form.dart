@@ -17,8 +17,8 @@ class _RegisterFormState extends State<RegisterForm> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _isVisible = false;
+  final _formKey = GlobalKey<FormState>();
+  var _isVisible = false;
 
   @override
   void initState() {
@@ -41,9 +41,9 @@ class _RegisterFormState extends State<RegisterForm> {
       return false; // Validation failed
     }
 
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    final confirmPassword = _confirmPasswordController.text.trim();
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+    final String confirmPassword = _confirmPasswordController.text.trim();
 
     if (password != confirmPassword) {
       log('Passwords do not match');
@@ -54,54 +54,51 @@ class _RegisterFormState extends State<RegisterForm> {
       await const AuthRepo().signUpWithEmail(email, password);
       log('User registered successfully');
       return true;
-    } catch (e) {
+    } on Exception catch (e) {
       log('Error: $e');
       return false;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          EmailTextField(
-            isLoading: widget.isLoading,
-            emailController: _emailController,
-            textInputAction: TextInputAction.next,
-            onChanged: (value) {},
-          ),
-          PasswordTextField(
-            isLoading: widget.isLoading,
-            passwordController: _passwordController,
-            isVisible: _isVisible,
-            setVisible: (isVisible) => setState(() => _isVisible = isVisible),
-            textInputAction: TextInputAction.next,
-            labelText: 'Password',
-            onChanged: (value) {},
-          ),
-          PasswordTextField(
-            isLoading: widget.isLoading,
-            passwordController: _confirmPasswordController,
-            isVisible: _isVisible,
-            setVisible: (isVisible) => setState(() => _isVisible = isVisible),
-            textInputAction: TextInputAction.go,
-            labelText: 'Confirm Password',
-          ),
-          CustomFilledButton(
-            label: 'Register',
-            onPressed:
-                widget.isLoading
-                    ? null
-                    : () async {
-                      if (await _signUp() && context.mounted) {
-                        await manageProfileNavigation(context);
-                      }
-                    },
-          ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Form(
+    key: _formKey,
+    child: Column(
+      children: [
+        EmailTextField(
+          isLoading: widget.isLoading,
+          emailController: _emailController,
+          textInputAction: TextInputAction.next,
+          onChanged: (value) {},
+        ),
+        PasswordTextField(
+          isLoading: widget.isLoading,
+          passwordController: _passwordController,
+          isVisible: _isVisible,
+          setVisible: (isVisible) => setState(() => _isVisible = isVisible),
+          textInputAction: TextInputAction.next,
+          labelText: 'Password',
+          onChanged: (value) {},
+        ),
+        PasswordTextField(
+          isLoading: widget.isLoading,
+          passwordController: _confirmPasswordController,
+          isVisible: _isVisible,
+          setVisible: (isVisible) => setState(() => _isVisible = isVisible),
+          textInputAction: TextInputAction.go,
+          labelText: 'Confirm Password',
+        ),
+        CustomFilledButton(
+          label: 'Register',
+          onPressed: widget.isLoading
+              ? null
+              : () async {
+                  if (await _signUp() && context.mounted) {
+                    await manageProfileNavigation(context);
+                  }
+                },
+        ),
+      ],
+    ),
+  );
 }

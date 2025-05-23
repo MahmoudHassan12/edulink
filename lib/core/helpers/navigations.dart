@@ -10,7 +10,7 @@ Future<void> _navigateTo(
   bool clearStack = false,
   Object? extra,
 }) async {
-  final router = GoRouter.of(context);
+  final GoRouter router = GoRouter.of(context);
   return clearStack
       ? router.go(route, extra: extra)
       : router.push<RouteMatchList?>(route, extra: extra);

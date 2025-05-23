@@ -13,11 +13,11 @@ class QuestionEntity {
     this.date,
   });
   factory QuestionEntity.fromMap(Map<String, dynamic>? data) {
-    final date = switch (data?['date']) {
-      String s => DateTime.tryParse(s),
-      int i => DateTime.fromMillisecondsSinceEpoch(i),
-      Timestamp t => t.toDate(),
-      DateTime d => d,
+    final DateTime? date = switch (data?['date']) {
+      final String s => DateTime.tryParse(s),
+      final int i => DateTime.fromMillisecondsSinceEpoch(i),
+      final Timestamp t => t.toDate(),
+      final DateTime d => d,
       _ => DateTime.now(),
     };
     return QuestionEntity(

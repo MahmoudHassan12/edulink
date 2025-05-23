@@ -89,13 +89,13 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
     emit(ManageCourseUpdated());
   }
 
-  Future<void> upload() async {
+  Future<void> upload() {
     emit(const ManageCourseLoading());
     setId();
     const coursesRepo = CoursesRepo();
     return coursesRepo
         .uploadImage(course.image!)
-        .then((e) => setImageUrl(e))
+        .then(setImageUrl)
         .then(
           (_) => coursesRepo
               .add(data: course.toMap(), documentId: course.id)

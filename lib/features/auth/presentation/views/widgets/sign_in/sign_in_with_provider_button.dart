@@ -16,7 +16,7 @@ class SignInWithProviderButton extends StatelessWidget {
   final bool isLoading;
   @override
   Widget build(BuildContext context) {
-    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final Color onSurface = Theme.of(context).colorScheme.onSurface;
     return OutlinedButton.icon(
       onPressed: isLoading ? null : onPressed,
       style: OutlinedButton.styleFrom(

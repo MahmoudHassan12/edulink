@@ -1,3 +1,5 @@
+import 'package:edu_link/core/domain/entities/location_entity.dart';
+import 'package:edu_link/core/domain/entities/office_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
 import 'package:edu_link/features/profile/presentation/views/widgets/profile_panal.dart'
@@ -9,14 +11,14 @@ class ThirdPanal extends StatelessWidget {
   final UserEntity user;
   @override
   Widget build(BuildContext context) {
-    final office = user.office;
-    final location = office?.location;
-    final allTimes = office?.availability?.times
+    final OfficeEntity? office = user.office;
+    final LocationEntity? location = office?.location;
+    final String? allTimes = office?.availability?.times
         ?.expand<String?>((e) {
           String? pad(int? time) => time?.toString().padLeft(2, '0');
-          final from = e.from;
+          final TimeOfDay? from = e.from;
           final fromM = (from?.hour ?? 0) < 12 ? 'AM' : 'PM';
-          final to = e.to;
+          final TimeOfDay? to = e.to;
           final toM = (to?.hour ?? 0) < 12 ? 'AM' : 'PM';
           final availability =
               '${e.day}: ${pad(from?.hour)}:${pad(from?.minute)} $fromM'

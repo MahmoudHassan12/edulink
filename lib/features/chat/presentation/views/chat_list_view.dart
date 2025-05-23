@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:edu_link/core/constants/borders.dart' show xsBorder;
 import 'package:edu_link/core/domain/entities/chat_entity.dart' show ChatEntity;
+import 'package:edu_link/core/domain/entities/message_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
@@ -21,130 +22,124 @@ class ChatListView extends StatelessWidget {
 class ChatListViewBody extends StatelessWidget {
   const ChatListViewBody({super.key});
   @override
-  Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          title: const EText('Chats'),
-          floating: true,
-          pinned: true,
-          actions: [
-            IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-          ],
-        ),
-        StreamBuilder<List<ChatEntity>>(
-          stream: const ChatService().getChates(),
-          builder: (_, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-            if (snapshot.hasError) {
-              return const SliverFillRemaining(
-                child: Center(child: EText('Error loading chats')),
-              );
-            }
-            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const SliverFillRemaining(
-                child: Center(child: EText('No chats available')),
-              );
-            }
-            if (snapshot.hasData) {
-              final chats =
-                  snapshot.data
-                      ?.where((chat) => chat.messages?.isNotEmpty ?? false)
-                      .toList()
-                    ?..sort(
-                      (a, b) =>
-                          b.messages?.last.date?.compareTo(
-                            a.messages?.last.date ?? DateTime.now(),
-                          ) ??
-                          0,
-                    );
-              if (chats?.isNotEmpty ?? false) {
-                return ChatList(chats: chats ?? []);
-              }
-              return const SliverFillRemaining(
-                child: Center(child: EText('No chats available')),
-              );
+  Widget build(BuildContext context) => CustomScrollView(
+    slivers: [
+      SliverAppBar(
+        title: const EText('Chats'),
+        floating: true,
+        pinned: true,
+        actions: [IconButton(icon: const Icon(Icons.search), onPressed: () {})],
+      ),
+      StreamBuilder<List<ChatEntity>>(
+        stream: const ChatService().getChates(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          if (snapshot.hasError) {
+            return const SliverFillRemaining(
+              child: Center(child: EText('Error loading chats')),
+            );
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const SliverFillRemaining(
+              child: Center(child: EText('No chats available')),
+            );
+          }
+          if (snapshot.hasData) {
+            final List<ChatEntity>? chats =
+                snapshot.data
+                    ?.where((chat) => chat.messages?.isNotEmpty ?? false)
+                    .toList()
+                  ?..sort(
+                    (a, b) =>
+                        b.messages?.last.date?.compareTo(
+                          a.messages?.last.date ?? DateTime.now(),
+                        ) ??
+                        0,
+                  );
+            if (chats?.isNotEmpty ?? false) {
+              return ChatList(chats: chats ?? []);
             }
             return const SliverFillRemaining(
               child: Center(child: EText('No chats available')),
             );
-          },
-        ),
-      ],
-    );
-  }
+          }
+          return const SliverFillRemaining(
+            child: Center(child: EText('No chats available')),
+          );
+        },
+      ),
+    ],
+  );
 }
 
 class ChatList extends StatelessWidget {
   const ChatList({required this.chats, super.key});
   final List<ChatEntity> chats;
   @override
-  Widget build(BuildContext context) {
-    return SliverList.builder(
-      itemCount: chats.length,
-      itemBuilder: (_, index) {
-        final chat = chats[index];
-        return ChatTile(chat: chat);
-      },
-    );
-  }
+  Widget build(BuildContext context) => SliverList.builder(
+    itemCount: chats.length,
+    itemBuilder: (_, index) {
+      final ChatEntity chat = chats[index];
+      return ChatTile(chat: chat);
+    },
+  );
 }
 
 class ChatTile extends StatelessWidget {
   const ChatTile({required this.chat, super.key});
   final ChatEntity chat;
   Future<ChatEntity> get _init {
-    final reciver = chat.users?.firstWhere((user) => user.id != getUser?.id);
+    final UserEntity? reciver = chat.users?.firstWhere(
+      (user) => user.id != getUser?.id,
+    );
     return const UserRepo()
         .get(documentId: reciver!.id!)
         .then((user) => chat.copyWith(users: [getUser!, user!]));
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _init,
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (!snapshot.hasData) {
-          return const Center(child: EText('No chats available'));
-        }
-        if (snapshot.hasError) {
-          return const Center(child: EText('Error loading chat'));
-        }
-        final chat = snapshot.data;
-        final reciever = chat?.users?.last;
-        final lastMessage = chat?.messages?.last;
-        final date = DateFormat(
-          'MMMM dd, yyyy',
-        ).format(lastMessage?.date ?? DateTime.now());
-        final time = DateFormat(
-          'hh:mm a',
-        ).format(lastMessage?.date ?? DateTime.now());
-        return Card.filled(
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          shape: const RoundedSuperellipseBorder(borderRadius: xsBorder),
-          clipBehavior: Clip.antiAlias,
-          elevation: 0,
-          child: ListTile(
-            leading: UserPhoto(user: reciever ?? const UserEntity()),
-            title: EText(reciever?.name ?? 'Lol'),
-            subtitle: EText(lastMessage?.text ?? ''),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [EText(date), EText(time)],
-            ),
-            onTap: () async => chatNavigation(context, extra: reciever!),
+  Widget build(BuildContext context) => FutureBuilder(
+    future: _init,
+    builder: (_, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (!snapshot.hasData) {
+        return const Center(child: EText('No chats available'));
+      }
+      if (snapshot.hasError) {
+        return const Center(child: EText('Error loading chat'));
+      }
+      final ChatEntity? chat = snapshot.data;
+      final UserEntity? reciever = chat?.users?.last;
+      final MessageEntity? lastMessage = chat?.messages?.last;
+      final String date = DateFormat(
+        'MMMM dd, yyyy',
+      ).format(lastMessage?.date ?? DateTime.now());
+      final String time = DateFormat(
+        'hh:mm a',
+      ).format(lastMessage?.date ?? DateTime.now());
+      return Card.filled(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        shape: const RoundedSuperellipseBorder(borderRadius: xsBorder),
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        child: ListTile(
+          leading: UserPhoto(user: reciever ?? const UserEntity()),
+          title: EText(reciever?.name ?? 'Lol'),
+          subtitle: EText(lastMessage?.text ?? ''),
+          trailing: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [EText(date), EText(time)],
           ),
-        );
-      },
-    );
-  }
+          onTap: () => chatNavigation(context, extra: reciever!),
+        ),
+      );
+    },
+  );
 }

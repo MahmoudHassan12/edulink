@@ -38,22 +38,22 @@ import 'package:go_router/go_router.dart'
 
 abstract class Routes {
   const Routes();
-  static const String aboutView = '/about';
-  static const String chatView = '/chat';
-  static const String courseDetailsView = '/course-details';
-  static const String homeView = '/';
-  static const String manageCourseView = '/manage-course';
-  static const String manageProfileView = '/manage-profile';
-  static const String profileView = '/student-profile';
-  static const String qaForumView = '/qa-forum';
-  static const String questionDetailsView = '/question-details';
-  static const String registerCoursesView = '/register-courses';
-  static const String registeredUsersView = '/registered-users';
-  static const String registerView = '/register';
-  static const String resetPasswordView = '/reset-password';
-  static const String settingsView = '/settings';
-  static const String signinView = '/sign-in';
-  static const String contentView = '/content';
+  static const aboutView = '/about';
+  static const chatView = '/chat';
+  static const courseDetailsView = '/course-details';
+  static const homeView = '/';
+  static const manageCourseView = '/manage-course';
+  static const manageProfileView = '/manage-profile';
+  static const profileView = '/student-profile';
+  static const qaForumView = '/qa-forum';
+  static const questionDetailsView = '/question-details';
+  static const registerCoursesView = '/register-courses';
+  static const registeredUsersView = '/registered-users';
+  static const registerView = '/register';
+  static const resetPasswordView = '/reset-password';
+  static const settingsView = '/settings';
+  static const signinView = '/sign-in';
+  static const contentView = '/content';
 }
 
 final Map<String, Widget Function(BuildContext, Object?)> _routes = {

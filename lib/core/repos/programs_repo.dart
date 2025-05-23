@@ -11,6 +11,6 @@ class ProgramsRepo {
         (value) =>
             List<Map<String, dynamic>>.from(
               value,
-            ).map((e) => ProgramEntity.fromMap(e)).toList(),
+            ).map(ProgramEntity.fromMap).toList(),
       );
 }

@@ -27,7 +27,7 @@ class RegisteredUsersCubit extends Cubit<RegisteredUsersState> {
               emit(RegisteredUsersFailure(error.toString()));
             },
           );
-    } catch (e) {
+    } on Exception catch (e) {
       emit(RegisteredUsersFailure(e.toString()));
     }
   }

@@ -16,8 +16,7 @@ class ForgotPassword extends StatelessWidget {
           minimumSize: WidgetStatePropertyAll(Size.zero),
           visualDensity: VisualDensity.compact,
         ),
-        onPressed:
-            isLoading ? null : () async => resetPasswordNavigation(context),
+        onPressed: isLoading ? null : () => resetPasswordNavigation(context),
         child: const EText('Forgot Password?', style: TextStyle(fontSize: 14)),
       ),
     ),

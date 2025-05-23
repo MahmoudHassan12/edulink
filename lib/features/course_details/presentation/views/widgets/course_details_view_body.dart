@@ -20,7 +20,7 @@ class CourseDetailsViewBody extends StatelessWidget {
         actions: (getUser?.isProfessor ?? false)
             ? [
                 IconButton(
-                  onPressed: () async =>
+                  onPressed: () =>
                       manageCourseNavigation(context, extra: course),
                   icon: const Icon(Icons.edit_rounded),
                 ),
@@ -38,7 +38,7 @@ class CourseDetailsViewBody extends StatelessWidget {
           title: EText(course.code!),
           subtitle: EText('${course.title}\nBy Dr ${course.professor?.name}'),
           trailing: IconButton(
-            onPressed: () async => qAForumNavigation(context, extra: course),
+            onPressed: () => qAForumNavigation(context, extra: course),
             icon: const Icon(Icons.message_rounded),
           ),
         ),
@@ -52,14 +52,13 @@ class CourseDetailsViewBody extends StatelessWidget {
             EText(course.description!),
             const SizedBox(height: 16),
             CustomFilledButton.icon(
-              onPressed: () async =>
-                  contentNavigation(context, extra: course.id),
+              onPressed: () => contentNavigation(context, extra: course.id),
               icon: Icons.folder_rounded,
               label: 'Course Content',
             ),
             const SizedBox(height: 16),
             CustomFilledButton.icon(
-              onPressed: () async =>
+              onPressed: () =>
                   registeredUsersNavigation(context, extra: course.id!),
               icon: Icons.people_rounded,
               label: 'Registered Users',

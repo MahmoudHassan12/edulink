@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:edu_link/core/constants/borders.dart' show xsBorder;
 import 'package:flutter/material.dart'
     show
@@ -36,7 +38,7 @@ class CustomDropdownMenu<T> extends StatelessWidget {
   final ValueChanged<T?>? onSelected;
   @override
   SizedBox build(BuildContext context) {
-    final sizeOf = MediaQuery.sizeOf(context);
+    final Size sizeOf = MediaQuery.sizeOf(context);
     return SizedBox(
       height: 80 + 4, // 4 is the padding of the text error.
       child: DropdownMenu<T?>(

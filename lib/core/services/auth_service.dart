@@ -15,10 +15,8 @@ class AuthService {
   /// Sign in with Email & Password
   Future<User?> signInWithEmail(String email, String password) async {
     try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final UserCredential userCredential = await _auth
+          .signInWithEmailAndPassword(email: email, password: password);
       log('Signed in: ${userCredential.user}');
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
@@ -30,10 +28,8 @@ class AuthService {
   /// Sign up with Email & Password
   Future<User?> signUpWithEmail(String email, String password) async {
     try {
-      final userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
       log('Signed up: ${userCredential.user}');
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
@@ -47,7 +43,7 @@ class AuthService {
     try {
       log('Attempting Google Sign-In...');
 
-      final googleUser = await GoogleSignIn().signIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         log('Google Sign-In canceled by user.');
         return null;
@@ -55,23 +51,26 @@ class AuthService {
 
       log('Google User Selected: ${googleUser.email}');
 
-      final googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       log('Google Access Token: ${googleAuth.accessToken}');
       log('Google ID Token: ${googleAuth.idToken}');
 
-      final credential = GoogleAuthProvider.credential(
+      final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await _auth.signInWithCredential(credential);
+      final UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
       log('Google Sign-In successful: ${userCredential.user?.email}');
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       log('Google Sign-In Error: ${e.code} - ${e.message}');
       return null;
-    } catch (e) {
+    } on Exception catch (e) {
       log('Unexpected Error during Google Sign-In: $e');
       return null;
     }
@@ -81,15 +80,17 @@ class AuthService {
   Future<User?> signInWithFacebook() async {
     try {
       log('Attempting Facebook Sign-In...');
-      final result = await FacebookAuth.instance.login();
+      final LoginResult result = await FacebookAuth.instance.login();
 
       if (result.status == LoginStatus.success) {
-        final accessToken = result.accessToken!;
+        final AccessToken accessToken = result.accessToken!;
         log('Facebook Access Token: ${accessToken.tokenString}');
-        final credential = FacebookAuthProvider.credential(
+        final OAuthCredential credential = FacebookAuthProvider.credential(
           accessToken.tokenString,
         );
-        final userCredential = await _auth.signInWithCredential(credential);
+        final UserCredential userCredential = await _auth.signInWithCredential(
+          credential,
+        );
 
         log('Facebook Signed in successfully: ${userCredential.user?.email}');
         return userCredential.user;
@@ -100,7 +101,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       log('Facebook Sign-in Error: ${e.code}, Message: ${e.message}');
       return null;
-    } catch (e) {
+    } on Exception catch (e) {
       log('Unexpected Facebook Sign-in Error: $e');
       return null;
     }

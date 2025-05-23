@@ -15,7 +15,7 @@ class DepartmentField extends StatelessWidget {
   );
 }
 
-const List<String> _departments = [
+const _departments = <String>[
   'All Departments',
   'Geophysics',
   'Microbiology',

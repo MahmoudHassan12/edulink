@@ -42,12 +42,12 @@ class _UserInfoFirstPanal extends StatelessWidget {
   final UserEntity user;
   @override
   Widget build(BuildContext context) {
-    final studentInfo = {
+    final Map<String, String?> studentInfo = {
       'Credit Level': user.level,
       'Student ID': user.id,
       'Program': user.program?.name,
     };
-    final professorInfo = {
+    final Map<String, String?> professorInfo = {
       'Academic title': user.academicTitle,
       'Department': user.department?.name,
     };

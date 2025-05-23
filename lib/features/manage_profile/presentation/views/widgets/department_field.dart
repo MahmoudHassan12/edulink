@@ -9,8 +9,8 @@ class DepartmentField extends StatelessWidget {
   const DepartmentField({super.key});
   @override
   Widget build(BuildContext context) {
-    final cubit = context.watch<ManageProfileCubit>();
-    final department = cubit.user?.department;
+    final ManageProfileCubit cubit = context.watch<ManageProfileCubit>();
+    final DepartmentEntity? department = cubit.user?.department;
     return CustomDropdownMenu<DepartmentEntity>(
       controller: TextEditingController(text: department?.name),
       label: 'Department',

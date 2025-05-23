@@ -9,10 +9,8 @@ class RegisteredUsersView extends StatelessWidget {
   final String courseId;
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
+  Widget build(BuildContext context) => BlocProvider(
       create: (context) => RegisteredUsersCubit(courseId),
       child: const Scaffold(body: RegisteredUsersViewBody()),
     );
-  }
 }

@@ -58,34 +58,33 @@ class QuestionDetailsViewBlocSelector extends StatelessWidget {
             return null;
           }
         },
-        builder: (_, question) {
-          return BlocProvider(
-            create: (context) => AnswerManagerCubit(courseId, question.id!),
-            child: Scaffold(
-              appBar: AppBar(title: const EText('Question Details')),
-              body: QuestionDetailsViewBody(question: question!),
-              bottomSheet: Builder(
-                builder: (context) {
-                  final testController = TextEditingController();
-                  Future<void> testOnSend() async {
-                    final cubit = context.read<AnswerManagerCubit>()
-                      ..setQuestion(testController.text)
-                      ..setDate(DateTime.now())
-                      ..setUser(getUser!);
-                    return cubit.addAnswer();
-                  }
+        builder: (_, question) => BlocProvider(
+          create: (context) => AnswerManagerCubit(courseId, question.id!),
+          child: Scaffold(
+            appBar: AppBar(title: const EText('Question Details')),
+            body: QuestionDetailsViewBody(question: question!),
+            bottomSheet: Builder(
+              builder: (context) {
+                final testController = TextEditingController();
+                Future<void> testOnSend() {
+                  final AnswerManagerCubit cubit =
+                      context.read<AnswerManagerCubit>()
+                        ..setQuestion(testController.text)
+                        ..setDate(DateTime.now())
+                        ..setUser(getUser!);
+                  return cubit.addAnswer();
+                }
 
-                  return AnswerTextField(
-                    labelText: 'Answer',
-                    courseId: courseId,
-                    questionId: question.id,
-                    controller: testController,
-                    onSend: () async => testOnSend(),
-                  );
-                },
-              ),
+                return AnswerTextField(
+                  labelText: 'Answer',
+                  courseId: courseId,
+                  questionId: question.id,
+                  controller: testController,
+                  onSend: testOnSend,
+                );
+              },
             ),
-          );
-        },
+          ),
+        ),
       );
 }

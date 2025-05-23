@@ -16,8 +16,7 @@ class AnswerTextField extends StatelessWidget {
   final String? courseId;
   final String? questionId;
   @override
-  Widget build(BuildContext context) {
-    return BottomSheet(
+  Widget build(BuildContext context) => BottomSheet(
       onClosing: () {},
       enableDrag: false,
       elevation: 0,
@@ -39,5 +38,4 @@ class AnswerTextField extends StatelessWidget {
             ),
           ),
     );
-  }
 }

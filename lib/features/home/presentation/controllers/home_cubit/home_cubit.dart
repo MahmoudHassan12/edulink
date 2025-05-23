@@ -24,7 +24,7 @@ class HomeCubit extends Cubit<HomeState> {
         );
         emit(HomeSuccess(user?.courses));
       });
-    } catch (e) {
+    } on Exception catch (e) {
       emit(HomeFailure(e.toString()));
     }
   }

@@ -6,7 +6,7 @@ class ExternalVideoScreen extends StatelessWidget {
   final String videoUrl;
 
   Future<void> _openExternalPlayer(BuildContext context) async {
-    final url = Uri.parse(videoUrl);
+    final Uri url = Uri.parse(videoUrl);
 
     if (!await launchUrl(url, mode: LaunchMode.externalApplication) &&
         context.mounted) {
@@ -17,8 +17,7 @@ class ExternalVideoScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+  Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(title: const Text('External Video Player')),
       body: Center(
         child: ElevatedButton(
@@ -27,5 +26,4 @@ class ExternalVideoScreen extends StatelessWidget {
         ),
       ),
     );
-  }
 }
