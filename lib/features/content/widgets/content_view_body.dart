@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:edu_link/core/helpers/navigations.dart' show popNavigation;
 import 'package:edu_link/core/services/content_service.dart';
 import 'package:edu_link/features/content/domain/content_item_entity.dart';
 import 'package:edu_link/features/content/widgets/content_card.dart';
@@ -98,11 +99,11 @@ class _ContentViewBodyState extends State<ContentViewBody> {
           content: const Text('Are you sure you want to delete this content?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () => popNavigation(context, false),
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () => popNavigation(context, true),
               child: const Text('Delete', style: TextStyle(color: Colors.red)),
             ),
           ],

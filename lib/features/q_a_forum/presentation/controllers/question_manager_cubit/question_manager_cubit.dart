@@ -9,7 +9,7 @@ part 'question_manager_state.dart';
 class QuestionManagerCubit extends Cubit<QuestionManagerState> {
   QuestionManagerCubit(this._courseId) : super(const _QuestionManagerInitial());
   final String _courseId;
-  var _question = const QuestionEntity();
+  QuestionEntity _question = const QuestionEntity();
 
   QuestionEntity _updateQuestion(QuestionEntity question) =>
       _question = question;
@@ -40,6 +40,16 @@ class QuestionManagerCubit extends Cubit<QuestionManagerState> {
 
   Future<void> addQuestion() async {
     await const CoursesRepo().addQuestion(_question, _courseId);
+    emit(const QuestionSuccess());
+  }
+
+  Future<void> updateQuestion(String questionId) async {
+    await const CoursesRepo().updateQuestion(_question, _courseId);
+    emit(const QuestionSuccess());
+  }
+
+  Future<void> deleteQuestion(QuestionEntity question) async {
+    await const CoursesRepo().deleteQuestion(question, _courseId);
     emit(const QuestionSuccess());
   }
 }

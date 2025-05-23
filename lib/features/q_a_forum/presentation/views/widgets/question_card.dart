@@ -3,13 +3,16 @@ import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart'
-    show questionDetailsNavigation;
+    show popNavigation, questionDetailsNavigation;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/buttons/custom_icon_button_filled_tonal.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/core/widgets/favorite_button.dart';
 import 'package:edu_link/core/widgets/user_photo.dart';
+import 'package:edu_link/features/q_a_forum/presentation/controllers/question_manager_cubit/question_manager_cubit.dart'
+    show QuestionManagerCubit;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class QuestionCard extends StatelessWidget {
@@ -90,8 +93,34 @@ class QuestionCard extends StatelessWidget {
                       label: 'Answer',
                       hasMinimumSize: false,
                     ),
-                    if (user.id == getUser?.id)
-                      TextButton(onPressed: () {}, child: const Text('Delete')),
+                    if (user.id == getUser?.id && clickable)
+                      TextButton(
+                        onPressed: () => showDialog(
+                          context: context,
+                          builder: (_) => AlertDialog(
+                            title: const Text('Delete question'),
+                            content: const Text('Are you sure?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => popNavigation(context),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  await context
+                                      .read<QuestionManagerCubit>()
+                                      .deleteQuestion(qa);
+                                  if (context.mounted) {
+                                    popNavigation(context);
+                                  }
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        child: const Text('Delete'),
+                      ),
                     const Spacer(),
                     const FavoriteButton(),
                   ],

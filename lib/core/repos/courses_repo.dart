@@ -48,15 +48,30 @@ class CoursesRepo {
             log('Failed to add questions: $e');
           });
 
-  // Future<void> deleteQuestion(QuestionEntity question, String? courseId) =>
-  //     _fireStore // TODO(Yousef): Handle error
-  //         .deleteDocument(
-  //           path: _coursesPath,
-  //           listKey: 'questions',
-  //           list: [question.toMap()],
-  //           documentId: courseId,
-  //         )
-  //         .then((_) => log('Question deleted successfully!'));
+  Future<void> updateQuestion(QuestionEntity question, String courseId) =>
+      _fireStore
+          .updateSubDocument(
+            collectionPath: _coursesPath,
+            documentId: courseId,
+            subCollectionPath: 'questions',
+            subDocumentId: question.id!,
+            data: question.toMap(),
+          )
+          .then((_) => log('Question updated successfully!'))
+          .onError<FirebaseException>(
+            (e, _) => log('Failed to update question: $e'),
+          )
+          .catchError((e) => log('Failed to update question: $e'));
+
+  Future<void> deleteQuestion(QuestionEntity question, String courseId) =>
+      _fireStore
+          .deleteSubDocument(
+            collectionPath: _coursesPath,
+            documentId: courseId,
+            subCollectionPath: 'questions',
+            subDocumentId: question.id!,
+          )
+          .then((_) => log('Question deleted successfully!'));
 
   Future<void> addAnswer(
     String courseId,

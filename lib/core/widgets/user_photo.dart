@@ -19,15 +19,15 @@ class UserPhoto extends StatelessWidget {
   Widget build(BuildContext context) {
     final String url =
         user.imageUrl ?? 'https://avatar.iran.liara.run/public/32';
-    final circleAvatar = GestureDetector(
+    final circleAvatar = CircleAvatar(
+      backgroundImage: CachedNetworkImageProvider(url),
+      radius: radius,
+    );
+    return GestureDetector(
       onTap: hasNavigation
           ? () => profileNavigation(context, extra: user)
           : null,
-      child: CircleAvatar(
-        backgroundImage: CachedNetworkImageProvider(url),
-        radius: radius,
-      ),
+      child: isHero ? Hero(tag: url, child: circleAvatar) : circleAvatar,
     );
-    return isHero ? Hero(tag: url, child: circleAvatar) : circleAvatar;
   }
 }

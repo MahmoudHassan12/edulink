@@ -44,7 +44,7 @@ class _UserInfoFirstPanal extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, String?> studentInfo = {
       'Credit Level': user.level,
-      'Student ID': user.id,
+      'Student ID': user.id?.substring(0, 8).toUpperCase(),
       'Program': user.program?.name,
     };
     final Map<String, String?> professorInfo = {
@@ -59,18 +59,17 @@ class _UserInfoFirstPanal extends StatelessWidget {
           child: Column(
             spacing: 8,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children:
-                info.entries
-                    .map(
-                      (e) => EText(
-                        e.key,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                    )
-                    .toList(),
+            children: info.entries
+                .map(
+                  (e) => EText(
+                    e.key,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                )
+                .toList(),
           ),
         ),
         Column(

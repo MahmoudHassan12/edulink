@@ -634,6 +634,30 @@ class FirestoreService {
         .get(),
   );
 
+  Future<void> deleteSubCollection({
+    required String collectionPath,
+    required String documentId,
+    required String subCollectionPath,
+  }) => _deleteList(
+    _firestore
+        .collection(collectionPath)
+        .doc(documentId)
+        .collection(subCollectionPath)
+        .get(),
+  );
+
+  Future<void> deleteSubDocument({
+    required String collectionPath,
+    required String documentId,
+    required String subCollectionPath,
+    required String subDocumentId,
+  }) => _firestore
+      .collection(collectionPath)
+      .doc(documentId)
+      .collection(subCollectionPath)
+      .doc(subDocumentId)
+      .delete();
+
   Future<void> deleteSubValue({
     required String collectionPath,
     required String documentId,

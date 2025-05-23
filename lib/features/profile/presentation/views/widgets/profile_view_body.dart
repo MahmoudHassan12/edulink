@@ -1,9 +1,6 @@
-import 'dart:developer';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/services/auth_service.dart' show AuthService;
-import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart'
-    show CustomElevatedButton;
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart'
     show CustomFilledButton;
 import 'package:edu_link/core/widgets/e_text.dart' show EText;
@@ -32,14 +29,7 @@ class ProfileViewBody extends StatelessWidget {
             if (user.isProfessor ?? false) ...[
               const _Label('Office hours & availability'),
               ThirdPanal(user: user),
-            ] else
-              CustomElevatedButton.icon(
-                onPressed: () {
-                  log('${user.coursesIds?.length}');
-                },
-                label: 'More Details',
-                icon: Icons.arrow_forward_ios_rounded,
-              ),
+            ],
             if (user.id == getUser?.id) ...{
               const SizedBox(height: 12),
               CustomFilledButton.tonalIcon(
