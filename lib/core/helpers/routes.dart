@@ -32,7 +32,8 @@ import 'package:edu_link/features/register_courses/presentation/views/register_c
     show RegisterCoursesView;
 import 'package:edu_link/features/settings/presentation/views/settings_view.dart'
     show SettingsView;
-import 'package:flutter/material.dart' show BuildContext, RouterConfig, Widget;
+import 'package:flutter/material.dart'
+    show BuildContext, GlobalKey, NavigatorState, RouterConfig, Widget;
 import 'package:go_router/go_router.dart'
     show GoRoute, GoRouter, RouteMatchList;
 
@@ -88,8 +89,9 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.settingsView: (context, args) => const SettingsView(),
   Routes.signinView: (context, args) => const SigninView(),
 };
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 RouterConfig<RouteMatchList> routerConfig = GoRouter(
+  navigatorKey: navigatorKey,
   initialLocation: const AuthService().isSignedIn()
       ? (getUser?.isValid ?? false)
             ? Routes.homeView

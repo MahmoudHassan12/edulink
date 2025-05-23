@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart' show User;
 class UserEntity {
   const UserEntity({
     this.id,
+    this.fcmToken,
     this.name,
     this.email,
     this.phone,
@@ -36,6 +37,7 @@ class UserEntity {
 
   factory UserEntity.fromMap(Map<String, dynamic>? data) => UserEntity(
     id: data?['id'],
+    fcmToken: data?['fcmToken'],
     name: data?['name'],
     email: data?['email'],
     phone: data?['phone'],
@@ -53,6 +55,8 @@ class UserEntity {
   );
 
   final String? id;
+  final String? fcmToken;
+
   final String? name;
   final String? email;
   final String? phone;
@@ -71,6 +75,7 @@ class UserEntity {
 
   Map<String, dynamic> toMap() => {
     'id': id,
+    'fcmToken': fcmToken,
     'name': name,
     'email': email,
     'phone': phone,

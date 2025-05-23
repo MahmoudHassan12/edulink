@@ -28,6 +28,7 @@ dependencies:
   intl: ^0.20.2
   path: ^1.9.1
   shared_preferences: ^2.5.2
+  smart_notification_manager: ^0.0.5
   supabase_flutter: ^2.6.3
   syncfusion_flutter_pdfviewer: ^29.1.38
   url_launcher: ^6.3.1
@@ -43,5 +44,7 @@ flutter:
   assets:
     - assets/database/
     - assets/images/
+    - assets/service_account.json
+
 flutter_intl:
   enabled: true
