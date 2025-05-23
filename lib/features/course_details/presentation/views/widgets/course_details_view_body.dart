@@ -36,10 +36,12 @@ class CourseDetailsViewBody extends StatelessWidget {
       SliverToBoxAdapter(
         child: ListTile(
           title: EText(course.code!),
-          subtitle: EText('${course.title}\nBy Dr ${course.professor?.name}'),
-          trailing: IconButton(
+          subtitle: EText('${course.title}\nBy Dr. ${course.professor?.name}'),
+          trailing: IconButton.filledTonal(
             onPressed: () => qAForumNavigation(context, extra: course),
-            icon: const Icon(Icons.message_rounded),
+            icon: const Icon(Icons.forum_rounded),
+            style: const ButtonStyle(iconSize: WidgetStatePropertyAll(40)),
+            tooltip: 'Q&A Forum',
           ),
         ),
       ),
