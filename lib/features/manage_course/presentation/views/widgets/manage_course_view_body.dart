@@ -3,6 +3,7 @@ import 'package:edu_link/core/domain/entities/duration_entity.dart'
     show DurationEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/repos/courses_repo.dart' show CoursesRepo;
+import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
 import 'package:edu_link/features/manage_course/presentation/controllers/manage_course_cubit/manage_course_cubit.dart'
@@ -126,7 +127,14 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                           documentId: course.id!,
                         )
                       : cubit.upload();
-                  await const CoursesRepo().addCoursesIds([course.id!]);
+                  await const UserRepo().update(
+                    data: getUser!
+                        .copyWith(
+                          coursesIds: [...?getUser?.coursesIds, course.id!],
+                        )
+                        .toMap(),
+                    documentId: getUser!.id!,
+                  );
                 } else {
                   showSnackbar(
                     context,

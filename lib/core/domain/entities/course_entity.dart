@@ -2,8 +2,7 @@ import 'dart:io' show File;
 import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/question_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
-import 'package:edu_link/core/helpers/entities_handlers.dart'
-    show complexListEntity;
+import 'package:edu_link/core/helpers/entities_handlers.dart' show ListHandler;
 import 'package:edu_link/core/helpers/pick_image.dart' show pickImage;
 import 'package:edu_link/core/helpers/text_id_generator.dart'
     show TextIdGenerator;
@@ -29,10 +28,9 @@ class CourseEntity {
 
   /// Factory constructor to create `CourseEntity` from a Firestore map
   factory CourseEntity.fromMap(Map<String, dynamic>? data) {
-    final professor =
-        data?['professor'] != null
-            ? UserEntity.fromMap(data?['professor'])
-            : UserEntity(id: data?['professorId']);
+    final professor = data?['professor'] != null
+        ? UserEntity.fromMap(data?['professor'])
+        : UserEntity(id: data?['professorId']);
     return CourseEntity(
       id: data?['id'],
       code: data?['code'],
@@ -47,7 +45,10 @@ class CourseEntity {
       lectures: data?['lectures'],
       duration: DurationEntity.fromMap(data?['duration']),
       professor: professor,
-      questions: complexListEntity(data?['questions'], QuestionEntity.fromMap),
+      questions: ListHandler.parseComplex(
+        data?['questions'],
+        QuestionEntity.fromMap,
+      ),
     );
   }
 
@@ -68,7 +69,7 @@ class CourseEntity {
   final List<QuestionEntity>? questions;
 
   /// Converts `CourseEntity` to a Firestore-compatible map
-  Map<String, dynamic> toMap({bool toSharedPref = false}) => {
+  Map<String, dynamic> toMap() => {
     'id': id,
     'code': code,
     'title': title,
@@ -81,11 +82,8 @@ class CourseEntity {
     'creditHour': creditHour,
     'lectures': lectures,
     'duration': duration?.toMap(),
-    ...(toSharedPref
-        ? {'professor': professor?.toMap(toSharedPref: true)}
-        : {'professorId': professor?.id}),
-    'questions':
-        questions?.map((e) => e.toMap(toSharedPref: toSharedPref)).toList(),
+    'professorId': professor?.id,
+    'questions': questions?.map((e) => e.toMap()).toList(),
   };
 
   CourseEntity copyWith({

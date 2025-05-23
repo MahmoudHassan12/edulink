@@ -1,15 +1,11 @@
 import 'package:edu_link/core/domain/entities/availability_entity.dart';
 import 'package:edu_link/core/domain/entities/location_entity.dart';
-import 'package:edu_link/core/helpers/entities_handlers.dart';
 
 class OfficeEntity {
   const OfficeEntity({this.location, this.availability, this.contactInfo});
   factory OfficeEntity.fromMap(Map<String, dynamic>? data) => OfficeEntity(
-    location: complexEntity(data?['location'], LocationEntity.fromMap),
-    availability: complexEntity(
-      data?['availability'],
-      AvailabilityEntity.fromMap,
-    ),
+    location: LocationEntity.fromMap(data?['location']),
+    availability: AvailabilityEntity.fromMap(data?['availability']),
     contactInfo: data?['contactInfo'],
   );
 

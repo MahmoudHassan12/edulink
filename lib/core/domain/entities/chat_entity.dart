@@ -1,12 +1,11 @@
 import 'package:edu_link/core/domain/entities/message_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
-import 'package:edu_link/core/helpers/entities_handlers.dart'
-    show complexListEntity;
+import 'package:edu_link/core/helpers/entities_handlers.dart' show ListHandler;
 
 class ChatEntity {
   const ChatEntity({this.messages, this.users});
   factory ChatEntity.fromMap(Map<String, dynamic>? map) => ChatEntity(
-    messages: complexListEntity<MessageEntity>(
+    messages: ListHandler.parseComplex<MessageEntity>(
       map?['messages'],
       MessageEntity.fromMap,
     ),

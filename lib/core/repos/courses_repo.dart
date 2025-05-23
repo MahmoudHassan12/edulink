@@ -6,7 +6,6 @@ import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/question_entity.dart'
     show QuestionEntity;
 import 'package:edu_link/core/domain/entities/user_entity.dart';
-import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/query_entity.dart';
 import 'package:edu_link/core/repos/user_repo.dart' show UserRepo;
 import 'package:edu_link/core/services/firestore_service.dart'
@@ -29,15 +28,6 @@ class CoursesRepo {
           .then((_) => log('Course added successfully!'))
           .onError<FirebaseException>((e, _) => log('Failed to add course: $e'))
           .catchError((e) => log('Failed to add course: $e'));
-
-  Future<void> addCoursesIds(List<String> courseIds) => _fireStore
-      .addValue(
-        path: Endpoints.users,
-        documentId: getUser!.id!,
-        key: 'coursesIds',
-        data: courseIds,
-      )
-      .then((_) => log('Courses added successfully!'));
 
   Future<void> addQuestion(QuestionEntity question, String courseId) =>
       _fireStore
@@ -121,32 +111,27 @@ class CoursesRepo {
         log('${data.length} Courses fetched successfully!');
         return Future.wait(
           data.map((e) async {
-            final UserEntity? professor = await const UserRepo().get(
-              documentId: e['professorId'],
-            );
+            final UserEntity? professor = await const UserRepo()
+                .getFromFireStore(documentId: e['professorId']);
             return CourseEntity.fromMap(e).copyWith(professor: professor);
           }).toList(),
         );
       });
 
-  Stream<List<CourseEntity>?> getMultibleCoursesStream(
+  Stream<List<CourseEntity>?> streamMultibleCourses(
     List<String> courseIds,
   ) async* {
     yield* _fireStore
         .streamDocuments(path: _coursesPath, documentIds: courseIds)
-        .asyncMap((docs) {
-          log('${docs.length} Courses fetched successfully!');
-          return Future.wait<CourseEntity>(
+        .asyncMap(
+          (docs) => Future.wait<CourseEntity>(
             docs.map((e) async {
-              final Stream<UserEntity?> professorStream = const UserRepo()
-                  .getStream(documentId: e['professorId'], isProfessor: true);
-              await for (final professor in professorStream) {
-                return CourseEntity.fromMap(e).copyWith(professor: professor);
-              }
-              throw Exception('Professor stream ended without value');
+              final UserEntity? professor = await const UserRepo()
+                  .getFromFireStore(documentId: e['professorId']);
+              return CourseEntity.fromMap(e).copyWith(professor: professor);
             }).toList(),
-          );
-        });
+          ),
+        );
   }
 
   Future<void> update({
@@ -164,9 +149,8 @@ class CoursesRepo {
         log('${e.length} Courses fetched successfully!');
         final List<CourseEntity> courses = await Future.wait<CourseEntity>(
           e.map((data) async {
-            final UserEntity? professor = await const UserRepo().get(
-              documentId: data['professorId'],
-            );
+            final UserEntity? professor = await const UserRepo()
+                .getFromFireStore(documentId: data['professorId']);
             final CourseEntity course = CourseEntity.fromMap(
               data,
             ).copyWith(professor: professor);

@@ -23,11 +23,10 @@ class QuestionEntity {
     return QuestionEntity(
       id: data?['id'],
       question: data?['question'],
-      answers: complexListEntity(data?['answers'], AnswerEntity.fromMap),
-      user:
-          data?['user'] != null
-              ? UserEntity.fromMap(data?['user'])
-              : UserEntity(id: data?['userId']),
+      answers: ListHandler.parseComplex(data?['answers'], AnswerEntity.fromMap),
+      user: data?['user'] != null
+          ? UserEntity.fromMap(data?['user'])
+          : UserEntity(id: data?['userId']),
       date: date,
     );
   }
@@ -36,16 +35,12 @@ class QuestionEntity {
   final List<AnswerEntity>? answers;
   final UserEntity? user;
   final DateTime? date;
-  Map<String, dynamic> toMap({bool toSharedPref = false}) => {
+  Map<String, dynamic> toMap() => {
     'id': id,
     'question': question,
-    'answers':
-        answers?.map((e) => e.toMap(toSharedPref: toSharedPref)).toList(),
-    if (toSharedPref)
-      'user': user?.toMap(toSharedPref: true)
-    else
-      'userId': user?.id,
-    'date': toSharedPref ? date?.toIso8601String() : date,
+    'answers': answers?.map((e) => e.toMap()).toList(),
+    'userId': user?.id,
+    'date': date,
   };
   QuestionEntity copyWith({
     String? id,

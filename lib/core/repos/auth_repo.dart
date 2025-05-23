@@ -23,11 +23,10 @@ class AuthRepo {
 
   Future<User?> signUpWithEmail(String email, String password) =>
       _auth.signUpWithEmail(email, password).then((user) async {
-        final Map<String, dynamic> data = UserEntity(
-          email: email,
-          id: user?.uid,
-        ).toMap();
-        await _add(data: data, documentId: user!.uid);
+        await _userRepo.add(
+          data: UserEntity.fromFireBase(user).toMap(),
+          documentId: user!.uid,
+        );
         return user;
       });
 
@@ -36,58 +35,40 @@ class AuthRepo {
         if (user == null) {
           return null;
         }
-        if ((await _get(documentId: user.uid)) != null) {
+        if (await _userRepo.isUserExist(user.uid)) {
           await _get(documentId: user.uid);
         } else {
-          final Map<String, dynamic> data = UserEntity(
-            id: user.uid,
-            name: user.displayName,
-            email: user.email,
-            imageUrl: user.photoURL,
-            phone: user.phoneNumber,
-          ).toMap();
-          await _add(data: data, documentId: user.uid);
+          await _userRepo.add(
+            data: UserEntity.fromFireBase(user).toMap(),
+            documentId: user.uid,
+          );
         }
         return user;
       });
 
-  Future<User?> signInWithFacebook() =>
-      _auth.signInWithFacebook().then((user) async {
-        if (user == null) {
-          return null;
-        }
-        if ((await _get(documentId: user.uid)) != null) {
-          await _get(documentId: user.uid);
-        } else {
-          final Map<String, dynamic> data = UserEntity(
-            id: user.uid,
-            name: user.displayName,
-            email: user.email,
-            imageUrl: user.photoURL,
-            phone: user.phoneNumber,
-          ).toMap();
-          await _add(data: data, documentId: user.uid);
-        }
-        return user;
-      });
+  Future<User?> signInWithFacebook() => _auth.signInWithFacebook().then((
+    user,
+  ) async {
+    if (user == null) {
+      return null;
+    }
+    if (await _userRepo.isUserExist(user.uid)) {
+      await _get(documentId: user.uid);
+    } else {
+      final Map<String, dynamic> data = UserEntity.fromFireBase(user).toMap();
+      await _userRepo.add(data: data, documentId: user.uid);
+    }
+    return user;
+  });
 
-  Future<void> _add({
-    required Map<String, dynamic> data,
-    required String documentId,
-  }) => _userRepo
-      .addUser(data: data, documentId: documentId)
-      .onError<FirebaseException>((e, _) {
-        log('Failed to add user: $e');
-      })
-      .catchError((e) {
-        log('Failed to add user: $e');
-      });
-
-  Future<UserEntity?> _get({required String documentId}) => _userRepo.get(
-    documentId: documentId,
-    getCourses: true,
-    toSharedPref: true,
-  );
+  Future<UserEntity?> _get({required String documentId}) async {
+    final UserEntity? user = await _userRepo.getFromFireStore(
+      documentId: documentId,
+      getCourses: true,
+    );
+    await _userRepo.addToLocal(user!.toMap());
+    return user;
+  }
 
   Future<void> update() => _userRepo
       .update(data: getUser!.toMap(), documentId: _uid!)

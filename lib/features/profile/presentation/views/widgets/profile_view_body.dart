@@ -35,7 +35,7 @@ class ProfileViewBody extends StatelessWidget {
             ] else
               CustomElevatedButton.icon(
                 onPressed: () {
-                  log('${user.courses?.length}');
+                  log('${user.coursesIds?.length}');
                 },
                 label: 'More Details',
                 icon: Icons.arrow_forward_ios_rounded,

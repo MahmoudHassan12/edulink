@@ -49,12 +49,12 @@ class QuestionCard extends StatelessWidget {
               ListTile(
                 minTileHeight: 56,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                leading: UserPhoto(user: user),
+                leading: UserPhoto(user: user!),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     EText(
-                      user?.name ?? 'Anonymous',
+                      user.name ?? 'Anonymous',
                       style: const TextStyle(fontSize: 14),
                     ),
                     EText(
@@ -90,7 +90,7 @@ class QuestionCard extends StatelessWidget {
                       label: 'Answer',
                       hasMinimumSize: false,
                     ),
-                    if (user?.id == getUser?.id)
+                    if (user.id == getUser?.id)
                       TextButton(onPressed: () {}, child: const Text('Delete')),
                     const Spacer(),
                     const FavoriteButton(),

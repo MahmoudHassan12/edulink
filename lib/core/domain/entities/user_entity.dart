@@ -1,10 +1,10 @@
 import 'dart:io' show File;
-import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/department_entity.dart';
 import 'package:edu_link/core/domain/entities/office_entity.dart';
 import 'package:edu_link/core/domain/entities/program_entity.dart';
 import 'package:edu_link/core/helpers/entities_handlers.dart';
 import 'package:edu_link/core/helpers/pick_image.dart' show pickImage;
+import 'package:firebase_auth/firebase_auth.dart' show User;
 
 class UserEntity {
   const UserEntity({
@@ -18,7 +18,7 @@ class UserEntity {
     this.gitHubLink,
     this.department,
     this.level,
-    this.courses,
+    this.coursesIds,
     this.isProfessor,
     this.program,
     this.ssn,
@@ -26,33 +26,31 @@ class UserEntity {
     this.office,
   });
 
-  factory UserEntity.fromMap(Map<String, dynamic>? data) {
-    final List<CourseEntity>? getCourses = data?['courses'] != null
-        ? complexListEntity<CourseEntity>(
-            data?['courses'],
-            CourseEntity.fromMap,
-          )
-        : (data?['coursesIds'] as List<dynamic>?)
-              ?.map((id) => CourseEntity(id: id))
-              .toList();
-    return UserEntity(
-      id: data?['id'],
-      name: data?['name'],
-      email: data?['email'],
-      phone: data?['phone'],
-      imageUrl: data?['imageUrl'],
-      linkedInLink: data?['linkedInLink'],
-      gitHubLink: data?['gitHubLink'],
-      department: complexEntity(data?['department'], DepartmentEntity.fromMap),
-      level: data?['level'],
-      courses: getCourses,
-      isProfessor: data?['isProfessor'],
-      program: complexEntity(data?['program'], ProgramEntity.fromMap),
-      ssn: data?['ssn'],
-      academicTitle: data?['academicTitle'],
-      office: complexEntity(data?['office'], OfficeEntity.fromMap),
-    );
-  }
+  factory UserEntity.fromFireBase(User? user) => UserEntity(
+    id: user?.uid,
+    name: user?.displayName,
+    email: user?.email,
+    phone: user?.phoneNumber,
+    imageUrl: user?.photoURL,
+  );
+
+  factory UserEntity.fromMap(Map<String, dynamic>? data) => UserEntity(
+    id: data?['id'],
+    name: data?['name'],
+    email: data?['email'],
+    phone: data?['phone'],
+    imageUrl: data?['imageUrl'],
+    linkedInLink: data?['linkedInLink'],
+    gitHubLink: data?['gitHubLink'],
+    department: DepartmentEntity.fromMap(data?['department']),
+    level: data?['level'],
+    coursesIds: ListHandler.parseSimple(data?['coursesIds']),
+    isProfessor: data?['isProfessor'],
+    program: ProgramEntity.fromMap(data?['program']),
+    ssn: data?['ssn'],
+    academicTitle: data?['academicTitle'],
+    office: OfficeEntity.fromMap(data?['office']),
+  );
 
   final String? id;
   final String? name;
@@ -64,14 +62,14 @@ class UserEntity {
   final String? gitHubLink;
   final DepartmentEntity? department;
   final String? level;
-  final List<CourseEntity>? courses;
+  final List<String>? coursesIds;
   final bool? isProfessor;
   final ProgramEntity? program;
   final String? ssn;
   final String? academicTitle;
   final OfficeEntity? office;
 
-  Map<String, dynamic> toMap({bool toSharedPref = false}) => {
+  Map<String, dynamic> toMap() => {
     'id': id,
     'name': name,
     'email': email,
@@ -81,12 +79,7 @@ class UserEntity {
     'gitHubLink': gitHubLink,
     'department': department?.toMap(),
     'level': level,
-    if (toSharedPref)
-      'courses': courses
-          ?.map((course) => course.toMap(toSharedPref: true))
-          .toList()
-    else
-      'coursesIds': courses?.map((course) => course.id).toList(),
+    'coursesIds': coursesIds,
     'isProfessor': isProfessor ?? false,
     'program': program?.toMap(),
     'ssn': ssn,
@@ -105,7 +98,7 @@ class UserEntity {
     String? gitHubLink,
     DepartmentEntity? department,
     String? level,
-    List<CourseEntity>? courses,
+    List<String>? coursesIds,
     bool? isProfessor,
     ProgramEntity? program,
     String? ssn,
@@ -122,7 +115,7 @@ class UserEntity {
     imageUrl: imageUrl ?? this.imageUrl,
     department: department ?? this.department,
     level: level ?? this.level,
-    courses: courses ?? this.courses,
+    coursesIds: coursesIds ?? this.coursesIds,
     isProfessor: isProfessor ?? this.isProfessor,
     program: program ?? this.program,
     ssn: ssn ?? this.ssn,

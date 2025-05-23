@@ -6,7 +6,10 @@ class AvailabilityEntity {
 
   factory AvailabilityEntity.fromMap(Map<String, dynamic>? data) =>
       AvailabilityEntity(
-        times: complexListEntity(data?['times'], AvailableTimeEntity.fromMap),
+        times: ListHandler.parseComplex(
+          data?['times'],
+          AvailableTimeEntity.fromMap,
+        ),
       );
 
   final List<AvailableTimeEntity>? times;

@@ -57,7 +57,7 @@ class _DrawerHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ListTile(
-          leading: UserPhoto(user: getUser),
+          leading: UserPhoto(user: getUser!),
           title: EText(getUser?.name ?? 'No Name'),
           subtitle: FittedBox(
             fit: BoxFit.scaleDown,

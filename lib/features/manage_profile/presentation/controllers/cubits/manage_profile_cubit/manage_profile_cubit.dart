@@ -18,12 +18,8 @@ class ManageProfileCubit extends Cubit<ManageProfileState> {
   }
   UserEntity? user = getUser?.copyWith();
 
-  final departments = List<DepartmentEntity>.empty(
-    growable: true,
-  );
-  final programs = List<ProgramEntity>.empty(
-    growable: true,
-  );
+  final departments = List<DepartmentEntity>.empty(growable: true);
+  final programs = List<ProgramEntity>.empty(growable: true);
 
   Future<void> fetchDepartmentsAndPrograms() async {
     departments.addAll(await DepartmentsRepo().departments());

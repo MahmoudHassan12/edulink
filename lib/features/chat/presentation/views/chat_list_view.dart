@@ -97,7 +97,7 @@ class ChatTile extends StatelessWidget {
       (user) => user.id != getUser?.id,
     );
     return const UserRepo()
-        .get(documentId: reciver!.id!)
+        .getFromFireStore(documentId: reciver!.id!)
         .then((user) => chat.copyWith(users: [getUser!, user!]));
   }
 
@@ -129,15 +129,15 @@ class ChatTile extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         elevation: 0,
         child: ListTile(
-          leading: UserPhoto(user: reciever ?? const UserEntity()),
-          title: EText(reciever?.name ?? 'Lol'),
+          leading: UserPhoto(user: reciever!),
+          title: EText(reciever.name ?? 'Lol'),
           subtitle: EText(lastMessage?.text ?? ''),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [EText(date), EText(time)],
           ),
-          onTap: () => chatNavigation(context, extra: reciever!),
+          onTap: () => chatNavigation(context, extra: reciever),
         ),
       );
     },

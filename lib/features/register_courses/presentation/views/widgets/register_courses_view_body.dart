@@ -5,7 +5,7 @@ import 'package:edu_link/core/controllers/cubits/courses_cubit.dart/courses_cubi
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
-import 'package:edu_link/core/repos/courses_repo.dart';
+import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ class RegisterCoursesViewBody extends StatefulWidget {
 }
 
 class _RegisterCoursesViewBodyState extends State<RegisterCoursesViewBody> {
-  final List<String> selectedCourses = [];
+  final List<String> selectedCourses = [...?getUser?.coursesIds];
   @override
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: () async {
@@ -103,7 +103,10 @@ class RegisterButton extends StatelessWidget {
       child: CustomFilledButton(
         label: 'Register',
         onPressed: () => Future.wait<void>([
-          const CoursesRepo().addCoursesIds(selectedCourses),
+          const UserRepo().update(
+            data: getUser!.copyWith(coursesIds: selectedCourses).toMap(),
+            documentId: getUser!.id!,
+          ),
           homeNavigation(context),
         ]),
       ),
@@ -123,9 +126,7 @@ class ChooseCourse extends StatelessWidget {
   final ValueChanged<bool> onSelectionChanged;
   @override
   Widget build(BuildContext context) {
-    final List<String?>? registeredCoursesIds = getUser?.courses
-        ?.map((e) => e.id)
-        .toList();
+    final List<String?>? registeredCoursesIds = getUser?.coursesIds;
     return Checkbox(
       shape: const RoundedSuperellipseBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),

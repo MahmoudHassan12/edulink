@@ -22,13 +22,10 @@ class AnswerEntity {
   final String? answer;
   final UserEntity? user;
   final DateTime? date;
-  Map<String, dynamic> toMap({bool toSharedPref = false}) => {
+  Map<String, dynamic> toMap() => {
     'answer': answer,
-    if (toSharedPref)
-      'user': user?.toMap(toSharedPref: true)
-    else
-      'userId': user?.id,
-    'date': toSharedPref ? date?.toIso8601String() : date,
+    'userId': user?.id,
+    'date': date,
   };
   AnswerEntity copyWith({String? answer, UserEntity? user, DateTime? date}) =>
       AnswerEntity(
