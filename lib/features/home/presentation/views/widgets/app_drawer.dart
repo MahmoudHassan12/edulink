@@ -16,7 +16,7 @@ class AppDrawer extends StatelessWidget {
     final List<Map<String, Object?>> navigations = [
       {
         'icon': Icons.menu_book_rounded,
-        'label': 'Register Courses',
+        if (!(getUser?.isProfessor ?? true)) 'label': 'Register Courses',
         'action': registerCoursesNavigation,
       },
       {
