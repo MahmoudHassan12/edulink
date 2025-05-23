@@ -7,10 +7,11 @@ import 'package:edu_link/core/helpers/navigations.dart'
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/buttons/custom_icon_button_filled_tonal.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
-import 'package:edu_link/core/widgets/favorite_button.dart';
 import 'package:edu_link/core/widgets/user_photo.dart';
 import 'package:edu_link/features/q_a_forum/presentation/controllers/question_manager_cubit/question_manager_cubit.dart'
     show QuestionManagerCubit;
+import 'package:edu_link/features/question_details/presentation/views/answer_text_field.dart'
+    show AnswerTextField;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -51,7 +52,11 @@ class QuestionCard extends StatelessWidget {
             children: [
               ListTile(
                 minTileHeight: 56,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                contentPadding: const EdgeInsets.only(
+                  left: 12,
+                  right: 16,
+                  top: 4,
+                ),
                 leading: UserPhoto(user: user!),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -74,22 +79,59 @@ class QuestionCard extends StatelessWidget {
                   '$date at $time',
                   style: const TextStyle(fontSize: 11, color: Colors.grey),
                 ),
-                trailing: CustomIconButtonFilledTonal(
-                  onPressed: () {},
-                  icon: Icons.edit_note_rounded,
-                ),
+                trailing: user.id == getUser?.id && clickable
+                    ? CustomIconButtonFilledTonal(
+                        onPressed: () async {
+                          final controller = TextEditingController(
+                            text: qa.question,
+                          );
+                          await showDialog(
+                            context: context,
+                            builder: (_) => Dialog(
+                              child: AnswerTextField(
+                                controller: controller,
+                                onSend: () async {
+                                  final QuestionManagerCubit cubit =
+                                      context.read<QuestionManagerCubit>()
+                                        ..setQuestion(controller.text)
+                                        ..setDate(DateTime.now())
+                                        ..setUser(getUser!);
+                                  await cubit.updateQuestion();
+                                  controller.clear();
+                                  if (context.mounted) {
+                                    popNavigation(context);
+                                  }
+                                },
+                                labelText: 'Ask',
+                              ),
+                            ),
+                          );
+                        },
+                        icon: Icons.edit_note_rounded,
+                      )
+                    : null,
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 64, right: 8),
-                child: EText(qa.question ?? 'No question', softWrap: true),
+                child: EText(qa.question!, softWrap: true),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 child: Row(
                   spacing: 8,
                   children: [
                     CustomFilledButton(
-                      onPressed: () {},
+                      onPressed: () => questionDetailsNavigation(
+                        context,
+                        extra: {
+                          'qa': qa,
+                          'context': context,
+                          'courseId': courseId,
+                        },
+                      ),
                       label: 'Answer',
                       hasMinimumSize: false,
                     ),
@@ -121,8 +163,6 @@ class QuestionCard extends StatelessWidget {
                         ),
                         child: const Text('Delete'),
                       ),
-                    const Spacer(),
-                    const FavoriteButton(),
                   ],
                 ),
               ),

@@ -1,13 +1,13 @@
+import 'dart:async';
+
 import 'package:edu_link/core/domain/entities/course_entity.dart';
-import 'package:edu_link/core/domain/entities/duration_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/navigations.dart'
     show courseDetailsNavigation;
+import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:edu_link/core/widgets/course_image.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
-import 'package:edu_link/core/widgets/favorite_button.dart';
 import 'package:edu_link/core/widgets/user_photo.dart';
-import 'package:edu_link/features/home/presentation/views/widgets/text_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -18,7 +18,6 @@ class Course extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color surface = Theme.of(context).colorScheme.surface.withAlpha(160);
     final UserEntity? professor = course.professor;
-    final DurationEntity? duration = course.duration;
     final double width = MediaQuery.sizeOf(context).width - 88;
     return Card.filled(
       margin: EdgeInsets.zero,
@@ -69,7 +68,6 @@ class Course extends StatelessWidget {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           subtitle: EText(course.title ?? 'No Title'),
-                          trailing: const FavoriteButton(),
                           minVerticalPadding: 0,
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -79,24 +77,9 @@ class Course extends StatelessWidget {
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: TextIcon(
-                              icon: Icons.book_rounded,
-                              title: '${course.lectures} Lectures',
-                            ),
-                          ),
-                          Flexible(
-                            child: TextIcon(
-                              icon: Icons.watch_later_rounded,
-                              title:
-                                  '${duration?.hours}:'
-                                  '${duration?.minutes}:${duration?.seconds}',
-                            ),
-                          ),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: NumberOfStudents(courseId: course.id!),
                       ),
                     ),
                   ],
@@ -110,7 +93,7 @@ class Course extends StatelessWidget {
               child: ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
                 title: const EText('By'),
-                subtitle: EText(professor?.name ?? 'No Name'),
+                subtitle: EText('Dr. ${professor?.name}'),
                 trailing: UserPhoto(user: professor ?? const UserEntity()),
               ),
             ),
@@ -119,4 +102,46 @@ class Course extends StatelessWidget {
       ),
     );
   }
+}
+
+class NumberOfStudents extends StatefulWidget {
+  const NumberOfStudents({required this.courseId, super.key});
+  final String courseId;
+  @override
+  State<NumberOfStudents> createState() => _NumberOfStudentsState();
+}
+
+class _NumberOfStudentsState extends State<NumberOfStudents> {
+  int? _number = 0;
+  Future<void> _getStudents() async {
+    await const UserRepo()
+        .streamUsersByCourse(widget.courseId)
+        .map((List<UserEntity>? students) => _number = students?.length)
+        .first;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    unawaited(_getStudents());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) => Text.rich(
+    overflow: TextOverflow.fade,
+    softWrap: false,
+    TextSpan(
+      children: [
+        const WidgetSpan(
+          child: Icon(Icons.people_rounded),
+          alignment: PlaceholderAlignment.middle,
+        ),
+        TextSpan(
+          text: ' $_number Students',
+          style: const TextStyle(fontSize: 12),
+        ),
+      ],
+    ),
+  );
 }

@@ -14,13 +14,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  var _selectedIndex = 1;
+  var _selectedIndex = 0;
   void _onDestinationSelected(int index) =>
       index != _selectedIndex ? setState(() => _selectedIndex = index) : null;
   @override
   Widget build(BuildContext context) => Scaffold(
     body: _pages[_selectedIndex],
-    floatingActionButton: (getUser?.isProfessor ?? false) && _selectedIndex == 1
+    floatingActionButton: (getUser?.isProfessor ?? false) && _selectedIndex == 0
         ? const _AddCourseFloatingButton()
         : null,
     drawer: const AppDrawer(),
@@ -31,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
   );
 }
 
-const List<Widget> _pages = [ChatListView(), HomeViewBody(), SizedBox()];
+const List<Widget> _pages = [HomeViewBody(), ChatListView()];
 
 class _AddCourseFloatingButton extends StatelessWidget {
   const _AddCourseFloatingButton();

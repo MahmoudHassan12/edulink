@@ -12,20 +12,14 @@ class ENavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     const destinations = [
       NavigationDestination(
-        icon: Icon(Icons.chat_bubble_outline_rounded),
-        label: 'My Chats',
-        selectedIcon: Icon(Icons.chat_bubble_rounded),
-      ),
-      NavigationDestination(
         icon: Icon(Icons.home_outlined),
         label: 'Home',
         selectedIcon: Icon(Icons.home_rounded),
       ),
-
       NavigationDestination(
-        icon: Icon(Icons.favorite_outline_rounded),
-        label: 'Wishlist',
-        selectedIcon: Icon(Icons.favorite_rounded),
+        icon: Icon(Icons.chat_bubble_outline_rounded),
+        label: 'My Chats',
+        selectedIcon: Icon(Icons.chat_bubble_rounded),
       ),
     ];
     return NavigationBar(

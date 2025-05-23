@@ -43,7 +43,7 @@ class QuestionManagerCubit extends Cubit<QuestionManagerState> {
     emit(const QuestionSuccess());
   }
 
-  Future<void> updateQuestion(String questionId) async {
+  Future<void> updateQuestion() async {
     await const CoursesRepo().updateQuestion(_question, _courseId);
     emit(const QuestionSuccess());
   }
