@@ -30,7 +30,7 @@ import 'package:edu_link/features/question_details/presentation/views/question_d
     show QuestionDetailsView;
 import 'package:edu_link/features/register_courses/presentation/views/register_courses_view.dart'
     show RegisterCoursesView;
-import 'package:edu_link/features/settings/presentation/views/settings_view.dart'
+import 'package:edu_link/features/settings/presentation/view/settings_view.dart'
     show SettingsView;
 import 'package:flutter/material.dart' show BuildContext, RouterConfig, Widget;
 import 'package:go_router/go_router.dart'

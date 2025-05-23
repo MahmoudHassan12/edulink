@@ -95,7 +95,8 @@ class QuestionCard extends StatelessWidget {
                                       context.read<QuestionManagerCubit>()
                                         ..setQuestion(controller.text)
                                         ..setDate(DateTime.now())
-                                        ..setUser(getUser!);
+                                        ..setUser(getUser!)
+                                        ..setId(qa.id);
                                   await cubit.updateQuestion();
                                   controller.clear();
                                   if (context.mounted) {
