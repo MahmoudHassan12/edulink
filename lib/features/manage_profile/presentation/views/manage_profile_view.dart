@@ -1,6 +1,4 @@
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
-import 'package:edu_link/core/helpers/navigations.dart';
-import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
 import 'package:edu_link/features/manage_profile/presentation/controllers/cubits/manage_profile_cubit/manage_profile_cubit.dart'
     show ManageProfileCubit;
@@ -23,34 +21,3 @@ class ManageProfileView extends StatelessWidget {
     ),
   );
 }
-
-// ignore: unused_element
-Future<void> _deleteCourseDialog(
-  BuildContext context, {
-  required String documentId,
-}) =>
-    showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const EText('Delete Course'),
-        content: const EText(
-          'Are you sure you want to delete this course?',
-          softWrap: true,
-        ),
-        actions: [
-          TextButton(
-            child: const EText('Cancel'),
-            onPressed: () => popNavigation(context, false),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const EText('Delete'),
-            onPressed: () => popNavigation(context, true),
-          ),
-        ],
-      ),
-    ).then(
-      (value) => value ?? false
-          ? const CoursesRepo().delete(documentId: documentId)
-          : null,
-    );
