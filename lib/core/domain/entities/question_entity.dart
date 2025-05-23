@@ -55,8 +55,10 @@ class QuestionEntity {
     user: user ?? this.user,
     date: date ?? this.date,
   );
-  QuestionEntity setId() => copyWith(
-    id: TextIdGenerator(date!.millisecondsSinceEpoch.toString()).generateId(),
+  QuestionEntity setId([String? id]) => copyWith(
+    id:
+        id ??
+        TextIdGenerator(date!.millisecondsSinceEpoch.toString()).generateId(),
   );
   QuestionEntity setQuestion(String question) => copyWith(question: question);
   QuestionEntity setUser(UserEntity user) => copyWith(user: user);

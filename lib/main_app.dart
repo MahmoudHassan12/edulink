@@ -12,18 +12,22 @@ import 'package:flutter_localizations/flutter_localizations.dart'
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
   @override
-  MaterialApp build(BuildContext context) => MaterialApp.router(
-    debugShowCheckedModeBanner: false,
-    title: 'Edu Link',
-    routerConfig: routerConfig,
-    theme: const ThemeConfig().lightTheme,
-    darkTheme: const ThemeConfig().darkTheme,
-    localizationsDelegates: const [
-      AppLocalizationDelegate(),
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    supportedLocales: const AppLocalizationDelegate().supportedLocales,
-  );
+  MaterialApp build(BuildContext context) {
+    final theme = ThemeConfig(context);
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'Edu Link',
+      routerConfig: routerConfig,
+      theme: theme.light,
+      darkTheme: theme.dark,
+      themeMode: theme.mode,
+      localizationsDelegates: const [
+        AppLocalizationDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const AppLocalizationDelegate().supportedLocales,
+    );
+  }
 }
