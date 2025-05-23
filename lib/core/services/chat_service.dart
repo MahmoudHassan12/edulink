@@ -1,5 +1,3 @@
-// ignore_for_file: specify_nonobvious_local_variable_types
-
 import 'package:cloud_firestore/cloud_firestore.dart'
     show DocumentSnapshot, FirebaseFirestore;
 import 'package:edu_link/core/domain/entities/chat_entity.dart';
