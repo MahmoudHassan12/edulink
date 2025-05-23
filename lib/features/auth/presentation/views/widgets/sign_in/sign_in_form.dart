@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseFirestore;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/auth_repo.dart';
 import 'package:edu_link/core/repos/courses_repo.dart' show CoursesRepo;
@@ -7,6 +8,8 @@ import 'package:edu_link/features/auth/presentation/views/widgets/email_text_fie
 import 'package:edu_link/features/auth/presentation/views/widgets/password_text_field.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/forgot_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart'
+    show FirebaseMessaging;
 import 'package:flutter/material.dart';
 
 class SignInForm extends StatefulWidget {
@@ -46,6 +49,7 @@ class _SignInFormState extends State<SignInForm> {
 
         if (mounted) {
           showSnackbar(context, 'Welcome back!');
+     
           await handleSignInSuccess();
         }
       } else {
