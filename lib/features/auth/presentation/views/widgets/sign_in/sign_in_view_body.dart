@@ -7,9 +7,15 @@ import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/contin
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
 import 'package:flutter/material.dart';
 
-class SignInViewBody extends StatelessWidget {
-  const SignInViewBody({this.isLoading = false, super.key});
-  final bool isLoading;
+class SignInViewBody extends StatefulWidget {
+  const SignInViewBody({super.key});
+
+  @override
+  State<SignInViewBody> createState() => _SignInViewBodyState();
+}
+
+class _SignInViewBodyState extends State<SignInViewBody> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) => CustomScrollView(
     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -20,7 +26,11 @@ class SignInViewBody extends StatelessWidget {
         sliver: SliverList(
           delegate: SliverChildListDelegate.fixed([
             const SizedBox(height: 8),
-            SignInForm(isLoading: isLoading),
+            SignInForm(
+              isLoading: isLoading,
+              setIsLoading: (isLoading) =>
+                  setState(() => this.isLoading = isLoading),
+            ),
             const SizedBox(height: 32),
             HavingAccount(
               isLoading: isLoading,
@@ -31,9 +41,17 @@ class SignInViewBody extends StatelessWidget {
             const SizedBox(height: 32),
             const OrDivider(),
             const SizedBox(height: 32),
-            ContinueWithGoogleButton(isLoading: isLoading),
+            ContinueWithGoogleButton(
+              isLoading: isLoading,
+              setIsLoading: (isLoading) =>
+                  setState(() => this.isLoading = isLoading),
+            ),
             const SizedBox(height: 16),
-            ContinueWithFacebookButton(isLoading: isLoading),
+            ContinueWithFacebookButton(
+              isLoading: isLoading,
+              setIsLoading: (isLoading) =>
+                  setState(() => this.isLoading = isLoading),
+            ),
             const SizedBox(height: 16),
           ]),
         ),

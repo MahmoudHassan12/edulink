@@ -46,7 +46,7 @@ class AuthService {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) {
         log('Google Sign-In canceled by user.');
-        return null;
+        throw Exception('Google Sign-In canceled by user.');
       }
 
       log('Google User Selected: ${googleUser.email}');

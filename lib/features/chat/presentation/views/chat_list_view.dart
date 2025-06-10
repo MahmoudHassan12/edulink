@@ -12,11 +12,23 @@ import 'package:edu_link/core/widgets/user_photo.dart' show UserPhoto;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ChatListView extends StatelessWidget {
-  const ChatListView({super.key});
+class ChatListView extends StatefulWidget {
+  const ChatListView({super.key, this.wantKeepAlive = true});
+  final bool wantKeepAlive;
   @override
-  Widget build(BuildContext context) =>
-      const Scaffold(body: ChatListViewBody());
+  State<ChatListView> createState() => _ChatListViewState();
+}
+
+class _ChatListViewState extends State<ChatListView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return const Scaffold(body: ChatListViewBody());
+  }
+
+  @override
+  bool get wantKeepAlive => widget.wantKeepAlive;
 }
 
 class ChatListViewBody extends StatelessWidget {
@@ -130,7 +142,7 @@ class ChatTile extends StatelessWidget {
         elevation: 0,
         child: ListTile(
           leading: UserPhoto(user: reciever!),
-          title: EText(reciever.name ?? 'Lol'),
+          title: EText(reciever.name ?? 'No Name'),
           subtitle: EText(lastMessage?.text ?? ''),
           trailing: Column(
             mainAxisAlignment: MainAxisAlignment.center,

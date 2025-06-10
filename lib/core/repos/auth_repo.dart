@@ -47,8 +47,9 @@ class AuthRepo {
         return user;
       });
 
-  Future<User?> signInWithGoogle() =>
-      _auth.signInWithGoogle().then((user) async {
+  Future<User?> signInWithGoogle() {
+    try {
+      return _auth.signInWithGoogle().then((user) async {
         if (user == null) {
           return null;
         }
@@ -75,6 +76,10 @@ class AuthRepo {
         }
         return user;
       });
+    } on Exception catch (e) {
+      throw Exception(e);
+    }
+  }
 
   Future<User?> signInWithFacebook() => _auth.signInWithFacebook().then((
     user,

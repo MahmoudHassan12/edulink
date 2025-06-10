@@ -10,8 +10,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignInForm extends StatefulWidget {
-  const SignInForm({this.isLoading = false, super.key});
+  const SignInForm({
+    required this.setIsLoading,
+    this.isLoading = false,
+    super.key,
+  });
   final bool isLoading;
+  //
+  // ignore: avoid_positional_boolean_parameters
+  final void Function(bool isLoading) setIsLoading;
   @override
   State<SignInForm> createState() => _SignInFormState();
 }
@@ -20,7 +27,6 @@ class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  var _isLoading = false;
   Future<void> handleSignInSuccess() async {
     await const CoursesRepo().getAll();
     if (mounted) {
@@ -33,7 +39,7 @@ class _SignInFormState extends State<SignInForm> {
       return;
     }
 
-    setState(() => _isLoading = true);
+    widget.setIsLoading(true);
 
     try {
       final User? user = await const AuthRepo().signInWithEmail(
@@ -65,9 +71,7 @@ class _SignInFormState extends State<SignInForm> {
         showSnackbar(context, 'An error occurred: $e', flag: false);
       }
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      widget.setIsLoading(false);
     }
   }
 
@@ -77,20 +81,20 @@ class _SignInFormState extends State<SignInForm> {
     child: Column(
       children: [
         EmailTextField(
-          isLoading: _isLoading,
+          isLoading: widget.isLoading,
           emailController: _emailController,
           textInputAction: TextInputAction.next,
         ),
         PasswordTextField(
-          isLoading: _isLoading,
+          isLoading: widget.isLoading,
           passwordController: _passwordController,
           textInputAction: TextInputAction.go,
           labelText: 'Password',
         ),
-        ForgotPassword(isLoading: _isLoading),
+        ForgotPassword(isLoading: widget.isLoading),
         CustomFilledButton(
           label: 'Sign In',
-          onPressed: _isLoading ? null : _signIn,
+          onPressed: widget.isLoading ? null : _signIn,
         ),
       ],
     ),

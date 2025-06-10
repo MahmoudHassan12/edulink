@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:edu_link/core/helpers/flutter_local_notifications.dart'
+    show LocalNotificationsHelper;
 import 'package:edu_link/core/helpers/routes.dart' show routerConfig;
 import 'package:edu_link/core/helpers/theme_config.dart' show ThemeConfig;
+import 'package:edu_link/core/services/firebase_messaging_service.dart'
+    show FirebaseMessagingService;
 import 'package:edu_link/generated/l10n.dart' show AppLocalizationDelegate;
 import 'package:flutter/material.dart'
     show BuildContext, MaterialApp, StatelessWidget;
@@ -28,6 +34,11 @@ class MainApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const AppLocalizationDelegate().supportedLocales,
+      builder: (final context, final child) {
+        unawaited(const FirebaseMessagingService().init);
+        unawaited(LocalNotificationsHelper.init());
+        return child!;
+      },
     );
   }
 }

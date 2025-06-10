@@ -94,6 +94,7 @@ class UserEntity {
 
   UserEntity copyWith({
     String? id,
+    String? fcmToken,
     String? name,
     String? email,
     String? phone,
@@ -111,6 +112,7 @@ class UserEntity {
     OfficeEntity? office,
   }) => UserEntity(
     id: id ?? this.id,
+    fcmToken: fcmToken ?? this.fcmToken,
     name: name ?? this.name,
     email: email ?? this.email,
     gitHubLink: gitHubLink ?? this.gitHubLink,
@@ -127,6 +129,7 @@ class UserEntity {
     academicTitle: academicTitle ?? this.academicTitle,
     office: office ?? this.office,
   );
+  UserEntity setFcmToken(String fcmToken) => copyWith(fcmToken: fcmToken);
   UserEntity setName(String name) => copyWith(name: name);
   UserEntity setEmail(String email) => copyWith(email: email);
   UserEntity setGitHub(String githubLink) => copyWith(gitHubLink: githubLink);
