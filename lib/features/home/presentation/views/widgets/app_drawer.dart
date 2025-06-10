@@ -14,11 +14,12 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, Object?>> navigations = [
-      {
-        'icon': Icons.menu_book_rounded,
-        if (!(getUser?.isProfessor ?? true)) 'label': 'Register Courses',
-        'action': registerCoursesNavigation,
-      },
+      if (!(getUser?.isProfessor ?? true))
+        {
+          'icon': Icons.menu_book_rounded,
+          'label': 'Register Courses',
+          'action': registerCoursesNavigation,
+        },
       {
         'icon': Icons.settings_rounded,
         'label': 'Settings',

@@ -7,6 +7,7 @@ class MessageEntity {
     final DateTime date = switch (data?['date']) {
       final Timestamp t => t.toDate(),
       final DateTime d => d,
+      final String s => DateTime.parse(s),
       _ => DateTime.now(),
     };
     return MessageEntity(
@@ -18,9 +19,16 @@ class MessageEntity {
   final UserEntity? user;
   final String? text;
   final DateTime? date;
+
   Map<String, dynamic> toMap() => {
     'userId': user?.id,
     'text': text,
     'date': date,
+  };
+
+  Map<String, dynamic> toLocalMap() => {
+    'userId': user?.id,
+    'text': text,
+    'date': date?.toIso8601String(),
   };
 }

@@ -1,10 +1,6 @@
-import 'dart:async' show unawaited;
-
 import 'package:edu_link/core/domain/entities/chat_entity.dart';
 import 'package:edu_link/core/domain/entities/message_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
-import 'package:edu_link/core/helpers/flutter_local_notifications.dart'
-    show LocalNotificationsHelper;
 import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/query_entity.dart';
 import 'package:edu_link/core/services/firestore_service.dart'
@@ -21,46 +17,16 @@ class ChatService {
 
   Stream<ChatEntity> getChat(String userId1, String userId2) => _fireStore
       .streamDocument(path: 'chats', documentId: _getChatId(userId1, userId2))
-      .map((map) {
-        final chat = ChatEntity.fromMap(map);
-        final MessageEntity? lastMessage = chat.messages?.last;
-        if (lastMessage?.user?.id != getUser?.id) {
-          unawaited(
-            LocalNotificationsHelper.show(
-              id: chat.hashCode,
-              title: 'New Message',
-              body: chat.messages?.isNotEmpty ?? false
-                  ? lastMessage?.text ?? 'You have a new message'
-                  : 'You have a new message',
-            ),
-          );
-        }
-        return chat;
-      });
+      .map(ChatEntity.fromMap);
 
-  Stream<List<ChatEntity>> getChates() => _fireStore
+  Stream<List<ChatEntity>> streamChates() => _fireStore
       .streamCollectionWithQuery(
         path: 'chats',
         query: QueryEntity(
           fields: [FieldEntity(field: 'usersIds', arrayContains: getUser?.id)],
         ),
       )
-      .map((e) {
-        final lastChat = ChatEntity.fromMap(e.first);
-        final MessageEntity? lastMessage = lastChat.messages?.last;
-        if (lastMessage?.user?.id != getUser?.id) {
-          unawaited(
-            LocalNotificationsHelper.show(
-              id: lastChat.hashCode,
-              title: 'New Message',
-              body: lastChat.messages?.isNotEmpty ?? false
-                  ? lastMessage?.text ?? 'You have a new message'
-                  : 'You have a new message',
-            ),
-          );
-        }
-        return e.map(ChatEntity.fromMap).toList();
-      });
+      .map((e) => e.map(ChatEntity.fromMap).toList());
 
   Future<void> sendMessage(
     String userId1,

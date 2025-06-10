@@ -27,4 +27,8 @@ class ChatEntity {
     'messages': messages?.map((e) => e.toMap()).toList(),
     'usersIds': users?.map((e) => e.id).toList(),
   };
+  Map<String, dynamic> toLocalMap() => {
+    'messages': messages?.map((e) => e.toLocalMap()).toList(),
+    'usersIds': users?.map((e) => e.id).toList(),
+  };
 }
