@@ -7,11 +7,13 @@ Edu Link is your gateway to a smarter academic journey! With powerful features a
 ## 🚀 Key Features
 
 - 👤 **Personalized Profiles:** Tailored experiences for students and instructors.
+- 🔐 **Role-Based Access:** Easy sign-up for students. Professors' access is restricted and granted manually by IT through Firebase role management.
 - 📚 **Effortless Course Management:** Access and organize academic content with ease.
 - 💬 **Academic Discussions:** Engage in meaningful conversations and share knowledge.
 - 🔔 **Smart Notifications:** Stay updated with important academic notifications.
 - 💬 **1 to 1 Chat:** Stay connected and chat privately with other students and professors.
 - 📁 **Material Sharing:** Upload and access course videos, PDFs, and other resources.
+- ☁️ **Cloud Storage with Supabase:** Fast and secure media and file storage (PDFs, images, videos).
 - 📱 **Cross-Device Access:** Works seamlessly on Android phones and emulators.
 
 ---
@@ -27,7 +29,6 @@ Stay tuned for more updates and features!
 ## 📁 Repository Structure
 
 ```
-
 EduLink/
 ├── lib/                   # Main Flutter source code (UI, logic)
 ├── assets/                # Fonts, images, and other media assets
@@ -42,7 +43,6 @@ EduLink/
 ├── firebase.json          # Firebase hosting config (if applicable)
 ├── firestore.rules        # Firestore security rules
 ├── firestore.indexes.json # Firestore index definitions
-
 ```
 
 ---
@@ -97,15 +97,17 @@ build/app/outputs/flutter-apk/app-release.apk
 
 ---
 
-## ☁️ Firebase Setup
+## ☁️ Firebase & Supabase Integration
 
-Edu Link uses Firebase for:
+Edu Link uses:
 
-- 🔐 Authentication
-- 🔄 Firestore for course materials and chat
-- 🔔 FCM for real-time notifications
+- 🔐 **Firebase Authentication**: Secure login and sign-up.
+- 🧑‍🏫 **Role Management**: Instructor access is manually approved via Firebase by IT.
+- 🔄 **Firestore**: Chat, notifications, and dynamic course metadata.
+- 🔔 **FCM**: Real-time notifications for chat and content updates.
+- ☁️ **Supabase Storage**: Hosting PDFs, images, and course videos efficiently.
 
-> 📬 **Firebase configuration (structure and setup) will be shared upon request.**  
+> 📬 **Firebase and Supabase configurations and database structure will be shared upon request.**  
 > Please contact the developer if you need to deploy your own backend.
 
 ---
