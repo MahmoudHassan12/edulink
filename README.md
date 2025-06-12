@@ -1,6 +1,6 @@
-# 🎓 Edu Link
+# 🎓 EduLink
 
-Edu Link is your gateway to a smarter academic journey! With powerful features and a user-friendly interface, Edu Link connects students and instructors seamlessly, promoting an interactive and productive learning environment.
+EduLink is your gateway to a smarter academic journey! With powerful features and a user-friendly interface, EduLink connects students and instructors seamlessly, promoting an interactive and productive learning environment.
 
 ---
 
@@ -17,9 +17,9 @@ Edu Link is your gateway to a smarter academic journey! With powerful features a
 
 ---
 
-## 💡 Why Edu Link?
+## 💡 Why EduLink?
 
-Edu Link transforms traditional learning into a dynamic experience, making education more accessible, engaging, and effective for everyone involved.
+EduLink transforms traditional learning into a dynamic experience, making education more accessible, engaging, and effective for everyone involved.
 
 Stay tuned for more updates and features!
 
@@ -98,7 +98,7 @@ build/app/outputs/flutter-apk/app-release.apk
 
 ## ☁️ Firebase & Supabase Integration
 
-Edu Link uses:
+EduLink uses:
 
 - 🔐 **Firebase Authentication**: Secure login and sign-up.
 - 🧑‍🏫 **Role Management**: Instructor access is manually approved via Firebase by IT.
