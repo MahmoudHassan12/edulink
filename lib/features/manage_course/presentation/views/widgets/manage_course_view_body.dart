@@ -112,9 +112,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                       ..setCreditHour(
                         int.tryParse(_creditHourController.text) ?? 0,
                       )
-                      // TODO(Mahmoud): Don't forget this line
                       ..setLectures(widget.course?.lectures ?? 0)
-                      // TODO(Mahmoud): Don't forget this line
                       ..setDuration(
                         widget.course?.duration ?? const DurationEntity(),
                       )
