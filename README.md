@@ -143,10 +143,9 @@ Chapters include:
 
 ## 👨‍💻 Developers
 
-**Hossam Hassan**
 **Mahmoud Hassan**  
 **Yousef Saber**  
-
+**Hossam Hassan**
 ---
 
 ## 📜 License & Usage
