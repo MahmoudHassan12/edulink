@@ -146,8 +146,13 @@ Chapters include:
 **Mahmoud Hassan**  
 **Yousef Saber**  
 **Hossam Hassan**
----
 
+---
+🎬 Demo Video
+See Edu Link in action! Watch the short demo video showcasing the app’s main features:
+
+▶️ [Watch Demo on Google Drive](https://drive.google.com/drive/u/2/folders/1lP-p3dFTPAnnhGFHpKyJ0RM1xzHjOnMH) 
+---
 ## 📜 License & Usage
 
 This project was developed as part of a university graduation project at **Faculty Of Science, Ain Shams University**.  
