@@ -122,11 +122,38 @@ EduLink uses:
 
 ---
 
+### 📘 Full Documentation
+
+For detailed information about the Edu Link project — including setup, architecture, usage, and testing — please refer to the official documentation:
+
+👉 [EduLink GitBook Documentation](https://hossams-organization-1.gitbook.io/edulink)
+
+Chapters include:
+
+- ✅ **Introduction** – Overview, goals, and target users  
+- ⚙️ **Tools & Technologies** – Data sources, frameworks, and platforms used  
+- 💻 **System Requirements** – For both users and developers  
+- 🧠 **Challenges & Solutions** – What we faced and how we solved it  
+- 🏗 **Architecture** – Design, system flow, and components  
+- 📱 **User Guide** – How to install and use the app  
+- 👨‍💻 **Developer Guide** – Folder structure and setup  
+- 🧪 **Testing & Feedback** – Quality assurance and collected feedback  
+
+---
+
+## 🎬 Demo Video
+
+See Edu Link in action! Watch the short demo video showcasing the app’s main features:
+
+▶️ [Watch Demo on Google Drive](https://drive.google.com/drive/u/2/folders/1lP-p3dFTPAnnhGFHpKyJ0RM1xzHjOnMH) 
+
+---
+
 ## 👨‍💻 Developers
 
-**Hossam Hassan**
 **Mahmoud Hassan**  
 **Yousef Saber**  
+**Hossam Hassan**
 
 ---
 
