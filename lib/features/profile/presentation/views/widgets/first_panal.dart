@@ -44,7 +44,7 @@ class _UserInfoFirstPanal extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, String?> studentInfo = {
       'Credit Level': user.level,
-      'Student ID': user.id?.substring(0, 8).toUpperCase(),
+      'Student ID': user.ssn?.substring(0, 8).toUpperCase(),
       'Program': user.program?.name,
     };
     final Map<String, String?> professorInfo = {
@@ -52,41 +52,47 @@ class _UserInfoFirstPanal extends StatelessWidget {
       'Department': user.department?.name,
     };
     final info = user.isProfessor ?? false ? professorInfo : studentInfo;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Column(
-            spacing: 8,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: info.entries
-                .map(
-                  (e) => EText(
-                    e.key,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: info.entries
+            .map(
+              (e) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: Text(
+                        e.key,
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-        Column(
-          spacing: 8,
-          children: List<EText>.generate(
-            info.length,
-            (_) => const EText('  :  '),
-          ),
-        ),
-        Expanded(
-          child: Column(
-            spacing: 8,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: info.entries.map((e) => EText(e.value!)).toList(),
-          ),
-        ),
-      ],
+                    const SizedBox(width: 4),
+                    const Text(
+                      ":",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 8),
+
+                    Expanded(
+                      child: Text(
+                        e.value ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

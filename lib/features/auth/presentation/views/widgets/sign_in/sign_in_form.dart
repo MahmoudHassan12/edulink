@@ -90,7 +90,14 @@ class _SignInFormState extends State<SignInForm> {
           passwordController: _passwordController,
           textInputAction: TextInputAction.go,
           labelText: 'Password',
+          isVisible: isPasswordVisible,
+          setVisible: (value) {
+            setState(() {
+              isPasswordVisible = value;
+            });
+          },
         ),
+
         ForgotPassword(isLoading: widget.isLoading),
         CustomFilledButton(
           label: 'Sign In',
@@ -99,6 +106,7 @@ class _SignInFormState extends State<SignInForm> {
       ],
     ),
   );
+  bool isPasswordVisible = false;
 }
 
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackbar(
