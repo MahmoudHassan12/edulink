@@ -9,6 +9,8 @@ import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:edu_link/core/widgets/app_search_anchor.dart';
 import 'package:edu_link/core/widgets/buttons/custom_filled_button.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
+import 'package:edu_link/features/home/presentation/controllers/home_cubit/home_cubit.dart'
+    show HomeCubit;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder, ReadContext;
 
@@ -110,13 +112,18 @@ class RegisterButton extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: CustomFilledButton(
         label: 'Register',
-        onPressed: () => Future.wait<void>([
-          const UserRepo().update(
+        onPressed: () async {
+          await const UserRepo().update(
             data: getUser!.copyWith(coursesIds: selectedCourses).toMap(),
             documentId: getUser!.id!,
-          ),
-          homeNavigation(context),
-        ]),
+          );
+          if (context.mounted) {
+            await context.read<HomeCubit>().getCourses();
+          }
+          if (context.mounted) {
+            popNavigation(context);
+          }
+        },
       ),
     ),
   );
@@ -142,7 +149,7 @@ class ChooseCourse extends StatelessWidget {
       value:
           (registeredCoursesIds?.contains(courseId) ?? false) ||
           selectedCourses.contains(courseId),
-      onChanged: registeredCoursesIds?.contains(courseId) ?? true
+      onChanged: registeredCoursesIds?.contains(courseId) ?? false
           ? null
           : (value) {
               if (value != null) {

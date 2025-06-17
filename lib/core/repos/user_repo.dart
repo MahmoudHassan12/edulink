@@ -7,9 +7,11 @@ import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/entities_handlers.dart';
 import 'package:edu_link/core/helpers/query_entity.dart';
 import 'package:edu_link/core/helpers/shared_pref.dart';
+import 'package:edu_link/core/repos/auth_repo.dart';
 import 'package:edu_link/core/services/firestore_service.dart'
     show FirestoreService;
 import 'package:edu_link/core/services/supabase_service.dart';
+import 'package:flutter/material.dart' show BuildContext;
 
 class UserRepo {
   const UserRepo();
@@ -91,10 +93,7 @@ class UserRepo {
 
   Future<List<UserEntity>?> getMultipleUsers(List<String> userIds) => _fireStore
       .getDocuments(path: _path, documentIds: userIds)
-      .then((e) {
-        log('${e.length} Users fetched successfully!');
-        return e.map(UserEntity.fromMap).toList();
-      })
+      .then((e) => e.map(UserEntity.fromMap).toList())
       .onError<FirebaseException>((e, _) {
         log('Users not found');
         throw Exception('Users not found: $e');
@@ -124,6 +123,10 @@ class UserRepo {
         log('${docs.length} Users fetched successfully!');
         return docs.map(UserEntity.fromMap).toList();
       });
+
+  Future<void> signOut(BuildContext context) => const AuthRepo()
+      .signOut(context)
+      .then((_) => SharedPrefSingleton.remove(Endpoints.user));
 
   Future<void> delete({required String documentId}) => _fireStore
       .deleteDocument(path: _path, documentId: documentId)

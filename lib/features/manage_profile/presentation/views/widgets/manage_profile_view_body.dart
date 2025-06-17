@@ -176,7 +176,7 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
                 if (cubit.user?.isValid ?? false) {
                   await cubit.update();
                   if (context.mounted) {
-                    await homeNavigation(context);
+                    homeNavigation(context);
                   }
                 } else {
                   showSnackbar(

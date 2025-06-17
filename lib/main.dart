@@ -1,10 +1,7 @@
 import 'package:edu_link/core/helpers/bloc_observe.dart' show BlocObserve;
 import 'package:edu_link/core/helpers/flutter_local_notifications.dart'
     show LocalNotificationsHelper;
-import 'package:edu_link/core/helpers/notification_handler.dart';
 import 'package:edu_link/core/helpers/shared_pref.dart';
-import 'package:edu_link/core/services/firebase_messaging_service.dart'
-    show FirebaseMessagingService;
 import 'package:edu_link/core/services/supabase_service.dart'
     show SupabaseService;
 import 'package:edu_link/features/chat/presentation/controllers/cubit/chat_list_cubit.dart';
@@ -13,14 +10,9 @@ import 'package:edu_link/features/settings/presentation/controllers/theme_modes_
 import 'package:edu_link/firebase_options.dart' show DefaultFirebaseOptions;
 import 'package:edu_link/main_app.dart' show MainApp;
 import 'package:firebase_core/firebase_core.dart' show Firebase;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart' show WidgetsFlutterBinding, runApp;
 import 'package:flutter_bloc/flutter_bloc.dart'
     show BlocProvider, MultiBlocProvider;
-import 'package:hydrated_bloc/hydrated_bloc.dart'
-    show HydratedBloc, HydratedStorage, HydratedStorageDirectory;
-import 'package:path_provider/path_provider.dart'
-    show getApplicationDocumentsDirectory;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,26 +22,13 @@ Future<void> main() async {
   const BlocObserve().init();
 
   await LocalNotificationsHelper.init();
-  const FirebaseMessagingService().onBackgroundMessage();
 
-  await requestNotificationPermissions();
-  await setupNotificationTapHandler();
-
-  HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorageDirectory.web
-        : HydratedStorageDirectory(
-            (await getApplicationDocumentsDirectory()).path,
-          ),
-  );
+  // await requestNotificationPermissions();
 
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<ChatListCubit>(
-          create: (_) => ChatListCubit(),
-          lazy: false,
-        ),
+        BlocProvider<ChatListCubit>(create: (_) => ChatListCubit()),
         BlocProvider<ThemeModesCubit>(create: (_) => ThemeModesCubit()),
         BlocProvider<SeedColorsCubit>(create: (_) => SeedColorsCubit()),
         BlocProvider<HomeCubit>(create: (_) => HomeCubit()),

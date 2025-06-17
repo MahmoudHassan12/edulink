@@ -27,7 +27,7 @@ class ContinueWithGoogleButton extends StatelessWidget {
       if (user != null && context.mounted) {
         setIsLoading(false);
         getUser?.isValid ?? false
-            ? await homeNavigation(context)
+            ? homeNavigation(context)
             : await manageProfileNavigation(context);
       } else {
         setIsLoading(false);

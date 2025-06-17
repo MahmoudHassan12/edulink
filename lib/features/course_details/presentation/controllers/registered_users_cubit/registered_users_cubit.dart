@@ -14,22 +14,14 @@ class RegisteredUsersCubit extends Cubit<RegisteredUsersState> {
   final String courseId;
 
   late StreamSubscription<List<UserEntity>?> _subscription;
-  void streamUsersByCourse() {
+  StreamSubscription<List<UserEntity>?> streamUsersByCourse() {
     emit(RegisteredUsersLoading());
-    try {
-      _subscription = const UserRepo()
-          .streamUsersByCourse(courseId)
-          .listen(
-            (users) {
-              emit(RegisteredUsersSuccess(users));
-            },
-            onError: (error) {
-              emit(RegisteredUsersFailure(error.toString()));
-            },
-          );
-    } on Exception catch (e) {
-      emit(RegisteredUsersFailure(e.toString()));
-    }
+    return _subscription = const UserRepo()
+        .streamUsersByCourse(courseId)
+        .listen(
+          (users) => emit(RegisteredUsersSuccess(users)),
+          onError: (error) => emit(RegisteredUsersFailure(error.toString())),
+        );
   }
 
   @override

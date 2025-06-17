@@ -19,7 +19,7 @@ class _HomeViewState extends State<HomeView> {
       index != _selectedIndex ? setState(() => _selectedIndex = index) : null;
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: _pages[_selectedIndex],
+    body: [const HomeViewBody(), const ChatListView()][_selectedIndex],
     floatingActionButton: (getUser?.isProfessor ?? false) && _selectedIndex == 0
         ? const _AddCourseFloatingButton()
         : null,
@@ -30,8 +30,6 @@ class _HomeViewState extends State<HomeView> {
     ),
   );
 }
-
-const List<Widget> _pages = [HomeViewBody(), ChatListView()];
 
 class _AddCourseFloatingButton extends StatelessWidget {
   const _AddCourseFloatingButton();

@@ -13,7 +13,8 @@ class AppBarBottom extends StatelessWidget implements PreferredSizeWidget {
         if (state is HomeSuccess) {
           return AppSearchAnchor(courses: state.courses);
         }
-        return const AppSearchAnchor();
+        return const SizedBox.shrink();
+        // return const AppSearchAnchor();
       },
     ),
   );

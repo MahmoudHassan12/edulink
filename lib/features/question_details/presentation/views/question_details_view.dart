@@ -29,7 +29,7 @@ class QuestionDetailsView extends StatelessWidget {
   final BuildContext qaContext;
   final String courseId;
   @override
-  BlocProvider build(_) => BlocProvider<FetchQuestionsCubit>.value(
+  Widget build(_) => BlocProvider<FetchQuestionsCubit>.value(
     value: BlocProvider.of<FetchQuestionsCubit>(qaContext),
     child: QuestionDetailsViewBlocSelector(question: qa, courseId: courseId),
   );
@@ -58,7 +58,7 @@ class QuestionDetailsViewBlocSelector extends StatelessWidget {
             return null;
           }
         },
-        builder: (_, question) => BlocProvider(
+        builder: (_, question) => BlocProvider<AnswerManagerCubit>(
           create: (context) => AnswerManagerCubit(courseId, question.id!),
           child: Scaffold(
             appBar: AppBar(title: const EText('Question Details')),

@@ -30,7 +30,7 @@ class _SignInFormState extends State<SignInForm> {
   Future<void> handleSignInSuccess() async {
     await const CoursesRepo().getAll();
     if (mounted) {
-      await homeNavigation(context);
+      homeNavigation(context);
     }
   }
 

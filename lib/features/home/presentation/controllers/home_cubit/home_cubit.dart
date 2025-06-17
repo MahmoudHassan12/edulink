@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
-import 'package:edu_link/core/domain/entities/user_entity.dart';
+import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/repos/user_repo.dart' show UserRepo;
@@ -12,17 +12,32 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeInitial()) {
-    _streamCourses();
+    unawaited(getCourses());
   }
-  StreamSubscription<UserEntity?> _streamCourses() {
+  Future<void> getCourses() async {
     emit(const HomeLoading());
-    return _streamUser().listen(
-      (user) => const CoursesRepo()
-          .streamMultibleCourses(user!.coursesIds!)
-          .listen((courses) => emit(HomeSuccess(courses))),
-    );
+    if (getUser?.coursesIds?.isEmpty ?? true) {
+      return emit(const HomeSuccess([]));
+    }
+    return const CoursesRepo()
+        .getMultibleCourses(getUser!.coursesIds!)
+        .then((courses) async {
+          final List<String>? professorsIds = courses
+              ?.map((e) => e.professor!.id!)
+              .toList();
+          final List<UserEntity>? professors = await const UserRepo()
+              .getMultipleUsers(professorsIds!);
+          final List<CourseEntity>? updatedCourses = courses
+              ?.map(
+                (e) => e.copyWith(
+                  professor: professors?.firstWhere(
+                    (professor) => professor.id == e.professor?.id,
+                  ),
+                ),
+              )
+              .toList();
+          return emit(HomeSuccess(updatedCourses));
+        })
+        .onError((error, _) => emit(HomeFailure(error.toString())));
   }
-
-  Stream<UserEntity?> _streamUser() =>
-      const UserRepo().stream(documentId: getUser!.id!);
 }

@@ -133,21 +133,10 @@ class CoursesRepo {
         );
       });
 
-  Stream<List<CourseEntity>?> streamMultibleCourses(
-    List<String> courseIds,
-  ) async* {
-    yield* _fireStore
-        .streamDocuments(path: _coursesPath, documentIds: courseIds)
-        .asyncMap(
-          (docs) => Future.wait<CourseEntity>(
-            docs.map((e) async {
-              final UserEntity? professor = await const UserRepo()
-                  .getFromFireStore(documentId: e['professorId']);
-              return CourseEntity.fromMap(e).copyWith(professor: professor);
-            }).toList(),
-          ),
-        );
-  }
+  Stream<List<CourseEntity>?> streamMultibleCourses(List<String> courseIds) =>
+      _fireStore
+          .streamDocuments(path: _coursesPath, documentIds: courseIds)
+          .map((docs) => docs.map(CourseEntity.fromMap).toList());
 
   Future<void> update({
     required Map<String, dynamic> data,

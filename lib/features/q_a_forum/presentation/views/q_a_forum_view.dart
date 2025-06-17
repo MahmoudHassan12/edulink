@@ -18,7 +18,9 @@ class QAForumView extends StatelessWidget {
         BlocProvider<QuestionManagerCubit>(
           create: (context) => QuestionManagerCubit(course.id!),
         ),
-        BlocProvider(create: (context) => FetchQuestionsCubit(course.id!)),
+        BlocProvider<FetchQuestionsCubit>(
+          create: (context) => FetchQuestionsCubit(course.id!),
+        ),
       ],
       child: QAForumViewBody(course: course),
     ),

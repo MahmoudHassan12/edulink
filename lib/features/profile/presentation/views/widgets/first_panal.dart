@@ -44,7 +44,7 @@ class _UserInfoFirstPanal extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, String?> studentInfo = {
       'Credit Level': user.level,
-      'Student ID': user.ssn?.substring(0, 8).toUpperCase(),
+      'Student ID': user.ssn,
       'Program': user.program?.name,
     };
     final Map<String, String?> professorInfo = {
@@ -53,13 +53,13 @@ class _UserInfoFirstPanal extends StatelessWidget {
     };
     final info = user.isProfessor ?? false ? professorInfo : studentInfo;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: info.entries
             .map(
               (e) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,11 +76,10 @@ class _UserInfoFirstPanal extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     const Text(
-                      ":",
+                      ':',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(width: 8),
-
                     Expanded(
                       child: Text(
                         e.value ?? '',

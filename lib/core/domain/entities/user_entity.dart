@@ -153,7 +153,5 @@ class UserEntity {
       (email?.isNotEmpty ?? false) &&
       (phone?.isNotEmpty ?? false) &&
       (department?.isValid ?? false) &&
-      (level?.isNotEmpty ?? false) &&
-      (program?.isValid ?? false) &&
       (ssn?.isNotEmpty ?? false);
 }

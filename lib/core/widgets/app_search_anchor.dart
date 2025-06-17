@@ -19,6 +19,7 @@ class AppSearchAnchor extends StatelessWidget {
     ),
     constraints: const BoxConstraints(minHeight: 48),
     barElevation: const WidgetStatePropertyAll(0),
+    enabled: courses?.isNotEmpty ?? false,
   );
 }
 
@@ -37,8 +38,8 @@ Iterable<ListTile> _suggestions(
     if ((courseTitle?.toLowerCase().contains(searchQuery) ?? false) ||
         (courseCode?.toLowerCase().contains(searchQuery) ?? false)) {
       yield ListTile(
-        title: Text(courseCode!),
-        subtitle: Text(courseTitle!),
+        title: Text(courseCode ?? ''),
+        subtitle: Text(courseTitle ?? ''),
         onTap: () => courseDetailsNavigation(context, extra: course).then(
           (_) => controller
             ..clear()
