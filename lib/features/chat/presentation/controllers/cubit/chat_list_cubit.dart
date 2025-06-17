@@ -26,8 +26,7 @@ class ChatListCubit extends Cubit<ChatListState> {
     return _chatSubscription = const ChatService().streamChates().listen(
       (chats) async {
         if (chats.isEmpty) {
-          emit(ChatListSuccess(chats: const []));
-          return;
+          return emit(ChatListSuccess(chats: const []));
         }
         final List<String?> recieversIds = chats
             .map(
