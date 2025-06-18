@@ -8,6 +8,7 @@ import 'package:flutter/material.dart'
         IconButton,
         MaterialTapTargetSize,
         MediaQuery,
+        OutlinedButton,
         RoundedSuperellipseBorder,
         Size;
 
@@ -31,4 +32,11 @@ ButtonStyle styleCustomElevatedButton(BuildContext context) =>
       elevation: 0,
       minimumSize: Size(MediaQuery.sizeOf(context).longestSide, 56),
       shape: const RoundedSuperellipseBorder(borderRadius: xxsBorder),
+    );
+
+ButtonStyle styleCustomOutlinedButton(BuildContext context) =>
+    OutlinedButton.styleFrom(
+      elevation: 0,
+      minimumSize: Size(MediaQuery.sizeOf(context).longestSide, 56),
+      shape: const RoundedSuperellipseBorder(borderRadius: xsBorder),
     );

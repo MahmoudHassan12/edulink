@@ -75,17 +75,17 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                     .toList();
                 return ListView.builder(
                   reverse: true,
-                  itemCount: messages?.length,
+                  itemCount: messages?.length ?? 0,
                   itemBuilder: (_, index) {
                     final MessageEntity? message = messages?[index];
                     final isSender = message?.user?.id == _sender.id;
                     return ChatBubble(
-                      text: message!.text!,
+                      text: message?.text ?? '',
                       user: isSender ? _sender : receiver,
                       isSender: isSender,
                       isSameUser:
                           index < (messages?.length ?? 0) - 1 &&
-                          messages?[index + 1].user?.id == message.user?.id,
+                          messages?[index + 1].user?.id == message?.user?.id,
                     );
                   },
                 );

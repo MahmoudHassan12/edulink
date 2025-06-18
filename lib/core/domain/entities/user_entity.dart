@@ -1,4 +1,6 @@
 import 'dart:io' show File;
+import 'package:edu_link/core/domain/entities/available_time_entity.dart'
+    show AvailableTimeEntity;
 import 'package:edu_link/core/domain/entities/department_entity.dart';
 import 'package:edu_link/core/domain/entities/office_entity.dart';
 import 'package:edu_link/core/domain/entities/program_entity.dart';
@@ -9,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart' show User;
 class UserEntity {
   const UserEntity({
     this.id,
-    this.fcmToken,
     this.name,
     this.email,
     this.phone,
@@ -37,7 +38,6 @@ class UserEntity {
 
   factory UserEntity.fromMap(Map<String, dynamic>? data) => UserEntity(
     id: data?['id'],
-    fcmToken: data?['fcmToken'],
     name: data?['name'],
     email: data?['email'],
     phone: data?['phone'],
@@ -55,8 +55,6 @@ class UserEntity {
   );
 
   final String? id;
-  final String? fcmToken;
-
   final String? name;
   final String? email;
   final String? phone;
@@ -75,7 +73,6 @@ class UserEntity {
 
   Map<String, dynamic> toMap() => {
     'id': id,
-    'fcmToken': fcmToken,
     'name': name,
     'email': email,
     'phone': phone,
@@ -94,7 +91,6 @@ class UserEntity {
 
   UserEntity copyWith({
     String? id,
-    String? fcmToken,
     String? name,
     String? email,
     String? phone,
@@ -112,7 +108,6 @@ class UserEntity {
     OfficeEntity? office,
   }) => UserEntity(
     id: id ?? this.id,
-    fcmToken: fcmToken ?? this.fcmToken,
     name: name ?? this.name,
     email: email ?? this.email,
     gitHubLink: gitHubLink ?? this.gitHubLink,
@@ -129,24 +124,33 @@ class UserEntity {
     academicTitle: academicTitle ?? this.academicTitle,
     office: office ?? this.office,
   );
-  UserEntity setFcmToken(String fcmToken) => copyWith(fcmToken: fcmToken);
   UserEntity setName(String name) => copyWith(name: name);
   UserEntity setEmail(String email) => copyWith(email: email);
   UserEntity setGitHub(String githubLink) => copyWith(gitHubLink: githubLink);
   UserEntity setLinkedIn(String linkedinLink) =>
       copyWith(linkedInLink: linkedinLink);
-
   UserEntity setPhone(String phone) => copyWith(phone: phone);
   Future<UserEntity> setImage() async => copyWith(image: await pickImage());
   UserEntity setImageUrl(String imageUrl) => copyWith(imageUrl: imageUrl);
-  UserEntity setDepartment(DepartmentEntity department) =>
-      copyWith(department: department);
+  UserEntity setDepartment(DepartmentEntity department) => copyWith(
+    department: department,
+    office: office?.setDepartment(department.name),
+  );
   UserEntity setLevel(String level) => copyWith(level: level);
   UserEntity setProgram(ProgramEntity program) => copyWith(program: program);
   UserEntity setSsn(String ssn) => copyWith(ssn: ssn);
   UserEntity setAcademicTitle(String academicTitle) =>
       copyWith(academicTitle: academicTitle);
-  UserEntity setOffice(OfficeEntity office) => copyWith(office: office);
+
+  UserEntity setBuilding(String building) =>
+      copyWith(office: office?.setBuilding(building));
+  UserEntity setFloor(String floor) =>
+      copyWith(office: office?.setFloor(floor));
+  UserEntity setRoom(String room) => copyWith(office: office?.setRoom(room));
+  UserEntity setAvailableTime(AvailableTimeEntity availableTime) =>
+      copyWith(office: office?.setAvailableTime(availableTime));
+  UserEntity setContactInfo(String contactInfo) =>
+      copyWith(office: office?.setContactInfo(contactInfo));
 
   bool get isValid =>
       (name?.isNotEmpty ?? false) &&

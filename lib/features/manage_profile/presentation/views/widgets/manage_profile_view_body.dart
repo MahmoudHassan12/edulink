@@ -1,7 +1,10 @@
+import 'package:edu_link/core/domain/entities/location_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
+import 'package:edu_link/core/widgets/buttons/custom_outlined_button.dart';
+import 'package:edu_link/core/widgets/custom_dropdown_menu.dart';
 import 'package:edu_link/core/widgets/custom_text_form_field.dart'
     show CustomTextFormField;
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
@@ -37,10 +40,14 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
   late final TextEditingController _ssnController;
   late final TextEditingController _gitHubController;
   late final TextEditingController _linkedInController;
+  late final TextEditingController _buildingController;
+  late final TextEditingController _floorController;
+  late final TextEditingController _roomController;
 
   @override
   void initState() {
     final UserEntity? user = getUser;
+    final LocationEntity? location = user?.office?.location;
     _nameController = TextEditingController(text: user?.name);
     _emailController = TextEditingController(text: user?.email);
     _phoneController = TextEditingController(text: user?.phone);
@@ -48,6 +55,9 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
     _ssnController = TextEditingController(text: user?.ssn);
     _gitHubController = TextEditingController(text: user?.gitHubLink);
     _linkedInController = TextEditingController(text: user?.linkedInLink);
+    _buildingController = TextEditingController(text: location?.building);
+    _floorController = TextEditingController(text: location?.floor);
+    _roomController = TextEditingController(text: location?.room);
     super.initState();
   }
 
@@ -97,100 +107,147 @@ class _ManageCourseViewBodyState extends State<ManageProfileViewBody> {
   }
 
   @override
-  CustomScrollView build(BuildContext context) => CustomScrollView(
-    slivers: [
-      PickImage(imageUrl: getUser?.imageUrl),
-      SliverPadding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        sliver: SliverList.list(
-          children: [
-            const SizedBox(height: 16),
-            NameField(controller: _nameController),
-            EmailField(controller: _emailController),
+  CustomScrollView build(BuildContext context) {
+    final bool isProfessor = getUser?.isProfessor ?? false;
+    return CustomScrollView(
+      slivers: [
+        PickImage(imageUrl: getUser?.imageUrl),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          sliver: SliverList.list(
+            children: [
+              const SizedBox(height: 16),
+              NameField(controller: _nameController),
+              EmailField(controller: _emailController),
+              CustomTextFormField(
+                labelText: 'Phone',
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.next,
+                controller: _phoneController,
+              ),
+              CustomTextFormField(
+                labelText: 'SSN',
+                keyboardType: TextInputType.number,
+                textInputAction: TextInputAction.next,
+                controller: _ssnController,
+              ),
+              const DepartmentField(),
+              if (!isProfessor) const ProgramField(),
+              if (!isProfessor) LevelField(controller: _levelController),
+              if (isProfessor)
+                CustomTextFormField(
+                  labelText: 'Building',
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  controller: _buildingController,
+                ),
+              if (isProfessor) ...[
+                CustomTextFormField(
+                  labelText: 'Floor',
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  controller: _floorController,
+                ),
+                CustomTextFormField(
+                  labelText: 'Room',
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  controller: _roomController,
+                ),
+                CustomOutlinedButton(
+                  onPressed: () async {
+                    await showAdaptiveDialog(
+                      context: context,
+                      builder: (context) => Dialog(),
+                    );
+                    await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                  },
+                  text: 'Add Availablity Time',
+                ),
+                const SizedBox(height: 24),
+              ],
+              GithubField(controller: _gitHubController),
+              LinkedinField(controller: _linkedInController),
+              CustomElevatedButton(
+                onPressed: () async {
+                  final String name = _nameController.text.trim();
+                  final String email = _emailController.text.trim();
+                  final String phone = _phoneController.text.trim();
+                  final String level = _levelController.text.trim();
+                  final String ssn = _ssnController.text.trim();
+                  final String github = _gitHubController.text.trim();
+                  final String linkedin = _linkedInController.text.trim();
+                  final String building = _buildingController.text.trim();
+                  final String floor = _floorController.text.trim();
+                  final String room = _roomController.text.trim();
 
-            CustomTextFormField(
-              labelText: 'Phone',
-              keyboardType: TextInputType.phone,
-              textInputAction: TextInputAction.next,
-              controller: _phoneController,
-            ),
-            const DepartmentField(),
-            const ProgramField(),
-            CustomTextFormField(
-              labelText: 'SSN',
-              keyboardType: TextInputType.number,
-              textInputAction: TextInputAction.next,
-              controller: _ssnController,
-            ),
-            LevelField(controller: _levelController),
-            GithubField(controller: _gitHubController),
-            LinkedinField(controller: _linkedInController),
-            CustomElevatedButton(
-              onPressed: () async {
-                final String name = _nameController.text.trim();
-                final String email = _emailController.text.trim();
-                final String phone = _phoneController.text.trim();
-                final String level = _levelController.text.trim();
-                final String ssn = _ssnController.text.trim();
-                final String github = _gitHubController.text.trim();
-                final String linkedin = _linkedInController.text.trim();
-
-                if (!_isValidEmail(email)) {
-                  showSnackbar(
-                    context,
-                    'Please enter a valid email address.',
-                    flag: false,
-                  );
-                  return;
-                }
-
-                if (!_isValidPhone(phone)) {
-                  showSnackbar(
-                    context,
-                    'Please enter a valid phone number.',
-                    flag: false,
-                  );
-                  return;
-                }
-
-                if (!_isValidGitHub(github)) {
-                  showSnackbar(context, 'Invalid GitHub link.', flag: false);
-                  return;
-                }
-
-                if (!_isValidLinkedIn(linkedin)) {
-                  showSnackbar(context, 'Invalid LinkedIn link.', flag: false);
-                  return;
-                }
-
-                final ManageProfileCubit cubit =
-                    context.read<ManageProfileCubit>()
-                      ..setName(name)
-                      ..setEmail(email)
-                      ..setPhone(phone)
-                      ..setLevel(level)
-                      ..setSsn(ssn)
-                      ..setGitHub(github)
-                      ..setLinkedIn(linkedin);
-
-                if (cubit.user?.isValid ?? false) {
-                  await cubit.update();
-                  if (context.mounted) {
-                    homeNavigation(context);
+                  if (!_isValidEmail(email)) {
+                    showSnackbar(
+                      context,
+                      'Please enter a valid email address.',
+                      flag: false,
+                    );
+                    return;
                   }
-                } else {
-                  showSnackbar(
-                    context,
-                    'Please fill all the fields.',
-                    flag: false,
-                  );
-                }
-              },
-              label: 'Done',
-            ),
-          ],
+
+                  if (!_isValidPhone(phone)) {
+                    showSnackbar(
+                      context,
+                      'Please enter a valid phone number.',
+                      flag: false,
+                    );
+                    return;
+                  }
+
+                  if (!_isValidGitHub(github)) {
+                    showSnackbar(context, 'Invalid GitHub link.', flag: false);
+                    return;
+                  }
+
+                  if (!_isValidLinkedIn(linkedin)) {
+                    showSnackbar(
+                      context,
+                      'Invalid LinkedIn link.',
+                      flag: false,
+                    );
+                    return;
+                  }
+
+                  final ManageProfileCubit cubit =
+                      context.read<ManageProfileCubit>()
+                        ..setName(name)
+                        ..setEmail(email)
+                        ..setPhone(phone)
+                        ..setLevel(level)
+                        ..setSsn(ssn)
+                        ..setGitHub(github)
+                        ..setLinkedIn(linkedin)
+                        ..setBuilding(building)
+                        ..setFloor(floor)
+                        ..setRoom(room);
+
+                  if (cubit.user?.isValid ?? false) {
+                    await cubit.update();
+                    if (context.mounted) {
+                      homeNavigation(context);
+                    }
+                  } else {
+                    showSnackbar(
+                      context,
+                      'Please fill all the fields.',
+                      flag: false,
+                    );
+                  }
+                },
+                label: 'Done',
+              ),
+            ],
+          ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }

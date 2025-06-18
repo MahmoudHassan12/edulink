@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:edu_link/core/domain/entities/available_time_entity.dart'
+    show AvailableTimeEntity;
 import 'package:edu_link/core/domain/entities/department_entity.dart';
-import 'package:edu_link/core/domain/entities/office_entity.dart'
-    show OfficeEntity;
 import 'package:edu_link/core/domain/entities/program_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
@@ -89,8 +89,28 @@ class ManageProfileCubit extends Cubit<ManageProfileState> {
     emit(ManageProfileUpdated());
   }
 
-  void setOffice(OfficeEntity office) {
-    updateUser(user?.setOffice(office));
+  void setBuilding(String building) {
+    updateUser(user?.setBuilding(building));
+    emit(ManageProfileUpdated());
+  }
+
+  void setFloor(String floor) {
+    updateUser(user?.setFloor(floor));
+    emit(ManageProfileUpdated());
+  }
+
+  void setRoom(String room) {
+    updateUser(user?.setRoom(room));
+    emit(ManageProfileUpdated());
+  }
+
+  void setContactInfo(String contactInfo) {
+    updateUser(user?.setContactInfo(contactInfo));
+    emit(ManageProfileUpdated());
+  }
+
+  void setAvailableTime(AvailableTimeEntity availableTime) {
+    updateUser(user?.setAvailableTime(availableTime));
     emit(ManageProfileUpdated());
   }
 

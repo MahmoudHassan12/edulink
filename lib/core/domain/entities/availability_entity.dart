@@ -14,7 +14,13 @@ class AvailabilityEntity {
 
   final List<AvailableTimeEntity>? times;
 
+  AvailabilityEntity copyWith({List<AvailableTimeEntity>? times}) =>
+      AvailabilityEntity(times: times ?? this.times);
+
   Map<String, List<Map<String, dynamic>>?> toMap() => {
     'times': times?.map((time) => time.toMap()).toList(),
   };
+
+  AvailabilityEntity setAvailableTime(AvailableTimeEntity availableTime) =>
+      AvailabilityEntity(times: times?..add(availableTime));
 }
