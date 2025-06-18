@@ -2,10 +2,11 @@ import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/duration_entity.dart'
     show DurationEntity;
 import 'package:edu_link/core/helpers/get_user.dart';
-import 'package:edu_link/core/repos/courses_repo.dart' show CoursesRepo;
-import 'package:edu_link/core/repos/user_repo.dart';
+import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:edu_link/features/auth/presentation/views/widgets/sign_in/sign_in_form.dart';
+import 'package:edu_link/features/home/presentation/controllers/home_cubit/home_cubit.dart'
+    show HomeCubit;
 import 'package:edu_link/features/manage_course/presentation/controllers/manage_course_cubit/manage_course_cubit.dart'
     show ManageCourseCubit;
 import 'package:edu_link/features/manage_course/presentation/views/widgets/code_field.dart';
@@ -21,8 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ManageCourseViewBody extends StatefulWidget {
-  const ManageCourseViewBody({super.key, this.course});
-  final CourseEntity? course;
+  const ManageCourseViewBody({super.key, required this.course});
+  final CourseEntity course;
   @override
   State<ManageCourseViewBody> createState() => _ManageCourseViewBodyState();
 }
@@ -39,17 +40,17 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
 
   @override
   void initState() {
-    final CourseEntity? course = widget.course;
-    _codeController = TextEditingController(text: course?.code);
-    _titleController = TextEditingController(text: course?.title);
+    final CourseEntity course = widget.course;
+    _codeController = TextEditingController(text: course.code);
+    _titleController = TextEditingController(text: course.title);
     _creditHourController = TextEditingController(
-      text: course?.creditHour.toString(),
+      text: course.creditHour == null ? '' : course.creditHour.toString(),
     );
-    _levelController = TextEditingController(text: course?.level);
-    _departmentController = TextEditingController(text: course?.department);
-    _semesterController = TextEditingController(text: course?.semester);
-    _typeController = TextEditingController(text: course?.type);
-    _descriptionController = TextEditingController(text: course?.description);
+    _levelController = TextEditingController(text: course.level);
+    _departmentController = TextEditingController(text: course.department);
+    _semesterController = TextEditingController(text: course.semester);
+    _typeController = TextEditingController(text: course.type);
+    _descriptionController = TextEditingController(text: course.description);
     super.initState();
   }
 
@@ -69,7 +70,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
   @override
   CustomScrollView build(BuildContext context) => CustomScrollView(
     slivers: [
-      PickImage(imageUrl: widget.course?.imageUrl),
+      PickImage(imageUrl: widget.course.imageUrl),
       SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         sliver: SliverList.list(
@@ -77,7 +78,7 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
             const SizedBox(height: 16),
             CodeField(
               controller: _codeController,
-              enabled: widget.course == null,
+              enabled: !widget.course.isValid,
             ),
             TitleField(controller: _titleController),
             Row(
@@ -112,27 +113,26 @@ class _ManageCourseViewBodyState extends State<ManageCourseViewBody> {
                       ..setCreditHour(
                         int.tryParse(_creditHourController.text) ?? 0,
                       )
-                      ..setLectures(widget.course?.lectures ?? 0)
+                      ..setLectures(widget.course.lectures ?? 0)
                       ..setDuration(
-                        widget.course?.duration ?? const DurationEntity(),
+                        widget.course.duration ?? const DurationEntity(),
                       )
                       ..setProfessor(getUser!);
                 final CourseEntity course = cubit.course;
                 if (course.isValid) {
-                  widget.course != null
-                      ? await const CoursesRepo().update(
-                          data: course.toMap(),
-                          documentId: course.id!,
-                        )
-                      : cubit.upload();
-                  await const UserRepo().update(
-                    data: getUser!
-                        .copyWith(
-                          coursesIds: [...?getUser?.coursesIds, course.id!],
-                        )
-                        .toMap(),
-                    documentId: getUser!.id!,
-                  );
+                  widget.course.isValid
+                      ? await cubit.update()
+                      : await cubit.upload();
+                  if (context.mounted) {
+                    await context.read<HomeCubit>().getCourses();
+                  }
+                  if (context.mounted) {
+                    showSnackbar(
+                      context,
+                      '${widget.course.isValid ? 'Updated' : 'Added'} successfully.',
+                    );
+                    homeNavigation(context);
+                  }
                 } else {
                   showSnackbar(
                     context,

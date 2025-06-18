@@ -3,15 +3,17 @@ import 'package:edu_link/core/domain/entities/course_entity.dart'
 import 'package:edu_link/core/domain/entities/duration_entity.dart'
     show DurationEntity;
 import 'package:edu_link/core/domain/entities/user_entity.dart' show UserEntity;
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
+import 'package:edu_link/core/repos/user_repo.dart';
 import 'package:flutter/material.dart' show immutable;
 import 'package:flutter_bloc/flutter_bloc.dart' show Cubit;
 
 part 'manage_course_state.dart';
 
 class ManageCourseCubit extends Cubit<ManageCourseState> {
-  ManageCourseCubit() : super(const ManageCourseInitial());
-  CourseEntity course = const CourseEntity();
+  ManageCourseCubit(this.course) : super(const ManageCourseInitial());
+  CourseEntity course;
   CourseEntity _updateCourse(CourseEntity courseEntity) =>
       course = courseEntity;
   void setTitle(String title) {
@@ -89,16 +91,37 @@ class ManageCourseCubit extends Cubit<ManageCourseState> {
     emit(ManageCourseUpdated());
   }
 
+  Future<void> update() async {
+    emit(const ManageCourseLoading());
+    setId();
+    if (course.image != null) {
+      await const CoursesRepo().uploadImage(course.image!).then(setImageUrl);
+    }
+    return const CoursesRepo()
+        .update(data: course.toMap(), documentId: course.id!)
+        .then((_) => emit(const ManageCourseSuccess()))
+        .catchError((e) => emit(ManageCourseFailure(e.toString())));
+  }
+
   Future<void> upload() {
     emit(const ManageCourseLoading());
     setId();
-    const coursesRepo = CoursesRepo();
-    return coursesRepo
+    return const CoursesRepo()
         .uploadImage(course.image!)
         .then(setImageUrl)
         .then(
-          (_) => coursesRepo
+          (_) => const CoursesRepo()
               .add(data: course.toMap(), documentId: course.id)
+              .then(
+                (_) => const UserRepo().update(
+                  data: getUser!
+                      .copyWith(
+                        coursesIds: getUser!.coursesIds?..add(course.id!),
+                      )
+                      .toMap(),
+                  documentId: getUser!.id!,
+                ),
+              )
               .then((_) => emit(const ManageCourseSuccess())),
         )
         .catchError((e) => emit(ManageCourseFailure(e.toString())));

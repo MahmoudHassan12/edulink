@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/domain/entities/user_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
@@ -63,7 +62,7 @@ class CourseDetailsViewBody extends StatelessWidget {
           children: [
             const Divider(),
             const SizedBox(height: 8),
-            EText(course.description!),
+            EText(course.description ?? 'No description available.'),
             const SizedBox(height: 16),
             CustomFilledButton.icon(
               onPressed: () => contentNavigation(context, extra: course.id),

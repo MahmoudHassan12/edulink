@@ -5,7 +5,6 @@ import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:edu_link/core/widgets/buttons/custom_outlined_button.dart';
-import 'package:edu_link/core/widgets/custom_dropdown_menu.dart';
 import 'package:edu_link/core/widgets/custom_text_form_field.dart'
     show CustomTextFormField;
 import 'package:edu_link/core/widgets/e_text.dart';

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
-import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
@@ -13,25 +12,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
 
 class ManageCourseView extends StatelessWidget {
-  const ManageCourseView({super.key, this.course});
-  final CourseEntity? course;
+  const ManageCourseView({required this.course, super.key});
+  final CourseEntity course;
   @override
   Scaffold build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: EText(course == null ? 'Add Course' : 'Edit Course'),
+      title: EText(!course.isValid ? 'Add Course' : 'Edit Course'),
       centerTitle: true,
-      actions: course == null
+      actions: !course.isValid
           ? null
           : [
               IconButton(
                 icon: const Icon(Icons.delete_rounded),
                 onPressed: () =>
-                    _deleteCourseDialog(context, documentId: course!.id!),
+                    _deleteCourseDialog(context, documentId: course.id!),
               ),
             ],
     ),
     body: BlocProvider<ManageCourseCubit>(
-      create: (context) => ManageCourseCubit(),
+      create: (context) => ManageCourseCubit(course),
       child: ManageCourseViewBody(course: course),
     ),
   );

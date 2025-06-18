@@ -63,7 +63,7 @@ final Map<String, Widget Function(BuildContext, Object?)> _routes = {
   Routes.courseDetailsView: (context, args) =>
       CourseDetailsView(course: args! as CourseEntity),
   Routes.manageCourseView: (context, args) =>
-      ManageCourseView(course: args as CourseEntity?),
+      ManageCourseView(course: args! as CourseEntity),
   Routes.profileView: (context, args) => ProfileView(user: args! as UserEntity),
   Routes.qaForumView: (context, args) =>
       QAForumView(course: args! as CourseEntity),

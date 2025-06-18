@@ -1,3 +1,4 @@
+import 'package:edu_link/core/domain/entities/course_entity.dart';
 import 'package:edu_link/core/helpers/get_user.dart' show getUser;
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/features/chat/presentation/views/chat_list_view.dart';
@@ -35,7 +36,8 @@ class _AddCourseFloatingButton extends StatelessWidget {
   const _AddCourseFloatingButton();
   @override
   FloatingActionButton build(BuildContext context) => FloatingActionButton(
-    onPressed: () => manageCourseNavigation(context),
+    onPressed: () =>
+        manageCourseNavigation(context, extra: const CourseEntity()),
     child: const Icon(Icons.add_rounded),
   );
 }
