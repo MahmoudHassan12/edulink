@@ -31,6 +31,18 @@ class AuthRepo {
         return user;
       });
 
+  Future<void> sendPasswordResetEmail(String email) => _auth
+      .sendPasswordResetEmail(email)
+      .then((_) {
+        log('Password reset email sent to $email');
+      })
+      .onError<FirebaseException>((e, _) {
+        log('Failed to send password reset email: $e');
+      })
+      .catchError((e) {
+        log('Failed to send password reset email: $e');
+      });
+
   Future<User?> signInWithGoogle() {
     try {
       return _auth.signInWithGoogle().then((user) async {
