@@ -14,17 +14,7 @@ class ThirdPanal extends StatelessWidget {
     final OfficeEntity? office = user.office;
     final LocationEntity? location = office?.location;
     final String? allTimes = office?.availability?.times
-        ?.expand<String?>((e) {
-          String? pad(int? time) => time?.toString().padLeft(2, '0');
-          final TimeOfDay? from = e.from;
-          final fromM = (from?.hour ?? 0) < 12 ? 'AM' : 'PM';
-          final TimeOfDay? to = e.to;
-          final toM = (to?.hour ?? 0) < 12 ? 'AM' : 'PM';
-          final availability =
-              '${e.day}: ${pad(from?.hour)}:${pad(from?.minute)} $fromM'
-              ' - ${pad(to?.hour)}:${pad(to?.minute)} $toM';
-          return [availability];
-        })
+        ?.expand<String?>((e) => [e.toFormattedString(context)])
         .join('\n');
     return ProfilePanal(
       child: Column(

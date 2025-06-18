@@ -147,8 +147,10 @@ class UserEntity {
   UserEntity setFloor(String floor) =>
       copyWith(office: office?.setFloor(floor));
   UserEntity setRoom(String room) => copyWith(office: office?.setRoom(room));
-  UserEntity setAvailableTime(AvailableTimeEntity availableTime) =>
-      copyWith(office: office?.setAvailableTime(availableTime));
+  UserEntity setAvailableTime(
+    AvailableTimeEntity availableTime, [
+    int? index,
+  ]) => copyWith(office: office?.setAvailableTime(availableTime, index));
   UserEntity setContactInfo(String contactInfo) =>
       copyWith(office: office?.setContactInfo(contactInfo));
 

@@ -109,8 +109,8 @@ class ManageProfileCubit extends Cubit<ManageProfileState> {
     emit(ManageProfileUpdated());
   }
 
-  void setAvailableTime(AvailableTimeEntity availableTime) {
-    updateUser(user?.setAvailableTime(availableTime));
+  void setAvailableTime(AvailableTimeEntity availableTime, [int? index]) {
+    updateUser(user?.setAvailableTime(availableTime, index));
     emit(ManageProfileUpdated());
   }
 

@@ -21,6 +21,12 @@ class AvailabilityEntity {
     'times': times?.map((time) => time.toMap()).toList(),
   };
 
-  AvailabilityEntity setAvailableTime(AvailableTimeEntity availableTime) =>
-      AvailabilityEntity(times: times?..add(availableTime));
+  AvailabilityEntity setAvailableTime(
+    AvailableTimeEntity availableTime, [
+    int? index,
+  ]) => AvailabilityEntity(
+    times: (index != null)
+        ? (times?..[index] = availableTime)
+        : (times?..add(availableTime)),
+  );
 }

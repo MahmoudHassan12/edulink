@@ -38,8 +38,12 @@ class OfficeEntity {
       copyWith(location: location?.setDepartment(department));
   OfficeEntity setRoom(String room) =>
       copyWith(location: location?.setRoom(room));
-  OfficeEntity setAvailableTime(AvailableTimeEntity availableTime) =>
-      copyWith(availability: availability?.setAvailableTime(availableTime));
+  OfficeEntity setAvailableTime(
+    AvailableTimeEntity availableTime, [
+    int? index,
+  ]) => copyWith(
+    availability: availability?.setAvailableTime(availableTime, index),
+  );
   OfficeEntity setContactInfo(String contactInfo) =>
       copyWith(contactInfo: contactInfo);
 }

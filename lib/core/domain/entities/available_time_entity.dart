@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart' show TimeOfDay;
+import 'package:flutter/material.dart' show BuildContext, TimeOfDay, immutable;
 
+@immutable
 class AvailableTimeEntity {
   const AvailableTimeEntity({this.day, this.from, this.to});
 
@@ -37,4 +38,24 @@ class AvailableTimeEntity {
   AvailableTimeEntity setDay(String day) => copyWith(day: day);
   AvailableTimeEntity setFrom(TimeOfDay from) => copyWith(from: from);
   AvailableTimeEntity setTo(TimeOfDay to) => copyWith(to: to);
+
+  bool isValid() => (day?.isNotEmpty ?? false) && from != null && to != null;
+
+  String toFormattedString(BuildContext context) =>
+      '$day: ${from?.format(context)} - ${to?.format(context)}';
+
+  @override
+  String toString() => 'AvailableTimeEntity(day: $day, from: $from, to: $to)';
+
+  @override
+  int get hashCode => day.hashCode ^ from.hashCode ^ to.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AvailableTimeEntity &&
+          runtimeType == other.runtimeType &&
+          day == other.day &&
+          from == other.from &&
+          to == other.to;
 }
