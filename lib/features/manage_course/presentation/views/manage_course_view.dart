@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_link/core/domain/entities/course_entity.dart'
     show CourseEntity;
+import 'package:edu_link/core/helpers/get_user.dart';
 import 'package:edu_link/core/helpers/navigations.dart';
 import 'package:edu_link/core/repos/courses_repo.dart';
 import 'package:edu_link/core/widgets/e_text.dart';
@@ -38,6 +40,57 @@ class ManageCourseView extends StatelessWidget {
 Future<void> _deleteCourseDialog(
   BuildContext context, {
   required String documentId,
+}) async {
+  final bool? confirm = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const EText('Delete Course'),
+      content: const EText(
+        'Are you sure you want to delete this course?',
+        softWrap: true,
+      ),
+      actions: [
+        TextButton(
+          child: const EText('Cancel'),
+          onPressed: () => popNavigation(context, false),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(foregroundColor: Colors.red),
+          child: const EText('Delete'),
+          onPressed: () => popNavigation(context, true),
+        ),
+      ],
+    ),
+  );
+
+  if (confirm ?? false) {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    final QuerySnapshot<Map<String, dynamic>> usersSnapshot = await firestore
+        .collection('users')
+        .get();
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+        in usersSnapshot.docs) {
+      final List<dynamic> coursesIds = doc.data()['coursesIds'] ?? [];
+
+      if (coursesIds.contains(documentId)) {
+        coursesIds.remove(documentId);
+
+        await firestore.collection('users').doc(doc.id).update({
+          'coursesIds': coursesIds,
+        });
+      }
+    }
+
+    await const CoursesRepo().delete(documentId: documentId);
+  }
+}
+
+/*
+Future<void> _deleteCourseDialog(
+  BuildContext context, {
+  required String documentId,
 }) =>
     showDialog<bool>(
       context: context,
@@ -59,8 +112,11 @@ Future<void> _deleteCourseDialog(
           ),
         ],
       ),
-    ).then(
-      (value) => value ?? false
-          ? const CoursesRepo().delete(documentId: documentId)
-          : null,
-    );
+    ).then((value) {
+      if (value ?? false) {
+        FirebaseFirestore.instance.collection("users").doc(getUser?.id);
+
+        return const CoursesRepo().delete(documentId: documentId);
+      }
+    });
+*/

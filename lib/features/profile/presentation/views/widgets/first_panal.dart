@@ -48,7 +48,7 @@ class _UserInfoFirstPanal extends StatelessWidget {
       'Program': user.program?.name,
     };
     final Map<String, String?> professorInfo = {
-      'Academic title': user.academicTitle,
+      'Academic title': user.academicTitle ?? 'Professor',
       'Department': user.department?.name,
     };
     final info = user.isProfessor ?? false ? professorInfo : studentInfo;

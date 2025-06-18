@@ -18,7 +18,7 @@ class AvailabilityEntity {
       AvailabilityEntity(times: times ?? this.times);
 
   Map<String, List<Map<String, dynamic>>?> toMap() => {
-    'times': times?.map((time) => time.toMap()).toList(),
+    'times': times?.map((time) => time.toMap()).toList() ?? [],
   };
 
   AvailabilityEntity setAvailableTime(

@@ -20,19 +20,21 @@ class ThirdPanal extends StatelessWidget {
       child: Column(
         spacing: 8,
         children: [
-          _ListTile(
-            title: 'Office Location',
-            subtitle:
-                '${location?.room}, ${location?.building}, ${location?.floor}\n'
-                '${location?.department} Department',
-            icon: Icons.location_on_rounded,
-          ),
+          if (location?.isValid() ?? false)
+            _ListTile(
+              title: 'Office Location',
+              subtitle:
+                  '${location?.room}, ${location?.building}, ${location?.floor}\n'
+                  '${location?.department} Department',
+              icon: Icons.location_on_rounded,
+            ),
           const Divider(indent: 16, endIndent: 16),
-          _ListTile(
-            title: 'Office Hours',
-            subtitle: allTimes!,
-            icon: Icons.watch_later_rounded,
-          ),
+          if (allTimes != null)
+            _ListTile(
+              title: 'Office Hours',
+              subtitle: allTimes,
+              icon: Icons.watch_later_rounded,
+            ),
         ],
       ),
     );

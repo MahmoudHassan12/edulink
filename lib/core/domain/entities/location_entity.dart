@@ -36,4 +36,8 @@ class LocationEntity {
   LocationEntity setDepartment(String? department) =>
       copyWith(department: department);
   LocationEntity setRoom(String room) => copyWith(room: room);
+  bool isValid() => building != null &&
+        floor != null &&
+        department != null &&
+        room != null;
 }

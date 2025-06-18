@@ -72,7 +72,7 @@ class _ContentViewBodyState extends State<ContentViewBody> {
               'Content deleted successfully.',
               style: TextStyle(color: Colors.white),
             ),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.green,
           ),
         );
       }
